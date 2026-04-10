@@ -19,25 +19,25 @@ This reference covers advanced patterns for complex scenarios, troubleshooting c
 ### Application-Wide Settings
 
 ```typescript
-import { QueryBuilder } from '@syncfusion/ej2-querybuilder';
+import { QueryBuilder, ColumnsModel } from '@syncfusion/ej2-querybuilder';
 
 // Set global defaults
 const queryBuilderConfig = {
-  allowDragDrop: true,
-  displayMode: 'Inline',
-  enableAccessibility: true,
+  allowDragAndDrop: true,
+  displayMode: 'Horizontal' as 'Horizontal' | 'Vertical',
   enableRtl: false,
   locale: 'en',
   showButtons: {
     ruleDelete: true,
     groupDelete: true,
     groupInsert: true,
-    ruleInsert: true
+    cloneRule: true,
+    cloneGroup: true
   }
 };
 
 // Create instances with global config
-const createQueryBuilder = (containerID: string, columns, data) => {
+const createQueryBuilder = (containerID: string, columns: ColumnsModel[], data: object[]) => {
   return new QueryBuilder({
     ...queryBuilderConfig,
     width: '100%',
@@ -47,8 +47,8 @@ const createQueryBuilder = (containerID: string, columns, data) => {
 };
 
 // Usage
-const qb1 = createQueryBuilder('qb1', columns1, data1);
-const qb2 = createQueryBuilder('qb2', columns2, data2);
+const qb1 = createQueryBuilder('#qb1', columns1, data1);
+const qb2 = createQueryBuilder('#qb2', columns2, data2);
 ```
 
 ### Instance-Specific Overrides
@@ -57,8 +57,8 @@ const qb2 = createQueryBuilder('qb2', columns2, data2);
 // Global default but override for specific instance
 const qb = new QueryBuilder({
   ...queryBuilderConfig,
-  displayMode: 'Vertical',  // Override from vertical
-  allowDragDrop: false,     // Disable for this instance
+  displayMode: 'Vertical',      // Override to vertical
+  allowDragAndDrop: false,      // Disable for this instance
   columns: columns,
   dataSource: data
 });
@@ -71,10 +71,9 @@ qb.appendTo('#querybuilder');
 ```typescript
 class QueryBuilderConfigManager {
   private static defaults = {
-    allowDragDrop: true,
-    displayMode: 'Inline',
-    enableAccessibility: true,
-    theme: 'material'
+    allowDragAndDrop: true,
+    displayMode: 'Horizontal' as 'Horizontal' | 'Vertical',
+    locale: 'en'
   };
   
   static getConfig(options?: any) {
@@ -99,7 +98,7 @@ class QueryBuilderConfigManager {
 }
 
 // Usage
-QueryBuilderConfigManager.setDefaults({ locale: 'es', theme: 'fabric' });
+QueryBuilderConfigManager.setDefaults({ locale: 'es' });
 const qb = QueryBuilderConfigManager.createInstance('#qb', cols, data);
 ```
 
@@ -177,8 +176,7 @@ class TwoWayQueryBuilder {
   
   updateQueryBuilder(model: FilterModel) {
     this.model = model;
-    this.qb.rule = model as any;
-    this.qb.refresh();
+    this.qb.setRules(model as any);
   }
   
   getModel(): FilterModel {
@@ -329,29 +327,31 @@ if (!validation.valid) {
 ### Large Dataset Handling
 
 ```typescript
-// Use virtual scrolling for large datasets
-const largeDataset = generateMillionRecords();
-
+// For large datasets, bind only the necessary data to QueryBuilder
+// and apply the generated predicate on the full dataset separately
 const qb = new QueryBuilder({
   width: '100%',
-  dataSource: largeDataset,
-  columns: columns,
-  
-  // Performance optimization
-  enableVirtualization: true,  // If supported
-  pageSize: 50  // Load in batches
+  columns: columns
+  // Don't bind large datasets directly to QueryBuilder
+  // bind a representative small sample or no data at all for rule building
 });
 
 qb.appendTo('#querybuilder');
 
-function generateMillionRecords() {
+// After building rules, use the DataManager query to filter on the server
+qb.addEventListener('change', async () => {
+  const query = qb.getDataManagerQuery(qb.getRules());
+  // Send query to server
+});
+
+function generateRecords(count: number) {
   const records = [];
-  for (let i = 0; i < 1000000; i++) {
+  for (let i = 0; i < count; i++) {
     records.push({
-      id: i,
-      name: `Employee ${i}`,
-      dept: ['Sales', 'IT', 'HR', 'Finance'][i % 4],
-      salary: 50000 + Math.random() * 100000
+      EmployeeID: i,
+      FirstName: `Employee${i}`,
+      Department: ['Sales', 'IT', 'HR', 'Finance'][i % 4],
+      Salary: 50000 + Math.random() * 100000
     });
   }
   return records;
@@ -451,6 +451,11 @@ class CachedQueryBuilder {
 ### Complete Event List
 
 ```typescript
+import {
+  QueryBuilder, ChangeEventArgs, ActionEventArgs,
+  DragEventArgs, DropEventArgs
+} from '@syncfusion/ej2-querybuilder';
+
 const qb = new QueryBuilder({
   columns: columns,
   dataSource: data
@@ -458,48 +463,53 @@ const qb = new QueryBuilder({
 
 qb.appendTo('#querybuilder');
 
-// Rule events
-qb.addEventListener('ruleAdded', (args: any) => {
-  console.log('Rule added:', args);
+// Fires before any action is performed
+qb.addEventListener('actionBegin', (args: ActionEventArgs) => {
+  console.log('Action begin:', args.name);
 });
 
-qb.addEventListener('ruleUpdated', (args: any) => {
-  console.log('Rule updated:', args);
+// Fires before a rule/group changes
+qb.addEventListener('beforeChange', (args: ChangeEventArgs) => {
+  console.log('Before change:', args.name);
 });
 
-qb.addEventListener('ruleDeleted', (args: any) => {
-  console.log('Rule deleted:', args);
+// Fires after any rule/group change
+qb.addEventListener('change', (args: ChangeEventArgs) => {
+  console.log('Query changed:', args.name);
+  console.log('Rules:', qb.getRules());
 });
 
-// Group events
-qb.addEventListener('groupAdded', (args: any) => {
-  console.log('Group added:', args);
+// Fires when a rule value changes
+qb.addEventListener('ruleChange', (args: any) => {
+  console.log('Rule value changed:', args);
 });
 
-qb.addEventListener('groupUpdated', (args: any) => {
-  console.log('Group updated:', args);
+// Fires once after the component is created
+qb.addEventListener('created', () => {
+  console.log('QueryBuilder created');
 });
 
-qb.addEventListener('groupDeleted', (args: any) => {
-  console.log('Group deleted:', args);
+// Fires after data binding completes
+qb.addEventListener('dataBound', () => {
+  console.log('Data bound');
 });
 
-// Change event
-qb.addEventListener('change', (args: any) => {
-  console.log('Query changed:', qb.getRules());
+// Fires before the component is destroyed
+qb.addEventListener('destroyed', () => {
+  console.log('QueryBuilder destroyed');
 });
 
 // Drag-drop events
-qb.addEventListener('dragStart', (args: any) => {
+qb.addEventListener('dragStart', (args: DragEventArgs) => {
   console.log('Drag started:', args);
 });
 
-qb.addEventListener('drag', (args: any) => {
+qb.addEventListener('drag', (args: DragEventArgs) => {
   console.log('Dragging:', args);
 });
 
-qb.addEventListener('dragStop', (args: any) => {
-  console.log('Drag stopped:', args);
+qb.addEventListener('drop', (args: DropEventArgs) => {
+  console.log('Dropped:', args);
 });
 ```
 
@@ -583,17 +593,10 @@ function processQuery() {
 ### 2. Provide User Feedback
 
 ```typescript
-// Show feedback for user actions
-qb.addEventListener('change', () => {
+// Show feedback for user actions using the change event
+// ChangeEventArgs exposes only the `name` property
+qb.addEventListener('change', (args: ChangeEventArgs) => {
   showMessage('Filter updated');
-});
-
-qb.addEventListener('ruleAdded', () => {
-  showMessage('Rule added', 'success');
-});
-
-qb.addEventListener('ruleDeleted', () => {
-  showMessage('Rule removed', 'info');
 });
 
 function showMessage(text: string, type: string = 'info') {
@@ -618,11 +621,10 @@ try {
     throw new Error(`Validation failed: ${validation.errors[0].message}`);
   }
   
-  qb.rule = importedRules;
-  qb.refresh();
+  qb.setRules(importedRules);
 } catch (error) {
   console.error('Error:', error);
-  showError(`Failed to load query: ${error.message}`);
+  showError(`Failed to load query: ${(error as Error).message}`);
 }
 ```
 
@@ -634,13 +636,13 @@ function createOptimizedQB(container: string, columns: any, data: any) {
   const qb = new QueryBuilder({
     columns: columns,
     dataSource: data,
-    allowDragDrop: true,
-    displayMode: 'Inline'
+    allowDragAndDrop: true,
+    displayMode: 'Horizontal'
   });
   
   qb.appendTo(container);
   
-  let timeout: NodeJS.Timeout;
+  let timeout: ReturnType<typeof setTimeout>;
   qb.addEventListener('change', () => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {

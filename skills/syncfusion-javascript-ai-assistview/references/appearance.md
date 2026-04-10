@@ -329,8 +329,8 @@ aiAssistView.appendTo('#aiAssistView');
 <head>
     <meta charset="utf-8" />
     <title>AI AssistView - RTL</title>
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/material.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/tailwind3.css" rel="stylesheet" />
 </head>
 <body>
     <div id="aiAssistView"></div>
@@ -368,28 +368,28 @@ Syncfusion provides 6 built-in themes:
 
 ```html
 <!-- Material Theme -->
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/material.css" rel="stylesheet" />
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/material.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind3.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/tailwind3.css" rel="stylesheet" />
 
 <!-- Bootstrap 5 Theme -->
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/bootstrap5.css" rel="stylesheet" />
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/bootstrap5.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/bootstrap5.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/bootstrap5.css" rel="stylesheet" />
 
 <!-- Tailwind CSS Theme -->
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/tailwind.css" rel="stylesheet" />
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/tailwind.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/tailwind.css" rel="stylesheet" />
 
 <!-- Fluent Theme -->
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/fluent.css" rel="stylesheet" />
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/fluent.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/fluent.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/fluent.css" rel="stylesheet" />
 
 <!-- Fabric Theme -->
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/fabric.css" rel="stylesheet" />
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/fabric.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/fabric.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/fabric.css" rel="stylesheet" />
 
 <!-- High Contrast Theme -->
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/highcontrast.css" rel="stylesheet" />
-<link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/highcontrast.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/highcontrast.css" rel="stylesheet" />
+<link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/highcontrast.css" rel="stylesheet" />
 ```
 
 ### Complete Example
@@ -403,12 +403,12 @@ Syncfusion provides 6 built-in themes:
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Syncfusion CSS -->
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-inputs/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-buttons/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-navigations/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-notifications/styles/material.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-buttons/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-navigations/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-notifications/styles/tailwind3.css" rel="stylesheet" />
     
     <style>
         .e-aiassistview.custom-appearance {

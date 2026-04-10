@@ -6,10 +6,6 @@ Complete reference for security features, HTML sanitization, and read-only mode 
 
 - [Overview](#overview)
 - [HTML Sanitization](#html-sanitization)
-  - [enableHtmlSanitizer](#enablehtmlsanitizer)
-  - [Sanitization Process](#sanitization-process)
-  - [Protected Elements and Attributes](#protected-elements-and-attributes)
-  - [Configuration Examples](#sanitization-configuration-examples)
 - [HTML Encoding](#html-encoding)
   - [enableHtmlEncode](#enablehtmlencode)
   - [When to Use HTML Encoding](#when-to-use-html-encoding)
@@ -31,146 +27,7 @@ The Block Editor provides robust security features to protect against Cross-Site
 
 ## HTML Sanitization
 
-HTML sanitization is a critical security feature that removes potentially malicious scripts, event handlers, and unsafe HTML tags from user-generated content.
-
-### enableHtmlSanitizer
-
-The `enableHtmlSanitizer` property enables automatic sanitization of HTML content to prevent XSS attacks.
-
-**Property:** `enableHtmlSanitizer`
-
-**Type:** `boolean`
-
-**Default:** `true`
-
-**Configuration:**
-```typescript
-const editor = new BlockEditor({
-    enableHtmlSanitizer: true  // Enabled by default
-});
-```
-
-When enabled, the sanitizer:
-- Removes `<script>` tags and JavaScript code
-- Strips dangerous event handlers (e.g., `onclick`, `onerror`, `onload`)
-- Removes potentially harmful tags (e.g., `<iframe>`, `<object>`, `<embed>`)
-- Filters unsafe URL schemes (e.g., `javascript:`, `data:`)
-- Preserves safe HTML formatting and structure
-
-### Sanitization Process
-
-The sanitization process occurs automatically when:
-1. Content is pasted into the editor
-2. HTML is loaded via `setBlocksData()` or `loadHtml()` methods
-3. User input includes HTML markup
-4. Content is imported from external sources
-
-**Sanitization Flow:**
-```
-Raw HTML Input → Sanitizer → Cleaned HTML → Editor Content
-```
-
-### Protected Elements and Attributes
-
-**Allowed HTML Tags:**
-```typescript
-[
-    'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'span', 'strong', 'em', 'u', 's', 'code', 'pre',
-    'a', 'ul', 'ol', 'li', 'blockquote',
-    'table', 'thead', 'tbody', 'tr', 'th', 'td',
-    'img', 'br', 'hr'
-]
-```
-
-**Allowed Attributes:**
-```typescript
-{
-    'a': ['href', 'title', 'target'],
-    'img': ['src', 'alt', 'width', 'height'],
-    'table': ['border', 'cellpadding', 'cellspacing'],
-    'td': ['colspan', 'rowspan'],
-    'th': ['colspan', 'rowspan'],
-    '*': ['class', 'id', 'style']  // Common attributes
-}
-```
-
-**Blocked Tags:**
-```typescript
-[
-    'script', 'iframe', 'object', 'embed', 'applet',
-    'link', 'meta', 'style', 'base', 'form', 'input'
-]
-```
-
-**Blocked Attributes:**
-```typescript
-[
-    'onclick', 'onerror', 'onload', 'onmouseover', 'onmouseout',
-    'onfocus', 'onblur', 'onchange', 'onsubmit', 'onkeydown',
-    'onkeyup', 'onkeypress', 'ondblclick', 'oncontextmenu'
-]
-```
-
-### Sanitization Configuration Examples
-
-**Example 1: Basic Sanitization**
-```typescript
-import { BlockEditor } from '@syncfusion/ej2-blockeditor';
-
-const blockEditor: BlockEditor = new BlockEditor({
-    enableHtmlSanitizer: true,
-    blocks: [
-        {
-            blockType: 'Paragraph',
-            content: [
-                {
-                    contentType: ContentType.Text,
-                    content: 'Safe content'
-                }
-            ]
-        }
-    ]
-});
-
-blockEditor.appendTo('#blockeditor');
-
-// Try to insert potentially dangerous content
-const dangerousHtml = `
-    <p>Safe paragraph</p>
-    <script>alert('XSS Attack!');</script>
-    <p onclick="alert('Clicked!')">Paragraph with event handler</p>
-    <iframe src="https://malicious-site.com"></iframe>
-`;
-
-// The sanitizer will clean this before insertion
-blockEditor.loadHtml(dangerousHtml);
-// Result: Only the safe <p> tags will be rendered
-```
-
-**Example 2: Sanitization with Paste Events**
-```typescript
-import { BlockEditor, BeforePasteCleanupEventArgs } from '@syncfusion/ej2-blockeditor';
-
-const blockEditor: BlockEditor = new BlockEditor({
-    enableHtmlSanitizer: true,
-    
-    beforePasteCleanup: (args: BeforePasteCleanupEventArgs) => {
-        console.log('Before sanitization:', args.content);
-        
-        // Additional custom validation
-        if (args.content.includes('<script>') || args.content.includes('javascript:')) {
-            alert('Potentially dangerous content detected and will be sanitized.');
-        }
-    },
-    
-    afterPasteCleanup: (args: AfterPasteCleanupEventArgs) => {
-        console.log('After sanitization:', args.content);
-    }
-});
-
-blockEditor.appendTo('#blockeditor');
-```
+HTML sanitization is a critical security feature that removes potentially malicious scripts, event handlers, and unsafe HTML tags from user-generated content. It is handled by default in the block editor.
 
 ## HTML Encoding
 
@@ -214,9 +71,6 @@ const blockEditor = new BlockEditor({
     enableHtmlEncode: true
 });
 
-// Input: <script>alert('XSS')</script>
-// Display: &lt;script&gt;alert('XSS')&lt;/script&gt;
-// Rendered as text: <script>alert('XSS')</script>
 ```
 
 ### Encoding Configuration Examples
@@ -329,7 +183,7 @@ const documentBlocks: BlockModel[] = [
             {
                 contentType: ContentType.Link,
                 content: 'our website',
-                properties: { href: 'https://www.syncfusion.com' }
+                properties: { href: 'www.syncfusion.com' }
             },
             {
                 contentType: ContentType.Text,

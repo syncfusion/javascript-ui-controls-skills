@@ -1,13 +1,13 @@
 ---
 name: syncfusion-javascript-dropdowns
-description: Comprehensive guide for implementing Syncfusion React dropdown components including DropDownList and MultiSelect. Use this when building selection interfaces, data binding, filtering, cascading dropdowns, custom templates, and accessible dropdown experiences in TypeScript applications.
+description: Comprehensive guide for implementing Syncfusion TypeScript dropdown components including AutoComplete, ComboBox, Mention, Dropdownlist and Multiselect. Use this when building selection interfaces, data binding, filtering, cascading dropdowns, custom templates, and accessible dropdown experiences.
 metadata:
   author: "Syncfusion Inc"
   version: "33.1.44"
   category: "Dropdowns"
 ---
 
-# Implementing Syncfusion TypeScript Dropdowns
+# Syncfusion javascript Dropdowns
 
 ## DropDownList
 
@@ -148,7 +148,7 @@ import { Query, DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
 
 let ddl: DropDownList = new DropDownList({
     dataSource: new DataManager({
-        url: 'https://your-api-endpoint.example.com/odata/', // Replace with your trusted API endpoint
+        url: 'url', // Replace with your trusted API endpoint
         adaptor: new ODataV4Adaptor,
         crossDomain: true  // Enable only when the API origin differs from your app; use only with trusted endpoints
     }),
@@ -405,7 +405,7 @@ import { DataManager, ODataV4Adaptor, Query } from '@syncfusion/ej2-data';
 
 const multiSelect = new MultiSelect({
   dataSource: new DataManager({
-    url: 'https://your-api-endpoint.example.com/odata/Customers', // Replace with your trusted API endpoint
+    url: 'url', // Replace with your trusted API endpoint
     adaptor: new ODataV4Adaptor(),
     crossDomain: true  // Enable only when the API origin differs from your app; use only with trusted endpoints
   }),
@@ -470,3 +470,624 @@ multiSelect.appendTo('#select');
 - **Localization:** Multi-language support
 - **RTL Support:** Right-to-left language support
 - **Keyboard Navigation:** Full keyboard accessibility
+
+## AutoComplete
+
+The AutoComplete component displays a matched suggestion list as the user types into an input field. It extends ComboBox with filtering-first behavior — the popup opens only when the user types, not on focus (by default).
+
+**Key capabilities:**
+- Filter suggestions by `StartsWith`, `EndsWith`, or `Contains` (default)
+- Bind local arrays (strings, numbers, objects) or remote `DataManager` sources
+- Highlight matched characters in the suggestion list
+- Control minimum characters before filtering triggers (`minLength`)
+- Handle or override filtering logic via the `filtering` event
+- Programmatically open/close the popup with `showPopup()` / `hidePopup()`
+- Float label support and full accessibility/keyboard navigation
+
+---
+
+### Navigation Guide
+
+#### Getting Started
+📄 **Read:** [references/getting-started.md](references/autocomplete-getting-started.md)
+- Installation and package setup
+- HTML element setup (`<input>`)
+- Basic instantiation with `new AutoComplete()`
+- Binding to the DOM with `appendTo()`
+- CSS and theme imports
+- Minimal working example
+
+#### Filtering Configuration
+📄 **Read:** [references/filtering.md](references/autocomplete-filtering.md)
+- `filterType`: `StartsWith`, `EndsWith`, `Contains`
+- `minLength`: minimum characters before filter runs
+- `ignoreCase`: case-sensitive vs case-insensitive search
+- `filtering` event: custom filter logic with `updateData()`
+- `filter()` method: programmatic filtering
+- Remote data filtering with `DataManager`
+
+#### Data Binding
+📄 **Read:** [references/data-binding.md](references/autocomplete-data-binding.md)
+- Local string, number, and object arrays
+- `fields` mapping: `text`, `value`, `iconCss`, `groupBy`
+- `query` property with `DataManager`
+- `htmlAttributes` for custom HTML attributes
+- Remote data source patterns
+
+#### Highlight & Suggestion Control
+📄 **Read:** [references/highlight-and-suggestions.md](references/autocomplete-highlight-and-suggestions.md)
+- `highlight`: visually highlight matched characters
+- `suggestionCount`: limit number of popup list items
+- `showPopupButton`: toggle the popup trigger button
+- `showPopup()` / `hidePopup()`: programmatic popup control
+
+#### Customization & Accessibility
+📄 **Read:** [references/customization.md](references/autocomplete-customization.md)
+- `floatLabelType`: `Never`, `Always`, `Auto`
+- CSS class overrides and theming
+- Keyboard navigation and ARIA support
+- Disabled state
+- RTL support
+
+#### Virtualization
+📄 **Read:** [references/virtualization.md](references/autocomplete-virtualization.md)
+- `AutoComplete.Inject(VirtualScroll)` — required module injection
+- `enableVirtualization: true` — activate virtual scrolling
+- Local data virtualization with large arrays
+- Remote data virtualization with `DataManager`
+- Customizing batch size with `query.take()`
+- Grouping with virtualization
+
+#### Full API Reference
+📄 **Read:** [references/api.md](references/autocomplete-api.md)
+- All 37 properties with types, defaults, and TypeScript examples
+- All 19 methods with full signatures, parameters, and return types
+- All 18 events with event argument details and usage examples
+- Covers: `actionFailureTemplate`, `allowCustom`, `allowObjectBinding`, `allowResize`, `autofill`, `cssClass`, `dataSource`, `debounceDelay`, `enablePersistence`, `enableRtl`, `enableVirtualization`, `enabled`, `fields`, `filterType`, `floatLabelType`, `footerTemplate`, `groupTemplate`, `headerTemplate`, `highlight`, `htmlAttributes`, `ignoreAccent`, `ignoreCase`, `isDeviceFullScreen`, `itemTemplate`, `locale`, `minLength`, `noRecordsTemplate`, `placeholder`, `popupHeight`, `popupWidth`, `query`, `readonly`, `showClearButton`, `showPopupButton`, `sortOrder`, `suggestionCount`, `value`, `width`, `zIndex`
+- Use this when looking up a specific property, method, or event name
+
+---
+
+### Quick Start
+
+```html
+<!-- index.html -->
+<input id="atc" type="text" />
+```
+
+```typescript
+import { AutoComplete } from '@syncfusion/ej2-dropdowns';
+
+// Local string array
+const sports: string[] = ['Badminton', 'Basketball', 'Cricket', 'Football', 'Hockey', 'Tennis'];
+
+const atcObj: AutoComplete = new AutoComplete({
+  dataSource: sports,
+  placeholder: 'Find a sport'
+});
+
+atcObj.appendTo('#atc');
+```
+
+```css
+/* Import a built-in theme */
+@import '../node_modules/@syncfusion/ej2/material.css';
+```
+
+Type any character — matching items appear in the suggestion popup. Press **Enter** or click a suggestion to select.
+
+---
+
+### Common Patterns
+
+#### Filter by StartsWith instead of Contains
+```typescript
+const atcObj: AutoComplete = new AutoComplete({
+  dataSource: sports,
+  filterType: 'StartsWith',
+  placeholder: 'Search'
+});
+atcObj.appendTo('#atc');
+```
+
+#### Object data with field mapping
+```typescript
+import { AutoComplete } from '@syncfusion/ej2-dropdowns';
+
+const employees: { [key: string]: Object }[] = [
+  { id: 1, name: 'Alice', dept: 'Engineering' },
+  { id: 2, name: 'Bob',   dept: 'Design' },
+  { id: 3, name: 'Carol', dept: 'Engineering' }
+];
+
+const atcObj: AutoComplete = new AutoComplete({
+  dataSource: employees,
+  fields: { value: 'id', text: 'name', groupBy: 'dept' },
+  placeholder: 'Find employee'
+});
+atcObj.appendTo('#atc');
+```
+
+#### Custom filtering via event
+```typescript
+import { AutoComplete, FilteringEventArgs } from '@syncfusion/ej2-dropdowns';
+import { Query } from '@syncfusion/ej2-data';
+
+const atcObj: AutoComplete = new AutoComplete({
+  dataSource: sports,
+  filtering: (e: FilteringEventArgs) => {
+    let query: Query = new Query().where('', 'startswith', e.text, true);
+    e.updateData(sports, query);
+  }
+});
+atcObj.appendTo('#atc');
+```
+
+#### Highlight matched text with limited suggestions
+```typescript
+const atcObj: AutoComplete = new AutoComplete({
+  dataSource: sports,
+  highlight: true,
+  suggestionCount: 5,
+  placeholder: 'Search (max 5 results)'
+});
+atcObj.appendTo('#atc');
+```
+
+---
+
+### Key Properties
+
+| Property | Type | Default | Purpose |
+|----------|------|---------|---------|
+| `dataSource` | `Object[] \| DataManager \| string[]` | `[]` | Data to search |
+| `fields` | `FieldSettingsModel` | `{ value: null, iconCss: null, groupBy: null }` | Maps object keys to display/value |
+| `filterType` | `FilterType` | `'Contains'` | How input is matched against data |
+| `minLength` | `number` | `1` | Min chars typed before filtering fires |
+| `ignoreCase` | `boolean` | `true` | Case-insensitive matching |
+| `ignoreAccent` | `boolean` | `false` | Ignore diacritic/accent characters when filtering |
+| `highlight` | `boolean` | `false` | Highlight matched chars in popup |
+| `suggestionCount` | `number` | `20` | Max items shown in popup |
+| `autofill` | `boolean` | `false` | Inline auto-fill of first matched item |
+| `allowCustom` | `boolean` | `true` | Allow values not in data source |
+| `allowObjectBinding` | `boolean` | `false` | Return full object as `value` on selection |
+| `allowResize` | `boolean` | `false` | Show resize handle on popup |
+| `showPopupButton` | `boolean` | `false` | Show dropdown arrow button |
+| `showClearButton` | `boolean` | `true` | Show ✕ clear button |
+| `floatLabelType` | `FloatLabelType` | `'Never'` | Label float behavior |
+| `htmlAttributes` | `{ [key: string]: string }` | `{}` | Extra HTML attributes on input |
+| `query` | `Query` | `null` | Custom query for DataManager |
+| `debounceDelay` | `number` | `300` | Delay (ms) before filter executes on keystroke |
+| `sortOrder` | `SortOrder` | `null` | Sort order of popup list: `None`, `Ascending`, `Descending` |
+| `enableVirtualization` | `boolean` | `false` | Virtual scrolling for large datasets |
+| `isDeviceFullScreen` | `boolean` | `true` | Fullscreen popup on mobile when filtering |
+| `enablePersistence` | `boolean` | `false` | Persist `value` across page reloads |
+| `enableRtl` | `boolean` | `false` | Right-to-left rendering |
+| `popupHeight` | `string \| number` | `'300px'` | Height of suggestion popup |
+| `popupWidth` | `string \| number` | `'100%'` | Width of suggestion popup |
+| `zIndex` | `number` | `1000` | Z-index of popup element |
+
+**Key Events:**
+
+| Event | Fires When |
+|-------|-----------|
+| `filtering` | Each keystroke — use `e.updateData()` to supply custom results |
+| `change` | Value changes via selection or user input |
+| `select` | User selects an item from the popup |
+| `open` / `close` | Popup opens or closes |
+| `beforeOpen` | Just before the popup opens |
+| `focus` / `blur` | Component gains or loses focus |
+| `dataBound` | Data source is populated in the popup |
+| `actionBegin` / `actionComplete` / `actionFailure` | Remote data fetch lifecycle |
+| `customValueSpecifier` | User types a value not in data source (`allowCustom: true`) |
+| `resizeStart` / `resizing` / `resizeStop` | Popup resize lifecycle (`allowResize: true`) |
+| `created` / `destroyed` | Component creation and destruction |
+
+**Key Methods:** `showPopup()`, `hidePopup()`, `filter(dataSource, query?, fields?)`, `clear()`, `addItem()`, `disableItem()`, `getDataByValue()`, `getItems()`, `focusIn()`, `focusOut()`, `showSpinner()`, `hideSpinner()`, `refresh()`, `destroy()`.
+
+## ComboBox
+
+The **ComboBox** component allows the user to type a value directly into the input **or** choose an option from the dropdown list of predefined options. It is the flexible middle ground between a plain text input and a strict DropDownList — users are not forced to pick an existing item unless `allowCustom` is set to `false`.
+
+**Key differentiators from DropDownList:**
+- Users can type freely; custom values are accepted by default (`allowCustom: true`)
+- `autofill` suggests the first matching item inline as the user types
+- `customValueSpecifier` event lets you format and transform user-typed custom values
+- Supports `allowFiltering` with an inline search experience (no separate filter bar)
+
+---
+
+### Component Overview
+
+| Capability | ComboBox Behavior |
+|---|---|
+| User input | Editable — user types directly in the input field |
+| Custom values | Allowed by default (`allowCustom: true`) |
+| Inline suggestion | Optional via `autofill: true` |
+| Filtering | Optional via `allowFiltering: true` + `filtering` event |
+| Virtualization | Supported via `ComboBox.Inject(VirtualScroll)` |
+| Data binding | Local arrays, object arrays, DataManager (remote) |
+| Object binding | Full object value binding via `allowObjectBinding: true` |
+
+---
+
+### Documentation and Navigation Guide
+
+#### Getting Started
+📄 **Read:** [references/getting-started.md](references/combobox-getting-started.md)
+- Installation and package setup
+- CSS/theme import
+- HTML element setup (`<select>` or `<input>`)
+- Basic instantiation with `new ComboBox({}).appendTo('#id')`
+- Initializing `value`, `text`, `index`
+- `showClearButton`, `placeholder`, `width`
+- Destroying the component
+
+#### Data Binding
+📄 **Read:** [references/data-binding.md](references/combobox-data-binding.md)
+- Local string arrays
+- Local object arrays with `fields` mapping (`text`, `value`, `groupBy`)
+- `htmlAttributes` for input element customization
+- Remote data with `DataManager`
+- `query` property for custom data queries
+- `allowObjectBinding` for full object value binding
+
+#### Filtering
+📄 **Read:** [references/filtering.md](references/combobox-filtering.md)
+- Enabling search with `allowFiltering: true`
+- `filtering` event and `FilteringEventArgs` usage
+- `filter()` method for local and remote custom filtering
+- `isDeviceFullScreen` behavior on mobile
+- No-match template handling
+
+#### Custom Values
+📄 **Read:** [references/custom-values.md](references/combobox-custom-values.md)
+- `allowCustom: true/false` — controlling whether typed values are accepted
+- `autofill` — inline suggestion as user types
+- `customValueSpecifier` event for formatting custom typed values
+- `CustomValueSpecifierEventArgs` interface (`text`, `item`)
+- Clearing custom values with `clear()` and `showClearButton`
+- `allowObjectBinding` combined with custom values
+
+#### Customization
+📄 **Read:** [references/customization.md](references/combobox-customization.md)
+- `floatLabelType`: `Never` / `Always` / `Auto`
+- `cssClass` for custom styling
+- `headerTemplate` / `footerTemplate` for popup header and footer
+- `placeholder`, `width`, `popupHeight`, `popupWidth`
+- `readonly` mode
+- Popup control: `showPopup()` / `hidePopup()`
+- Focus control: `focusIn()` / `focusOut()`
+- Spinner: `showSpinner()` / `hideSpinner()`
+
+#### Virtualization
+📄 **Read:** [references/virtualization.md](references/combobox-virtualization.md)
+- ⚠️ Required module injection: `ComboBox.Inject(VirtualScroll)`
+- `enableVirtualization: true` for large datasets
+- Local data virtualization
+- Remote `DataManager` virtualization
+- Interaction with `allowCustom` and `allowFiltering`
+
+#### Full API Reference
+📄 **Read:** [references/api.md](references/combobox-api.md)
+- All 37 public properties with types, defaults, and examples
+- 18 events with argument interfaces
+- 19 methods with signatures and usage
+- `CustomValueSpecifierEventArgs` interface
+
+---
+
+#### Quick Start
+
+```typescript
+import { ComboBox } from '@syncfusion/ej2-dropdowns';
+import '@syncfusion/ej2-base/styles/material.css';
+import '@syncfusion/ej2-inputs/styles/material.css';
+import '@syncfusion/ej2-popups/styles/material.css';
+import '@syncfusion/ej2-dropdowns/styles/material.css';
+
+const sportsData: string[] = ['Badminton', 'Basketball', 'Cricket', 'Football', 'Tennis'];
+
+const comboBox: ComboBox = new ComboBox({
+  dataSource: sportsData,
+  placeholder: 'Select or type a sport',
+  allowCustom: true
+});
+comboBox.appendTo('#combo-element');
+```
+
+```html
+<input id="combo-element" />
+```
+
+---
+
+### Common Patterns
+
+#### Allow Only Existing Values
+```typescript
+const comboBox: ComboBox = new ComboBox({
+  dataSource: sportsData,
+  allowCustom: false,        // reject values not in the list
+  placeholder: 'Select a sport'
+});
+comboBox.appendTo('#combo-element');
+```
+
+#### Inline Autofill Suggestion
+```typescript
+const comboBox: ComboBox = new ComboBox({
+  dataSource: sportsData,
+  autofill: true,            // suggests first match inline as user types
+  placeholder: 'Start typing...'
+});
+comboBox.appendTo('#combo-element');
+```
+
+#### Filtering with Remote Data
+```typescript
+import { ComboBox, FilteringEventArgs } from '@syncfusion/ej2-dropdowns';
+import { DataManager, ODataV4Adaptor, Query } from '@syncfusion/ej2-data';
+
+const comboBox: ComboBox = new ComboBox({
+  dataSource: new DataManager({ url: 'url', adaptor: new ODataV4Adaptor() }),
+  fields: { text: 'ContactName', value: 'CustomerID' },
+  allowFiltering: true,
+  filtering: (args: FilteringEventArgs) => {
+    const query = new Query().select(['ContactName', 'CustomerID']).take(6);
+    args.updateData(comboBox.dataSource as DataManager, query);
+  },
+  placeholder: 'Search customers'
+});
+comboBox.appendTo('#combo-element');
+```
+
+#### Custom Value Formatting
+```typescript
+import { ComboBox, CustomValueSpecifierEventArgs } from '@syncfusion/ej2-dropdowns';
+
+const comboBox: ComboBox = new ComboBox({
+  dataSource: [{ text: 'Cricket', id: '1' }],
+  fields: { text: 'text', value: 'id' },
+  allowCustom: true,
+  customValueSpecifier: (args: CustomValueSpecifierEventArgs) => {
+    args.item = { text: args.text, id: args.text.toLowerCase() };
+  }
+});
+comboBox.appendTo('#combo-element');
+```
+
+---
+
+### Key Properties
+
+| Property | Type | Default | Purpose |
+|---|---|---|---|
+| `dataSource` | `Object[] \| DataManager \| string[]` | `[]` | Data for the dropdown list |
+| `fields` | `FieldSettingsModel` | `{}` | Map `text`, `value`, `groupBy` keys |
+| `value` | `number \| string \| boolean \| object \| null` | `null` | Selected value |
+| `text` | `string \| null` | `null` | Display text of selected item |
+| `index` | `number \| null` | `null` | Index of selected item |
+| `allowCustom` | `boolean` | `true` | Allow user-typed values not in list |
+| `autofill` | `boolean` | `false` | Inline suggestion while typing |
+| `allowFiltering` | `boolean` | `false` | Show search box in popup |
+| `showClearButton` | `boolean` | `true` | Show ✕ button to clear selection |
+| `placeholder` | `string` | `null` | Input placeholder text |
+| `floatLabelType` | `FloatLabelType` | `'Never'` | Floating label behavior |
+| `readonly` | `boolean` | `false` | Disable user interaction |
+| `allowObjectBinding` | `boolean` | `false` | Bind full object as value |
+| `enableVirtualization` | `boolean` | `false` | Enable virtual scrolling ⚠️ requires `Inject` |
+
+## Mention
+
+The Mention component monitors a target element (textarea, input, or contenteditable div) and opens a suggestion popup when the user types a configured trigger character (default `@`). The user selects an item and it is inserted as a styled chip into the target element.
+
+**Key capabilities:**
+- Attach to any `<textarea>`, `<input>`, or `contenteditable` element via `target`
+- Configurable trigger character via `mentionChar` (default `@`)
+- Bind local arrays (strings, objects) or remote `DataManager` sources
+- Filter suggestions with `StartsWith`, `EndsWith`, or `Contains` (default)
+- Highlight matched characters in the popup via `highlight`
+- Customize the popup item layout with `itemTemplate` and the inserted chip with `displayTemplate`
+- Control when the popup opens: `minLength`, `requireLeadingSpace`, `debounceDelay`
+- Handle selection, change, and filtering with events
+- Programmatically trigger search with `search()` and manage items with `disableItem()` / `addItem()`
+
+---
+
+### Navigation Guide
+
+#### Getting Started
+📄 **Read:** [references/getting-started.md](references/mention-getting-started.md)
+- Installation and package setup
+- CSS and theme imports
+- HTML target element setup (textarea, input, contenteditable)
+- Basic instantiation: `new Mention({ target: '#myTextarea', dataSource: [...] })`
+- `appendTo()` usage
+- `mentionChar` — trigger character configuration
+- Minimal working example
+
+#### Data Binding
+📄 **Read:** [references/data-binding.md](references/mention-data-binding.md)
+- Local string and number arrays
+- Object arrays with `fields` mapping (`text`, `value`, `iconCss`, `groupBy`)
+- Remote `DataManager` with `actionBegin` / `actionComplete` / `actionFailure` events
+- `query` property for custom data queries
+- `sortOrder`: `None` / `Ascending` / `Descending`
+- `actionFailureTemplate` for remote error handling
+
+#### Filtering
+📄 **Read:** [references/filtering.md](references/mention-filtering.md)
+- `filterType`: `StartsWith`, `EndsWith`, `Contains`
+- `minLength`: minimum characters before popup appears
+- `ignoreCase` and `ignoreAccent` for flexible matching
+- `debounceDelay`: performance tuning for keystroke filtering
+- `filtering` event and `FilteringEventArgs` — custom filter logic with `updateData()`
+- Remote data filtering patterns
+
+#### Popup and Display
+📄 **Read:** [references/popup-and-display.md](references/mention-popup-and-display.md)
+- `target`: binding to textarea, input, or contenteditable
+- `requireLeadingSpace`: enforce space before `@`
+- `allowSpaces`: allow spaces within a mention search
+- `popupWidth` / `popupHeight` sizing
+- `showPopup()` / `hidePopup()` programmatic control
+- `zIndex` for layering
+- `noRecordsTemplate` / `spinnerTemplate`
+- `beforeOpen`, `opened`, `closed` popup lifecycle events
+
+#### Templates and Customization
+📄 **Read:** [references/templates-and-customization.md](references/mention-templates-and-customization.md)
+- `itemTemplate`: customize each suggestion item in the popup
+- `displayTemplate`: customize the inserted chip HTML
+- `groupTemplate`: group header rendering in popup
+- `showMentionChar`: include `@` in the inserted chip
+- `suffixText`: append a space or newline after insertion
+- `highlight`: bold matched characters in suggestions
+- `cssClass` for component-level styling
+
+#### Events and Methods
+📄 **Read:** [references/events-and-methods.md](references/mention-events-and-methods.md)
+- `select` event (`SelectEventArgs`) — fires when user picks an item
+- `change` event (`MentionChangeEventArgs`) — value, previousItem, element
+- `filtering` event — intercept and override suggestion data
+- `search(text, x, y)` — programmatic search trigger at screen coordinates
+- `disableItem(item)` — disable a specific popup item
+- `addItem(items, index?)` — add new items to the suggestion list
+- `getItems()` / `getDataByValue(value)` — query list state
+- `created` / `destroyed` lifecycle events
+
+#### Full API Reference
+📄 **Read:** [references/api.md](references/mention-api.md)
+- All 30 public properties with types, defaults, and descriptions
+  - All 15 methods with signatures, parameters, and return types
+  - All 12 events with event argument interface details
+- `MentionChangeEventArgs` interface fields
+- Use this reference when looking up a specific property, method, or event
+
+---
+
+### Quick Start
+
+```html
+<!-- index.html -->
+<textarea id="mentionTarget" rows="5" cols="40" placeholder="Type @ to mention someone"></textarea>
+<div id="mention-default"></div>
+```
+
+```typescript
+import { Mention } from '@syncfusion/ej2-dropdowns';
+
+const userData: { [key: string]: Object }[] = [
+  { name: 'Alice',   id: 'alice' },
+  { name: 'Bob',     id: 'bob'   },
+  { name: 'Carol',   id: 'carol' },
+  { name: 'David',   id: 'david' }
+];
+
+const mentionObj: Mention = new Mention({
+  target: '#mentionTarget',
+  dataSource: userData,
+  fields: { text: 'name', value: 'id' }
+});
+
+mentionObj.appendTo('#mention-default');
+```
+
+```css
+/* Import a built-in theme */
+@import '../node_modules/@syncfusion/ej2/material.css';
+```
+
+Type `@` in the textarea — the suggestion popup opens. Type more characters to filter. Press **Enter**, **Tab**, or click to insert the selected item as a chip.
+
+---
+
+### Common Patterns
+
+### Custom trigger character
+```typescript
+const mentionObj: Mention = new Mention({
+  target: '#mentionTarget',
+  dataSource: ['JavaScript', 'TypeScript', 'Python', 'Rust'],
+  mentionChar: '#'   // use # as trigger instead of @
+});
+mentionObj.appendTo('#mention-default');
+```
+
+#### Require minimum characters before popup opens
+```typescript
+const mentionObj: Mention = new Mention({
+  target: '#mentionTarget',
+  dataSource: userData,
+  fields: { text: 'name', value: 'id' },
+  minLength: 2     // popup only appears after typing @ + 2 characters
+});
+mentionObj.appendTo('#mention-default');
+```
+
+#### Highlight matched text and limit suggestion count
+```typescript
+const mentionObj: Mention = new Mention({
+  target: '#mentionTarget',
+  dataSource: userData,
+  fields: { text: 'name', value: 'id' },
+  highlight: true,
+  suggestionCount: 5
+});
+mentionObj.appendTo('#mention-default');
+```
+
+#### Allow spaces within a mention search
+```typescript
+const mentionObj: Mention = new Mention({
+  target: '#mentionTarget',
+  dataSource: [
+    { name: 'Alice Smith',  id: '1' },
+    { name: 'Bob Jones',    id: '2' }
+  ],
+  fields: { text: 'name', value: 'id' },
+  allowSpaces: true   // typing "@Alice Smith" still searches
+});
+mentionObj.appendTo('#mention-default');
+```
+
+#### Show @-symbol in the inserted chip
+```typescript
+const mentionObj: Mention = new Mention({
+  target: '#mentionTarget',
+  dataSource: userData,
+  fields: { text: 'name', value: 'id' },
+  showMentionChar: true,   // chip reads "@Alice" instead of "Alice"
+  suffixText: ' '          // insert a space after the chip
+});
+mentionObj.appendTo('#mention-default');
+```
+
+---
+
+### Key Properties
+
+| Property | Type | Default | Purpose |
+|---|---|---|---|
+| `target` | `HTMLElement \| string` | — | **Required.** The element to monitor for the trigger character |
+| `dataSource` | `Object[] \| DataManager \| string[]` | `[]` | Suggestion list data |
+| `fields` | `FieldSettingsModel` | `{ text: null, value: null, iconCss: null, groupBy: null }` | Map object keys |
+| `mentionChar` | `string` | `'@'` | Character that opens the popup |
+| `minLength` | `number` | `0` | Min chars after trigger before popup shows |
+| `suggestionCount` | `number` | `25` | Max items shown in popup |
+| `filterType` | `FilterType` | `'Contains'` | Match strategy for typed characters |
+| `ignoreCase` | `boolean` | `true` | Case-insensitive matching |
+| `highlight` | `boolean` | `false` | Bold matched characters in suggestions |
+| `allowSpaces` | `boolean` | `false` | Allow spaces within the mention search string |
+| `requireLeadingSpace` | `boolean` | `true` | Require a space before `@` to trigger |
+| `showMentionChar` | `boolean` | `false` | Prefix inserted chip text with `mentionChar` |
+| `suffixText` | `string` | `null` | Text appended after the inserted chip (e.g. `' '`) |
+| `debounceDelay` | `number` | `300` | Milliseconds to wait before filtering |
+| `popupHeight` | `string \| number` | `'300px'` | Popup list height |
+| `popupWidth` | `string \| number` | `'auto'` | Popup list width |
+
+**Key Events:** `select` (item picked), `change` (value updated in editor), `filtering` (custom filter logic), `beforeOpen` / `opened` / `closed` (popup lifecycle).
+
+**Key Methods:** `showPopup()`, `hidePopup()`, `search(text, x, y)`, `disableItem(item)`, `addItem(items, index?)`, `destroy()`.
+

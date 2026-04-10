@@ -148,7 +148,7 @@ const map = new Maps({
     zoomSettings: { maxZoom: 13, minZoom: 1 },
     layers: [
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
             type: 'OSM',
             markerSettings: {
                 dataSource: [

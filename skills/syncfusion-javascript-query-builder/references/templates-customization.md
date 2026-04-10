@@ -31,16 +31,12 @@ const columns: ColumnsModel[] = [
         element.type = 'text';
         return element;
       },
-      destroy: (args: any) => {
-        // Cleanup if needed
+      destroy: (args: { element: HTMLElement }) => {
+        // Cleanup custom component resources if needed
       },
-      write: (args: any) => {
-        // Set value
+      write: (args: { element: HTMLInputElement; value: string }) => {
+        // Set the initial value on the custom component
         args.element.value = args.value || '';
-      },
-      read: (args: any) => {
-        // Get value
-        return args.element.value;
       }
     }
   }
@@ -71,11 +67,8 @@ const statusColumn: ColumnsModel = {
       `;
       return select;
     },
-    write: (args: any) => {
+    write: (args: { element: HTMLSelectElement; value: string }) => {
       args.element.value = args.value || '';
-    },
-    read: (args: any) => {
-      return args.element.value;
     }
   }
 };
@@ -96,28 +89,22 @@ const dateColumn: ColumnsModel = {
       dateInput.className = 'custom-date-picker';
       return dateInput;
     },
-    write: (args: any) => {
+    write: (args: { element: HTMLInputElement; value: string }) => {
       if (args.value) {
-        // Convert dd/MM/yyyy to yyyy-MM-dd
+        // Convert dd/MM/yyyy to yyyy-MM-dd for the native date input
         const parts = args.value.split('/');
         if (parts.length === 3) {
           args.element.value = `${parts[2]}-${parts[1]}-${parts[0]}`;
         }
       }
-    },
-    read: (args: any) => {
-      if (args.element.value) {
-        // Convert yyyy-MM-dd to dd/MM/yyyy
-        const [year, month, day] = args.element.value.split('-');
-        return `${day}/${month}/${year}`;
-      }
-      return '';
     }
   }
 };
 ```
 
 ### Number Range Template
+
+Use `notifyChange` to push value updates back to QueryBuilder from within a custom template:
 
 ```typescript
 const salaryColumn: ColumnsModel = {
@@ -133,19 +120,23 @@ const salaryColumn: ColumnsModel = {
       `;
       return container;
     },
-    write: (args: any) => {
-      const minInput = args.element.querySelector('.min-value');
-      const maxInput = args.element.querySelector('.max-value');
-      
+    write: (args: { element: HTMLElement; value: number[] }) => {
+      const minInput = args.element.querySelector('.min-value') as HTMLInputElement;
+      const maxInput = args.element.querySelector('.max-value') as HTMLInputElement;
+
       if (Array.isArray(args.value)) {
-        minInput.value = args.value[0];
-        maxInput.value = args.value[1];
+        minInput.value = String(args.value[0]);
+        maxInput.value = String(args.value[1]);
       }
-    },
-    read: (args: any) => {
-      const min = args.element.querySelector('.min-value').value;
-      const max = args.element.querySelector('.max-value').value;
-      return [Number(min), Number(max)];
+
+      // Notify QueryBuilder when values change
+      const notify = () => {
+        const min = Number(minInput.value);
+        const max = Number(maxInput.value);
+        qb.notifyChange([min, max] as any, args.element);
+      };
+      minInput.addEventListener('change', notify);
+      maxInput.addEventListener('change', notify);
     }
   }
 };
@@ -153,7 +144,7 @@ const salaryColumn: ColumnsModel = {
 
 ## Operator Template
 
-### Custom Operator Dropdown
+### Custom Operator List
 
 ```typescript
 const customOperatorColumn: ColumnsModel = {
@@ -161,24 +152,24 @@ const customOperatorColumn: ColumnsModel = {
   label: 'Title',
   type: 'string',
   operators: [
-    { key: 'startswith', text: 'Starts with' },
-    { key: 'endswith', text: 'Ends with' },
-    { key: 'contains', text: 'Contains' },
-    { key: 'equal', text: 'Equals' }
+    { key: 'startswith', value: 'Starts with' },
+    { key: 'endswith', value: 'Ends with' },
+    { key: 'contains', value: 'Contains' },
+    { key: 'equal', value: 'Equals' }
   ],
   template: {
-    // Template for the value input
+    // Custom value input template
     create: () => {
       const input = document.createElement('input');
       input.type = 'text';
       input.className = 'operator-input';
       return input;
     },
-    write: (args: any) => {
+    write: (args: { element: HTMLInputElement; value: string }) => {
       args.element.value = args.value || '';
-    },
-    read: (args: any) => {
-      return args.element.value;
+      args.element.addEventListener('change', () => {
+        qb.notifyChange(args.element.value, args.element);
+      });
     }
   }
 };
@@ -186,26 +177,34 @@ const customOperatorColumn: ColumnsModel = {
 
 ## Field Template
 
-### Custom Field Selector
+### Rule Template (Full Row)
+
+Use `ruleTemplate` on a `ColumnsModel` to replace the entire rule row with a custom template:
 
 ```typescript
-const fieldTemplate: any = {
-  create: () => {
-    const select = document.createElement('select');
-    select.className = 'field-selector';
-    columns.forEach(col => {
-      const option = document.createElement('option');
-      option.value = col.field;
-      option.textContent = col.label || col.field;
-      select.appendChild(option);
-    });
-    return select;
-  },
-  write: (args: any) => {
-    args.element.value = args.value?.field || '';
-  },
-  read: (args: any) => {
-    return args.element.value;
+const customRuleColumn: ColumnsModel = {
+  field: 'Status',
+  label: 'Status',
+  type: 'string',
+  ruleTemplate: '#statusRuleTemplate'  // ID of a script/HTML template element
+};
+```
+
+You can also use a function:
+
+```typescript
+const customRuleColumn: ColumnsModel = {
+  field: 'Status',
+  label: 'Status',
+  type: 'string',
+  ruleTemplate: (args: any) => {
+    return `<div class="custom-rule">
+      <label>Status</label>
+      <select class="status-select">
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>`;
   }
 };
 ```
@@ -215,7 +214,7 @@ const fieldTemplate: any = {
 ### Using HTML String Templates
 
 ```typescript
-// Value template with HTML string
+// Value template with HTML buttons and notifyChange
 const advancedColumn: ColumnsModel = {
   field: 'Priority',
   label: 'Priority',
@@ -232,14 +231,21 @@ const advancedColumn: ColumnsModel = {
       `;
       return wrapper;
     },
-    write: (args: any) => {
-      const selected = wrapper.querySelector(`[data-value="${args.value}"]`);
-      if (selected) {
-        selected.classList.add('selected');
-      }
-    },
-    read: (args: any) => {
-      return args.element.querySelector('.priority-btn.selected')?.dataset.value || '';
+    write: (args: { element: HTMLElement; value: string }) => {
+      // Highlight the current value
+      args.element.querySelectorAll('.priority-btn').forEach((btn: Element) => {
+        (btn as HTMLElement).classList.toggle(
+          'selected',
+          (btn as HTMLElement).dataset.value === args.value
+        );
+      });
+      // Notify QueryBuilder on click
+      args.element.querySelectorAll('.priority-btn').forEach((btn: Element) => {
+        btn.addEventListener('click', () => {
+          const val = (btn as HTMLElement).dataset.value || '';
+          qb.notifyChange(val, args.element);
+        });
+      });
     }
   }
 };
@@ -256,18 +262,19 @@ const complexTemplate: ColumnsModel = {
     create: () => {
       return document.createElement('div');
     },
-    write: (args: any) => {
+    write: (args: { element: HTMLElement; value: string }) => {
       args.element.innerHTML = `
         <div class="employee-card">
-          <input type="text" class="employee-search" placeholder="Search...">
+          <input type="text" class="employee-search" placeholder="Search..." value="${args.value || ''}">
           <div class="employee-list">
             ${generateEmployeeOptions()}
           </div>
         </div>
       `;
-    },
-    read: (args: any) => {
-      return args.element.querySelector('.employee-search').value;
+      const searchInput = args.element.querySelector('.employee-search') as HTMLInputElement;
+      searchInput.addEventListener('change', () => {
+        qb.notifyChange(searchInput.value, args.element);
+      });
     }
   }
 };
@@ -297,17 +304,14 @@ const customColumn: ColumnsModel = {
       input.className = 'custom-status-input';  // Custom class
       return input;
     },
-    write: (args: any) => {
+    write: (args: { element: HTMLInputElement; value: string }) => {
       args.element.value = args.value || '';
       // Add dynamic class based on value
-      if (args.value === 'Active') {
-        args.element.classList.add('status-active');
-      } else if (args.value === 'Inactive') {
-        args.element.classList.add('status-inactive');
-      }
-    },
-    read: (args: any) => {
-      return args.element.value;
+      args.element.classList.toggle('status-active', args.value === 'Active');
+      args.element.classList.toggle('status-inactive', args.value === 'Inactive');
+      args.element.addEventListener('change', () => {
+        qb.notifyChange(args.element.value, args.element);
+      });
     }
   }
 };
@@ -400,27 +404,15 @@ function createQBWithTheme(theme: 'light' | 'dark' | 'highcontrast') {
   document.getElementById('querybuilder')?.classList.add(`qb-${theme}`);
 }
 
-function getThemedTemplate(column: ColumnsModel, theme: string): any {
-  const themeStyles = {
-    light: {
-      background: '#ffffff',
-      text: '#333333',
-      border: '#e0e0e0'
-    },
-    dark: {
-      background: '#1e1e1e',
-      text: '#ffffff',
-      border: '#444444'
-    },
-    highcontrast: {
-      background: '#000000',
-      text: '#ffff00',
-      border: '#ffff00'
-    }
+function getThemedTemplate(column: ColumnsModel, theme: string): TemplateColumn {
+  const themeStyles: Record<string, { background: string; text: string; border: string }> = {
+    light: { background: '#ffffff', text: '#333333', border: '#e0e0e0' },
+    dark: { background: '#1e1e1e', text: '#ffffff', border: '#444444' },
+    highcontrast: { background: '#000000', text: '#ffff00', border: '#ffff00' }
   };
-  
-  const style = themeStyles[theme];
-  
+
+  const style = themeStyles[theme] || themeStyles['light'];
+
   return {
     create: () => {
       const input = document.createElement('input');
@@ -429,11 +421,11 @@ function getThemedTemplate(column: ColumnsModel, theme: string): any {
       input.style.borderColor = style.border;
       return input;
     },
-    write: (args: any) => {
+    write: (args: { element: HTMLInputElement; value: string }) => {
       args.element.value = args.value || '';
-    },
-    read: (args: any) => {
-      return args.element.value;
+      args.element.addEventListener('change', () => {
+        qb.notifyChange(args.element.value, args.element);
+      });
     }
   };
 }
@@ -451,26 +443,25 @@ const responsiveTemplate: ColumnsModel = {
     create: () => {
       const container = document.createElement('div');
       container.className = 'responsive-input-container';
-      
+
       // Use textarea on mobile, input on desktop
       const isMobile = window.innerWidth < 768;
-      const element = isMobile 
+      const element = isMobile
         ? document.createElement('textarea')
         : document.createElement('input');
-      
+
       if (!isMobile) (element as HTMLInputElement).type = 'text';
       element.className = 'responsive-input';
       container.appendChild(element);
-      
+
       return container;
     },
-    write: (args: any) => {
-      const input = args.element.querySelector('textarea, input');
+    write: (args: { element: HTMLElement; value: string }) => {
+      const input = args.element.querySelector('textarea, input') as HTMLInputElement | HTMLTextAreaElement;
       input.value = args.value || '';
-    },
-    read: (args: any) => {
-      const input = args.element.querySelector('textarea, input');
-      return input.value;
+      input.addEventListener('change', () => {
+        qb.notifyChange(input.value, args.element);
+      });
     }
   }
 };
@@ -478,12 +469,15 @@ const responsiveTemplate: ColumnsModel = {
 
 ### Validation in Templates
 
+Use the `validation` property on `ColumnsModel` for built-in validation, or enforce it inside `write` with `notifyChange`:
+
 ```typescript
-// Add validation to template
+// Add validation to template using ColumnsModel.validation
 const validatedColumn: ColumnsModel = {
   field: 'Email',
   label: 'Email',
   type: 'string',
+  validation: { isRequired: true },  // Built-in required validation
   template: {
     create: () => {
       const input = document.createElement('input');
@@ -491,22 +485,17 @@ const validatedColumn: ColumnsModel = {
       input.className = 'email-input';
       return input;
     },
-    write: (args: any) => {
+    write: (args: { element: HTMLInputElement; value: string }) => {
       args.element.value = args.value || '';
-    },
-    read: (args: any) => {
-      const value = args.element.value;
-      
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        args.element.classList.add('error');
-        args.element.title = 'Invalid email format';
-      } else {
-        args.element.classList.remove('error');
-      }
-      
-      return value;
+      args.element.addEventListener('change', () => {
+        const value = args.element.value;
+        // Validate email format visually
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        args.element.classList.toggle('error', !emailRegex.test(value));
+        args.element.title = emailRegex.test(value) ? '' : 'Invalid email format';
+        // Notify QueryBuilder of the new value
+        qb.notifyChange(value, args.element);
+      });
     }
   }
 };
@@ -534,9 +523,9 @@ const advancedColumns: ColumnsModel[] = [
       },
       write: (args: any) => {
         args.element.value = args.value || '';
-      },
-      read: (args: any) => {
-        return args.element.value;
+        args.element.addEventListener('change', () => {
+          qb.notifyChange(args.element.value, args.element);
+        });
       }
     }
   },
@@ -560,11 +549,13 @@ const advancedColumns: ColumnsModel[] = [
           args.element.querySelector('.start-date').value = args.value[0];
           args.element.querySelector('.end-date').value = args.value[1];
         }
-      },
-      read: (args: any) => {
-        const start = args.element.querySelector('.start-date').value;
-        const end = args.element.querySelector('.end-date').value;
-        return [start, end];
+        const notify = () => {
+          const start = args.element.querySelector('.start-date').value;
+          const end = args.element.querySelector('.end-date').value;
+          qb.notifyChange([start, end], args.element);
+        };
+        args.element.querySelector('.start-date').addEventListener('change', notify);
+        args.element.querySelector('.end-date').addEventListener('change', notify);
       }
     }
   }

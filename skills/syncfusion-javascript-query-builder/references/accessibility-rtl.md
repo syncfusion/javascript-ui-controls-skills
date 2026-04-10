@@ -45,7 +45,9 @@ QueryBuilder meets WCAG 2.1 Level AA standards:
 - Valid HTML and ARIA
 - Compatible with assistive technologies
 
-### Enable Accessibility Features
+### Basic Setup
+
+QueryBuilder includes built-in accessibility support (ARIA roles, keyboard navigation) without requiring additional configuration:
 
 ```typescript
 import { QueryBuilder } from '@syncfusion/ej2-querybuilder';
@@ -53,32 +55,28 @@ import { QueryBuilder } from '@syncfusion/ej2-querybuilder';
 const qb = new QueryBuilder({
   width: '100%',
   dataSource: employeeData,
-  columns: columns,
-  
-  // Accessibility options
-  enableAccessibility: true,  // Enable accessibility features
-  enableHighContrast: false   // High contrast mode
+  columns: columns
 });
 
 qb.appendTo('#querybuilder');
 ```
 
-### High Contrast Mode
+### High Contrast Theme
+
+Apply the high contrast CSS theme by importing it in your stylesheet:
+
+```html
+<!-- High contrast theme via CSS class on body -->
+<link href="node_modules/@syncfusion/ej2-querybuilder/styles/high-contrast.css" rel="stylesheet">
+```
 
 ```typescript
-// High contrast theme
-const hcTheme = `
-  @import "../../node_modules/@syncfusion/ej2-querybuilder/styles/high-contrast.css";
-`;
-
-// Toggle high contrast
+// Toggle high contrast by adding/removing CSS class
 function toggleHighContrast(enabled: boolean) {
   if (enabled) {
     document.body.classList.add('e-high-contrast');
-    qb.enableHighContrast = true;
   } else {
     document.body.classList.remove('e-high-contrast');
-    qb.enableHighContrast = false;
   }
 }
 
@@ -170,6 +168,8 @@ document.addEventListener('DOMContentLoaded', setInitialFocus);
 ### Add ARIA Labels
 
 ```typescript
+import { ColumnsModel } from '@syncfusion/ej2-querybuilder';
+
 // Add ARIA roles and labels
 const columns: ColumnsModel[] = [
   {
@@ -184,8 +184,8 @@ const columns: ColumnsModel[] = [
   }
 ];
 
-// Enhance with ARIA after rendering
-qb.addEventListener('renderComplete', () => {
+// Enhance with ARIA using the created event
+qb.addEventListener('created', () => {
   // Add ARIA labels to rules
   const rules = document.querySelectorAll('.e-rule');
   rules.forEach((rule, index) => {
@@ -225,16 +225,10 @@ function announceChange(message: string) {
   liveRegion.textContent = message;
 }
 
-qb.addEventListener('ruleAdded', () => {
-  announceChange('New filter rule added');
-});
-
-qb.addEventListener('ruleDeleted', () => {
-  announceChange('Filter rule removed');
-});
-
-qb.addEventListener('groupAdded', () => {
-  announceChange('New group added');
+// Use the official change event to detect rule/group changes
+// ChangeEventArgs (from '@syncfusion/ej2-querybuilder') exposes only the `name` property
+qb.addEventListener('change', (args: ChangeEventArgs) => {
+  announceChange('Query Builder updated: ' + args.name);
 });
 
 // CSS for screen reader only
@@ -317,14 +311,13 @@ improveScreenReaderExperience();
 function testAccessibilityAnnouncements() {
   console.log('Testing accessibility announcements...');
   
-  // Test rule addition
-  const testRule = [{
+  // Test rule addition - should trigger change event with type 'insertRule'
+  qb.addRules([{
     field: 'City',
     operator: 'equal',
-    value: 'Seattle'
-  }];
-  
-  qb.addRules(testRule, 'group0');
+    value: 'Seattle',
+    type: 'string'
+  }], 'group0');
   // Should announce: "New filter rule added"
   
   // Verify focus

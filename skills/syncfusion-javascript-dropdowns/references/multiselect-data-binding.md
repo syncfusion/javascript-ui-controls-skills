@@ -90,7 +90,7 @@ import { MultiSelect } from '@syncfusion/ej2-dropdowns';
 import { DataManager, ODataV4Adaptor, Query } from '@syncfusion/ej2-data';
 
 const dataManager = new DataManager({
-  url: 'https://services.odata.org/V4/Northwind/Northwind.svc/Customers',
+  url: 'url',
   adaptor: new ODataV4Adaptor(),
   crossDomain: true
 });
@@ -114,7 +114,7 @@ Fetch JSON data from custom API:
 
 ```typescript
 const dataManager = new DataManager({
-  url: 'https://api.example.com/employees',
+  url: 'url',
   adaptor: new UrlAdaptor(),
   crossDomain: true
 });
@@ -367,7 +367,7 @@ const multiSelect = new MultiSelect({
 
 ```typescript
 const dataManager = new DataManager({
-  url: 'https://api.example.com/data',
+  url: 'url',
   adaptor: new UrlAdaptor(),  // Use correct adaptor
   crossDomain: true           // Enable for CORS
 });

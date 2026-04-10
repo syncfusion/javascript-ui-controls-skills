@@ -20,7 +20,7 @@ Maps.Inject(Marker);
 let map: Maps = new Maps({
     layers: [
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
             markerSettings: [{
                 dataSource: [
                     { latitude: 37.6872, longitude: -122.0808, name: 'San Francisco' },
@@ -306,7 +306,7 @@ const map = new Maps({
   
         layers: [
             {
-                urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+                urlTemplate: 'your URL link',
     
                 markerSettings: [
                     {

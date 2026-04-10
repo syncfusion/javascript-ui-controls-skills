@@ -317,7 +317,7 @@ L10n.load({
 
 let ddl: DropDownList = new DropDownList({
     dataSource: new DataManager({
-        url: 'https://services.odata.org/V4/Northwind/Northwind.svc/Customers',
+        url: 'url',
         adaptor: new ODataV4Adaptor,
         crossDomain: true
     }),

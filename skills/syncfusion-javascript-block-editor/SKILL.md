@@ -120,7 +120,7 @@ The Syncfusion JavaScript BlockEditor is a modern, block-based text editor that 
 
 ### Security and Sanitization
 📄 **Read:** [references/security-and-sanitization.md](references/security-and-sanitization.md)
-- HTML sanitization (enableHtmlSanitizer property, default: true)
+- HTML sanitization
 - HTML encoding (enableHtmlEncode property)
 - XSS prevention strategies
 - Read-only mode for view-only content
@@ -185,7 +185,7 @@ editor.appendTo('#blockeditor');
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-blockeditor/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/tailwind.css" rel="stylesheet" />
 </head>
 <body>
     <div id="blockeditor"></div>

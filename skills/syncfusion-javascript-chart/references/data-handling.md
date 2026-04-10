@@ -293,8 +293,14 @@ series: [{
 ### Remote Data (URL)
 
 ```typescript
+
+let dataManager: DataManager = new DataManager({
+    url: 'your data source URL link'
+});
+let query: Query = new Query().take(5);
+
 series: [{
-  dataSource: 'https://api.example.com/data',
+  dataSource: dataManager,
   xName: 'month',
   yName: 'sales'
 }]

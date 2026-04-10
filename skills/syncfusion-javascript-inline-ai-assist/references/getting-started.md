@@ -13,12 +13,12 @@ npm install @syncfusion/ej2-interactive-chat --save
 ## CSS Imports and Theme Configuration
 
 ```css
-@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-interactive-chat/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind3.css';
+@import '../node_modules/@syncfusion/ej2-interactive-chat/styles/tailwind3.css';
 ```
 
 ### Available Themes
@@ -120,11 +120,11 @@ document.getElementById('summarizeBtn').addEventListener('click', function() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Syncfusion CSS -->
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-interactive-chat/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-inputs/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-buttons/styles/material.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-navigations/styles/material.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-buttons/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-navigations/styles/tailwind3.css" rel="stylesheet" />
     
     <style>
         #editableText {
@@ -360,10 +360,10 @@ inlineAssist.showPopup();
 **Solution:** Ensure all required CSS files are imported in the correct order.
 
 ```typescript
-import '@syncfusion/ej2-base/styles/material.css';
-import '@syncfusion/ej2-interactive-chat/styles/material.css';
-import '@syncfusion/ej2-inputs/styles/material.css';
-import '@syncfusion/ej2-buttons/styles/material.css';
+import '@syncfusion/ej2-base/styles/tailwind3.css';
+import '@syncfusion/ej2-interactive-chat/styles/tailwind3.css';
+import '@syncfusion/ej2-inputs/styles/tailwind3.css';
+import '@syncfusion/ej2-buttons/styles/tailwind3.css';
 ```
 
 ### PromptRequest Not Firing

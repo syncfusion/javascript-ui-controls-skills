@@ -259,7 +259,7 @@ import { DataManager, ODataV4Adaptor, Query } from '@syncfusion/ej2-data';
 import { MultiSelect, FilteringEventArgs } from '@syncfusion/ej2-dropdowns';
 
 const dataManager = new DataManager({
-  url: 'https://services.odata.org/V4/Northwind/Northwind.svc/Customers',
+  url: 'url',
   adaptor: new ODataV4Adaptor(),
   crossDomain: true
 });

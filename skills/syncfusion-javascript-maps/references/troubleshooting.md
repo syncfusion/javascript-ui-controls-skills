@@ -73,10 +73,10 @@
 1. **Invalid map provider URL**
    ```typescript
    // ❌ Wrong - typo in URL
-   urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.PNG'
+   urlTemplate: 'your URL link .PNG'
    
    // ✅ Correct - case matters!
-   urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png'
+   urlTemplate: 'your URL link .png'
    ```
 
 2. **Network blocking**
@@ -154,7 +154,7 @@ These rules prevent most runtime and TypeScript errors.
 ```typescript
 layers: [
     {
-        urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+        urlTemplate: 'your URL link',
         markerSettings: [ { ... } ],
         navigationLineSettings: [ { ... } ]
     }

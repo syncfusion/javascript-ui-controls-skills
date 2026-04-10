@@ -33,26 +33,23 @@ Field [FirstName] | Operator [startswith] | Value [A]
 ### Complete Rule Properties
 
 ```typescript
-interface Rule {
-  // Identification
-  id?: string;                        // Auto-generated or custom ID
-  
+interface RuleModel {
   // Field definition
   field?: string;                     // Column field name
   label?: string;                     // Display label
   type?: string;                      // Data type
-  
-  // Operator and value
-  operator?: string;                  // Comparison (equal, contains, etc.)
-  value?: any;                        // Filter value
-  
-  // Grouping
-  condition?: 'and' | 'or';          // Logical operator
-  rules?: (Rule | RuleModel)[];      // Nested rules
-}
 
-interface RuleModel extends Rule {
-  // Base rule model for QueryBuilder
+  // Operator and value
+  operator?: string;                  // Comparison operator (equal, contains, etc.)
+  value?: string[] | number[] | string | number | boolean; // Filter value
+
+  // Grouping
+  condition?: string;                 // 'and' | 'or' — logical operator for the group
+  rules?: RuleModel[];               // Nested child rules or groups
+
+  // Optional flags
+  isLocked?: boolean;                 // Whether the rule/group is locked
+  not?: boolean;                      // Applies NOT to the group condition
 }
 ```
 
@@ -312,10 +309,8 @@ qb.deleteRules(['rule0']);
 // Delete multiple rules
 qb.deleteRules(['rule0', 'rule1', 'rule2']);
 
-// Clear all rules
-const allRules = qb.getRules();
-const ruleIds = allRules.rules.map((_, i) => `rule${i}`);
-qb.deleteRules(ruleIds);
+// Clear all rules (reset to empty root group)
+qb.reset();
 ```
 
 ### Update Rule
@@ -374,23 +369,44 @@ qb.deleteGroups(['group1', 'group2']);
 
 ## Rule Validation
 
-### Check if Rule is Valid
+### Built-in Validation
+
+Use `validateFields()` to validate all rules in the QueryBuilder and display errors for any invalid fields:
 
 ```typescript
-function isRuleValid(rule: Rule): boolean {
-  return rule.field && rule.operator && rule.value !== undefined;
+// Validate all current rules
+const isValid = qb.validateFields();
+if (isValid) {
+  console.log('All rules are valid');
+} else {
+  console.log('Some rules have invalid or missing values');
+}
+```
+
+### Get Valid Rules Only
+
+Use `getValidRules()` to retrieve only the complete, valid rules:
+
+```typescript
+const allRules = qb.getRules();
+const validRules = qb.getValidRules(allRules);
+console.log('Valid rules:', validRules);
+```
+
+### Check if Rule is Valid (Custom)
+
+```typescript
+function isRuleValid(rule: RuleModel): boolean {
+  return !!(rule.field && rule.operator && rule.value !== undefined);
 }
 
-// Validate all rules
-const rules = qb.getRules();
+// Validate all rules recursively
 function validateAllRules(ruleModel: RuleModel): boolean {
   if (ruleModel.rules) {
     return ruleModel.rules.every(rule => {
       if (rule.rules) {
-        // It's a group
-        return validateAllRules(rule as RuleModel);
+        return validateAllRules(rule);
       } else {
-        // It's a rule
         return isRuleValid(rule);
       }
     });
@@ -398,6 +414,7 @@ function validateAllRules(ruleModel: RuleModel): boolean {
   return false;
 }
 
+const rules = qb.getRules();
 if (validateAllRules(rules)) {
   console.log('All rules are valid');
 }
@@ -407,7 +424,7 @@ if (validateAllRules(rules)) {
 
 ```typescript
 // Define valid operators per type
-const validOperators = {
+const validOperators: Record<string, string[]> = {
   'string': ['startswith', 'endswith', 'contains', 'equal', 'notequal', 'in', 'notin'],
   'number': ['equal', 'notequal', 'greaterthan', 'lessthan', 'between'],
   'date': ['equal', 'notequal', 'greaterthan', 'lessthan', 'between'],
@@ -422,7 +439,7 @@ function isOperatorValid(fieldType: string, operator: string): boolean {
 ### Validate Before Adding
 
 ```typescript
-function validateAndAddRule(rule: Rule, groupId: string): boolean {
+function validateAndAddRule(rule: RuleModel, groupId: string): boolean {
   // Check required fields
   if (!rule.field || !rule.operator || rule.value === undefined) {
     console.error('Rule missing required fields');
@@ -430,7 +447,7 @@ function validateAndAddRule(rule: Rule, groupId: string): boolean {
   }
   
   // Check operator validity
-  if (!isOperatorValid(rule.type, rule.operator)) {
+  if (rule.type && !isOperatorValid(rule.type, rule.operator)) {
     console.error('Invalid operator for type:', rule.type);
     return false;
   }
@@ -451,29 +468,12 @@ validateAndAddRule({
 
 ## Nested Hierarchies
 
-### Understanding IDs
+### Understanding Group/Rule IDs
 
-```typescript
-// Root group always has ID: 'group0'
-// Child groups: 'group1', 'group2', etc.
-// Rules: 'rule0', 'rule1', etc.
+QueryBuilder automatically assigns string IDs to rendered groups and rules in the DOM. The root group is always `'group0'`. Nested groups use IDs like `'group1'`, `'group2'`, and rules use `'rule0'`, `'rule1'`, etc. Use these IDs with `getGroup()`, `getRule()`, `deleteGroups()`, `deleteRules()`, `cloneGroup()`, `cloneRule()`, `lockGroup()`, and `lockRule()`.
 
-const rule: RuleModel = {
-  condition: 'and',
-  rules: [
-    { id: 'rule0', field: 'City', operator: 'equal', value: 'Seattle' },
-    {
-      id: 'group1',
-      condition: 'or',
-      rules: [
-        { id: 'rule1', field: 'Status', operator: 'equal', value: 'Active' },
-        { id: 'rule2', field: 'Status', operator: 'equal', value: 'Pending' }
-      ]
-    }
-  ]
-};
-
-// Hierarchy:
+```
+// Example structure:
 // group0 (root AND)
 // ├── rule0 (City = Seattle)
 // └── group1 (OR)
@@ -481,39 +481,30 @@ const rule: RuleModel = {
 //     └── rule2 (Status = Pending)
 ```
 
-### Navigate Nested Hierarchy
+### Get a Group or Rule by ID
 
 ```typescript
-function findRuleById(rules: RuleModel, targetId: string): Rule | undefined {
-  for (const item of rules.rules) {
-    if (item.id === targetId) {
-      return item;
-    }
-    if (item.rules) {
-      const found = findRuleById(item as RuleModel, targetId);
-      if (found) return found;
-    }
-  }
-  return undefined;
-}
+// Use getGroup() to retrieve the RuleModel for a specific group
+const group1: RuleModel = qb.getGroup('group1');
+console.log('Group1 rules:', group1.rules);
 
-// Find rule1
-const rule1 = findRuleById(qb.getRules(), 'rule1');
-console.log(rule1);  // { id: 'rule1', field: 'Status', ... }
+// Use getRule() to retrieve the RuleModel for a specific rule
+const rule0: RuleModel = qb.getRule('rule0');
+console.log('Rule0:', rule0.field, rule0.operator, rule0.value);
 ```
 
 ### Flatten Nested Rules
 
 ```typescript
-function flattenRules(rules: RuleModel): Rule[] {
-  const flat: Rule[] = [];
+function flattenRules(rules: RuleModel): RuleModel[] {
+  const flat: RuleModel[] = [];
   
-  for (const item of rules.rules) {
+  for (const item of (rules.rules || [])) {
     if (item.rules) {
       // It's a group, recurse
-      flat.push(...flattenRules(item as RuleModel));
+      flat.push(...flattenRules(item));
     } else {
-      // It's a rule, add to flat list
+      // It's a leaf rule, add to flat list
       flat.push(item);
     }
   }
@@ -521,8 +512,8 @@ function flattenRules(rules: RuleModel): Rule[] {
   return flat;
 }
 
-const allRules = flattenRules(qb.getRules());
-console.log('All leaf rules:', allRules);
+const allLeafRules = flattenRules(qb.getRules());
+console.log('All leaf rules:', allLeafRules);
 ```
 
 ### Tree Traversal
@@ -531,11 +522,11 @@ console.log('All leaf rules:', allRules);
 function printRuleTree(rules: RuleModel, indent = 0) {
   const prefix = '  '.repeat(indent);
   
-  for (const item of rules.rules) {
+  for (const item of (rules.rules || [])) {
     if (item.rules) {
       // Group
       console.log(`${prefix}[GROUP] ${item.condition?.toUpperCase()}`);
-      printRuleTree(item as RuleModel, indent + 1);
+      printRuleTree(item, indent + 1);
     } else {
       // Rule
       console.log(`${prefix}[RULE] ${item.field} ${item.operator} ${item.value}`);

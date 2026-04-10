@@ -20,23 +20,11 @@ metadata:
 
 ---
 
-## ⚠️ Accepted Security Risk — Third‑Party Data Exposure
 
-This skill intentionally functions as an integration boundary
-and interacts with third‑party APIs as part of its core design.
+## ⚠️ Security & Trust Boundary
 
-This exposure is an accepted and documented architectural risk.
-
-Risk containment guarantees:
-- All external responses are treated as untrusted input
-- Responses must be validated against explicit schemas
-- Only whitelisted fields are emitted downstream
-- External responses MUST NOT influence:
-  - authentication or authorization
-  - navigation, redirects, or routing
-  - dynamic code execution or configuration
-- Control flow is limited to data operations (query, CRUD, cache)
-  within the consumer’s application logic
+- This skill generates code only, the agent does not execute data operations or fetch remote endpoints — all DataManager interactions occur solely within the user's application at runtime.
+- Generated code must treat all third-party API responses as untrusted input, never bind to unvalidated or user-provided URLs, and ensure authentication is enforced on all remote endpoints.
 
 ---
 

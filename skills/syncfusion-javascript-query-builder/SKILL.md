@@ -1,27 +1,15 @@
 ---
-name: syncfusion-javascript-querybuilder
+name: syncfusion-javascript-query-builder
 description: How to implement Syncfusion JavaScript QueryBuilder component with comprehensive guidance on columns, data binding, rules management, filtering, templates, drag-drop interactions, import/export, and accessibility. Use this skill when users need help with QueryBuilder setup, rule creation, complex query building, advanced customization, or dynamic filter UI requirements in TypeScript applications.
 metadata:
   author: "Syncfusion Inc"
   version: "33.1.44"
+  category: "Forms"
 ---
 
 # Implementing QueryBuilder in TypeScript
 
 The QueryBuilder is a powerful Syncfusion component for building dynamic, complex queries with a visual UI. This skill provides comprehensive guidance for implementing, configuring, and customizing the QueryBuilder in TypeScript applications.
-
-## When to Use This Skill
-
-Use this skill when you need to:
-- **Create interactive query builders** for filtering data visually
-- **Define column schemas** with types, operators, and validation
-- **Bind data** from local sources or remote APIs
-- **Manage rules and groups** with AND/OR logic
-- **Add drag-drop functionality** for moving and cloning rules
-- **Customize templates** for fields, operators, and values
-- **Export/import** queries as JSON or SQL
-- **Ensure accessibility** with keyboard navigation and ARIA
-- **Handle complex filtering scenarios** in your TypeScript applications
 
 ## Control Overview
 
@@ -40,7 +28,7 @@ Use this skill when you need to:
 ## Documentation and Navigation Guide
 
 ### Getting Started
-📄 **Read:** [references/getting-started.md](references/getting-started.md)
+See also: [references/getting-started.md](references/getting-started.md)
 - Installation and npm package setup
 - Syncfusion dependencies configuration
 - CSS imports and theme setup
@@ -49,7 +37,7 @@ Use this skill when you need to:
 - Running your first QueryBuilder application
 
 ### Columns and Schema Definition
-📄 **Read:** [references/columns-definition.md](references/columns-definition.md)
+See also: [references/columns-definition.md](references/columns-definition.md)
 - Column definitions and schema structure
 - Auto-generation of columns from data
 - Field mapping and labels
@@ -59,7 +47,7 @@ Use this skill when you need to:
 - Custom column configuration patterns
 
 ### Data Binding
-📄 **Read:** [references/data-binding.md](references/data-binding.md)
+See also: [references/data-binding.md](references/data-binding.md)
 - Local data binding with JavaScript arrays
 - Remote data binding with DataManager
 - DataSource assignment patterns
@@ -69,7 +57,7 @@ Use this skill when you need to:
 - DataManager configuration
 
 ### Rules and Groups Management
-📄 **Read:** [references/rules-and-groups.md](references/rules-and-groups.md)
+See also: [references/rules-and-groups.md](references/rules-and-groups.md)
 - Rule model structure (condition, rules, field, operator, value)
 - Creating single filter rules
 - Grouping rules with AND/OR logic
@@ -79,7 +67,7 @@ Use this skill when you need to:
 - Nested group hierarchies
 
 ### Filtering and Search Operations
-📄 **Read:** [references/filtering-search.md](references/filtering-search.md)
+See also: [references/filtering-search.md](references/filtering-search.md)
 - Filtering conditions creation and deletion
 - Query execution methods
 - Custom filter condition patterns
@@ -89,7 +77,7 @@ Use this skill when you need to:
 - Event handling for filter changes
 
 ### Templates and Customization
-📄 **Read:** [references/templates-customization.md](references/templates-customization.md)
+See also: [references/templates-customization.md](references/templates-customization.md)
 - Value template customization
 - Operator template customization
 - Field template customization
@@ -99,7 +87,7 @@ Use this skill when you need to:
 - Dynamic template rendering patterns
 
 ### Drag-Drop and Rule Interaction
-📄 **Read:** [references/drag-drop-clone-lock.md](references/drag-drop-clone-lock.md)
+See also: [references/drag-drop-clone-lock.md](references/drag-drop-clone-lock.md)
 - Drag and drop functionality for rules
 - Cloning rules within groups
 - Locking rules to prevent modification
@@ -109,7 +97,7 @@ Use this skill when you need to:
 - Visual feedback and styling
 
 ### Import/Export and Persistence
-📄 **Read:** [references/import-export.md](references/import-export.md)
+See also: [references/import-export.md](references/import-export.md)
 - Exporting rules to JSON format
 - Importing rules from JSON
 - SQL query generation
@@ -119,7 +107,7 @@ Use this skill when you need to:
 - State management
 
 ### Accessibility and RTL
-📄 **Read:** [references/accessibility-rtl.md](references/accessibility-rtl.md)
+See also: [references/accessibility-rtl.md](references/accessibility-rtl.md)
 - WCAG 2.1 AA compliance standards
 - Keyboard navigation patterns
 - ARIA attributes and labels
@@ -129,7 +117,7 @@ Use this skill when you need to:
 - Localization and internationalization
 
 ### Advanced Features and Troubleshooting
-📄 **Read:** [references/advanced-features.md](references/advanced-features.md)
+See also: [references/advanced-features.md](references/advanced-features.md)
 - Global and local configuration options
 - Model binding patterns
 - Advanced validation strategies
@@ -138,6 +126,16 @@ Use this skill when you need to:
 - State persistence patterns
 - Common issues and troubleshooting
 - Best practices for complex scenarios
+
+### API Reference
+See also: [references/api.md](references/api.md)
+- Complete properties reference with types and defaults
+- All public methods with parameters and return types
+- All events with event argument interfaces
+- Key model interfaces (RuleModel, ColumnsModel, ShowButtonsModel, ValueModel, TemplateColumn, Validation)
+- Event arg interfaces (ActionEventArgs, ChangeEventArgs, RuleChangeEventArgs, DragEventArgs, DropEventArgs)
+- SQL/query output interfaces (ParameterizedSql, ParameterizedNamedSql)
+- Usage examples for initialization, SQL export, rule management, clone/lock, and drag-drop
 
 ## Quick Start Example
 

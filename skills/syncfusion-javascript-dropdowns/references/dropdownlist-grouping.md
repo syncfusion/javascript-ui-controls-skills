@@ -77,7 +77,7 @@ let groupPredicate = new Predicate('City', 'equal', 'london').or('City', 'equal'
 
 let dropDownListObject: DropDownList = new DropDownList({
     dataSource: new DataManager({
-        url: 'https://services.odata.org/V4/Northwind/Northwind.svc/',
+        url: 'url',
         adaptor: new ODataV4Adaptor,
         crossDomain: true
     }),

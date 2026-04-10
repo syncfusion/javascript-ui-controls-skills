@@ -35,26 +35,27 @@ interface ColumnsModel {
   // Type information
   type?: 'string' | 'number' | 'date' | 'boolean';
   
-  // Operators
-  operators?: OperatorModel[];  // Custom operators for this column
+  // Operators — array of objects with string keys
+  operators?: { [key: string]: Object }[];  // Custom operators for this column
   
   // Formatting
-  format?: string;            // Date/number format (e.g., 'dd/MM/yyyy')
+  format?: string | FormatObject; // Date/number format (e.g., 'dd/MM/yyyy')
   step?: number;              // Increment step for number inputs
   
   // Predefined values
-  values?: string[] | number[];  // List of valid values
+  values?: string[] | number[] | boolean[];  // List of valid values
+  value?: string[] | number[] | string | number | boolean | Date; // Default value
   
-  // Filtering
-  category?: string;          // Group related columns
+  // Nested columns / category grouping
+  columns?: ColumnsModel[];   // Sub-fields
+  category?: string;          // Group related columns in field dropdown
   
-  // UI
-  template?: string | object; // Custom template
-}
-
-interface OperatorModel {
-  key: string;                // Operator ID (e.g., 'equal')
-  text: string;               // Display text
+  // UI templates
+  template?: TemplateColumn | string | Function; // Custom value widget template
+  ruleTemplate?: string | Function;              // Custom entire-rule-row template
+  
+  // Validation
+  validation?: Validation;    // isRequired, min, max
 }
 ```
 
@@ -220,10 +221,10 @@ Override default operators per column:
   field: 'City',
   type: 'string',
   operators: [
-    { key: 'equal', text: 'Is' },
-    { key: 'notequal', text: 'Is not' },
-    { key: 'in', text: 'In' },
-    { key: 'notin', text: 'Not in' }
+    { key: 'equal', value: 'Is' },
+    { key: 'notequal', value: 'Is not' },
+    { key: 'in', value: 'In' },
+    { key: 'notin', value: 'Not in' }
   ]
   // Removes startswith, endswith, contains
 }
@@ -237,8 +238,8 @@ const restrictedColumn: ColumnsModel = {
   field: 'Status',
   type: 'string',
   operators: [
-    { key: 'equal', text: 'Equals' },
-    { key: 'notequal', text: 'Not Equals' }
+    { key: 'equal', value: 'Equals' },
+    { key: 'notequal', value: 'Not Equals' }
   ]
 };
 
@@ -247,9 +248,9 @@ const customLabelsColumn: ColumnsModel = {
   field: 'Price',
   type: 'number',
   operators: [
-    { key: 'equal', text: 'Costs' },
-    { key: 'lessthan', text: 'Cheaper than' },
-    { key: 'greaterthan', text: 'More than' }
+    { key: 'equal', value: 'Costs' },
+    { key: 'lessthan', value: 'Cheaper than' },
+    { key: 'greaterthan', value: 'More than' }
   ]
 };
 ```
@@ -362,9 +363,9 @@ const advancedColumns: ColumnsModel[] = [
     step: 1,
     values: [1, 2, 3, 4, 5],
     operators: [
-      { key: 'equal', text: '=' },
-      { key: 'notequal', text: '≠' },
-      { key: 'in', text: 'in' }
+      { key: 'equal', value: '=' },
+      { key: 'notequal', value: '≠' },
+      { key: 'in', value: 'in' }
     ]
   },
   {
@@ -373,10 +374,10 @@ const advancedColumns: ColumnsModel[] = [
     type: 'date',
     format: 'dd/MM/yyyy',
     operators: [
-      { key: 'between', text: 'between' },
-      { key: 'equal', text: 'on' },
-      { key: 'greaterthan', text: 'after' },
-      { key: 'lessthan', text: 'before' }
+      { key: 'between', value: 'between' },
+      { key: 'equal', value: 'on' },
+      { key: 'greaterthan', value: 'after' },
+      { key: 'lessthan', value: 'before' }
     ]
   },
   {
@@ -386,10 +387,10 @@ const advancedColumns: ColumnsModel[] = [
     format: 'c',
     step: 1000,
     operators: [
-      { key: 'equal', text: '=' },
-      { key: 'greaterthan', text: '>' },
-      { key: 'lessthan', text: '<' },
-      { key: 'between', text: 'between' }
+      { key: 'equal', value: '=' },
+      { key: 'greaterthan', value: '>' },
+      { key: 'lessthan', value: '<' },
+      { key: 'between', value: 'between' }
     ]
   },
   {

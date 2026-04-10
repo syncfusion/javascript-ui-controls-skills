@@ -28,7 +28,10 @@ const qb = new QueryBuilder({
     ruleDelete: true,      // Show delete button on rules
     groupDelete: true,     // Show delete button on groups
     groupInsert: true,     // Show add group button
-    ruleInsert: true       // Show add rule button
+    cloneRule: true,       // Show clone rule button
+    cloneGroup: true,      // Show clone group button
+    lockRule: true,        // Show lock rule button
+    lockGroup: true        // Show lock group button
   }
 });
 
@@ -38,20 +41,18 @@ qb.appendTo('#querybuilder');
 ### Default Button Configuration
 
 ```typescript
-// Default behavior (all buttons enabled)
+// Default behavior (core buttons enabled)
 showButtons: {
   ruleDelete: true,
   groupDelete: true,
-  groupInsert: true,
-  ruleInsert: true
+  groupInsert: true
 }
 
 // Disable deletion
 showButtons: {
   ruleDelete: false,
   groupDelete: false,
-  groupInsert: true,
-  ruleInsert: true
+  groupInsert: true
 }
 
 // Read-only QueryBuilder (all buttons disabled)
@@ -59,7 +60,10 @@ showButtons: {
   ruleDelete: false,
   groupDelete: false,
   groupInsert: false,
-  ruleInsert: false
+  cloneRule: false,
+  cloneGroup: false,
+  lockRule: false,
+  lockGroup: false
 }
 ```
 
@@ -72,6 +76,8 @@ With buttons enabled, users can:
 3. **Delete Rule** - Click "X" button to remove a condition
 4. **Delete Group** - Remove entire group of conditions
 5. **Change Condition** - Switch between AND/OR logic
+6. **Clone Rule/Group** - Duplicate a rule or group
+7. **Lock Rule/Group** - Prevent modification of a rule or group
 
 ```typescript
 // UI with buttons (user interaction)
@@ -83,7 +89,10 @@ const qb = new QueryBuilder({
     ruleDelete: true,
     groupDelete: true,
     groupInsert: true,
-    ruleInsert: true
+    cloneRule: true,
+    cloneGroup: true,
+    lockRule: true,
+    lockGroup: true
   }
 });
 
@@ -104,37 +113,46 @@ document.getElementById('addRuleBtn').addEventListener('click', () => {
 ### Individual Button Control
 
 ```typescript
-interface ShowButtons {
+interface ShowButtonsModel {
   ruleDelete?: boolean;     // Delete rule button
   groupDelete?: boolean;    // Delete group button
   groupInsert?: boolean;    // Insert group button
-  ruleInsert?: boolean;     // Insert rule button
+  cloneRule?: boolean;      // Clone rule button
+  cloneGroup?: boolean;     // Clone group button
+  lockRule?: boolean;       // Lock rule button
+  lockGroup?: boolean;      // Lock group button
 }
 ```
 
 ### Use Cases
 
-#### Scenario 1: Allow Only Rule Addition
+#### Scenario 1: Clone and Lock Only
 
 ```typescript
-// Users can add rules but not delete
+// Users can clone and lock, but not delete
 showButtons: {
   ruleDelete: false,
   groupDelete: false,
-  groupInsert: false,
-  ruleInsert: true
+  groupInsert: true,
+  cloneRule: true,
+  cloneGroup: true,
+  lockRule: true,
+  lockGroup: true
 }
 ```
 
 #### Scenario 2: Template-Based Filtering
 
 ```typescript
-// Predefined template - users refine but don't add new rules
+// Predefined template - users can delete existing rules but not add new ones
 showButtons: {
   ruleDelete: true,     // Can delete existing
   groupDelete: false,   // Cannot delete groups
   groupInsert: false,   // Cannot add groups
-  ruleInsert: false     // Cannot add rules
+  cloneRule: false,
+  cloneGroup: false,
+  lockRule: false,
+  lockGroup: false
 }
 ```
 
@@ -146,7 +164,10 @@ showButtons: {
   ruleDelete: false,
   groupDelete: false,
   groupInsert: false,
-  ruleInsert: false
+  cloneRule: false,
+  cloneGroup: false,
+  lockRule: false,
+  lockGroup: false
 }
 ```
 
@@ -388,53 +409,34 @@ console.log('Filtered results:', filteredData);
 
 ### Export Query to SQL
 
-```typescript
-function rulestoSQL(rules: RuleModel): string {
-  function buildSQL(ruleModel: RuleModel): string {
-    const sqlParts = ruleModel.rules.map(rule => {
-      if (rule.rules) {
-        // It's a group
-        return `(${buildSQL(rule as RuleModel)})`;
-      } else {
-        // It's a rule
-        const field = rule.field;
-        const op = getSQLOperator(rule.operator);
-        const value = formatSQLValue(rule.value, rule.type);
-        return `${field} ${op} ${value}`;
-      }
-    });
-    
-    const operator = ruleModel.condition === 'and' ? 'AND' : 'OR';
-    return sqlParts.join(` ${operator} `);
-  }
-  
-  function getSQLOperator(op: string): string {
-    const map = {
-      'equal': '=',
-      'notequal': '!=',
-      'contains': 'LIKE',
-      'startswith': 'LIKE',
-      'endswith': 'LIKE',
-      'greaterthan': '>',
-      'lessthan': '<'
-    };
-    return map[op] || '=';
-  }
-  
-  function formatSQLValue(value: any, type: string): string {
-    if (type === 'string') {
-      return `'${String(value).replace(/'/g, "''")}'`;
-    }
-    return String(value);
-  }
-  
-  return `SELECT * FROM table WHERE ${buildSQL(rules)}`;
-}
+Use the built-in `getSqlFromRules()` method to convert the current rules to a SQL WHERE clause:
 
-// Export to SQL
-const sqlQuery = rulestoSQL(qb.getRules());
-console.log('SQL Query:', sqlQuery);
-// Output: SELECT * FROM table WHERE (City = 'Seattle') AND (Salary > 50000)
+```typescript
+// Get SQL WHERE clause from current rules
+const sqlWhere = qb.getSqlFromRules();
+console.log('SQL WHERE:', sqlWhere);
+// e.g. "City = 'Seattle' AND Salary > 50000"
+
+// Get SQL from a specific RuleModel
+const customRule: RuleModel = {
+  condition: 'and',
+  rules: [
+    { field: 'City', type: 'string', operator: 'equal', value: 'Seattle' },
+    { field: 'Salary', type: 'number', operator: 'greaterthan', value: 50000 }
+  ]
+};
+const customSQL = qb.getSqlFromRules(customRule);
+console.log('Custom SQL:', customSQL);
+
+// Get parameterized SQL (? placeholders)
+const paramSql = qb.getParameterizedSql();
+console.log('Parameterized SQL:', paramSql.sql);    // "City = ? AND Salary > ?"
+console.log('Params:', paramSql.params);            // ['Seattle', 50000]
+
+// Get named parameterized SQL
+const namedSql = qb.getParameterizedNamedSql();
+console.log('Named SQL:', namedSql.sql);            // "City = :City_1 AND Salary > :Salary_1"
+console.log('Named params:', namedSql.params);      // { City_1: 'Seattle', Salary_1: 50000 }
 ```
 
 ## Event Handling
@@ -442,31 +444,29 @@ console.log('SQL Query:', sqlQuery);
 ### Listen to Filter Changes
 
 ```typescript
-// When rules change, handle the event
-qb.addEventListener('change', (args: any) => {
-  console.log('Filter changed');
+import { ChangeEventArgs, RuleChangeEventArgs } from '@syncfusion/ej2-querybuilder';
+
+// Triggered after condition, field, operator, or value changes
+qb.addEventListener('change', (args: ChangeEventArgs) => {
+  console.log('Filter changed:', args.name);
   const newRules = qb.getRules();
   console.log('New rules:', newRules);
 });
 
-// When rule is added
-qb.addEventListener('ruleAdded', (args: any) => {
-  console.log('Rule added:', args);
+// Triggered before a change
+qb.addEventListener('beforeChange', (args: ChangeEventArgs) => {
+  console.log('Before filter change:', args.name);
 });
 
-// When rule is deleted
-qb.addEventListener('ruleDeleted', (args: any) => {
-  console.log('Rule deleted:', args);
+// Triggered after a rule change (respects immediateModeDelay)
+qb.addEventListener('ruleChange', (args: RuleChangeEventArgs) => {
+  console.log('Rule changed (debounced):', args.name);
+  console.log('Current SQL:', qb.getSqlFromRules());
 });
 
-// When group is added
-qb.addEventListener('groupAdded', (args: any) => {
-  console.log('Group added:', args);
-});
-
-// When group is deleted
-qb.addEventListener('groupDeleted', (args: any) => {
-  console.log('Group deleted:', args);
+// Triggered when component is created
+qb.addEventListener('created', () => {
+  console.log('QueryBuilder is ready');
 });
 ```
 
@@ -485,8 +485,7 @@ function loadSavedFilter() {
   const saved = localStorage.getItem('savedFilter');
   if (saved) {
     const rules: RuleModel = JSON.parse(saved);
-    qb.rule = rules;
-    qb.refresh();
+    qb.setRules(rules);
     console.log('Filter loaded');
   }
 }

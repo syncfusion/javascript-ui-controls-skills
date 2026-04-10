@@ -28,7 +28,7 @@ const qb = new QueryBuilder({
   width: '100%',
   dataSource: employeeData,
   columns: columns,
-  allowDragDrop: true  // Enable drag-drop
+  allowDragAndDrop: true  // Enable drag-drop
 });
 
 qb.appendTo('#querybuilder');
@@ -64,14 +64,9 @@ qb.appendTo('#querybuilder');
 ### Drag-Drop Configuration
 
 ```typescript
-interface DragDropOptions {
-  allowDragDrop: boolean;     // Enable/disable drag-drop
-  displayMode?: string;       // 'Inline' or 'Vertical' affects drag behavior
-}
-
 const qb = new QueryBuilder({
-  allowDragDrop: true,
-  displayMode: 'Inline',      // Horizontal layout - easier dragging
+  allowDragAndDrop: true,
+  displayMode: 'Horizontal',  // 'Horizontal' (default) or 'Vertical'
   dataSource: employeeData,
   columns: columns
 });
@@ -82,6 +77,8 @@ qb.appendTo('#querybuilder');
 ## Clone Rules
 
 ### Clone a Rule
+
+Use the built-in `cloneRule(ruleID, groupID, index)` method to duplicate a rule:
 
 ```typescript
 import { QueryBuilder } from '@syncfusion/ej2-querybuilder';
@@ -94,50 +91,30 @@ const qb = new QueryBuilder({
     ruleDelete: true,
     groupDelete: true,
     groupInsert: true,
-    ruleInsert: true
+    cloneRule: true,
+    cloneGroup: true
   }
 });
 
 qb.appendTo('#querybuilder');
 
-// Clone rule programmatically
-function cloneRule(ruleId: string) {
-  const rules = qb.getRules();
-  const ruleToClone = findRuleById(rules, ruleId);
-  
-  if (ruleToClone && !ruleToClone.rules) {
-    // It's a leaf rule (not a group)
-    const clonedRule = JSON.parse(JSON.stringify(ruleToClone));
-    qb.addRules([clonedRule], 'group0');
-  }
-}
-
-function findRuleById(rules: RuleModel, targetId: string): Rule | undefined {
-  for (const item of rules.rules) {
-    if (item.id === targetId) return item;
-    if (item.rules) {
-      const found = findRuleById(item as RuleModel, targetId);
-      if (found) return found;
-    }
-  }
-  return undefined;
-}
+// Clone a rule programmatically: cloneRule(ruleID, groupID, index)
+// ruleID  — the component-generated ID of the rule to clone  (e.g. "querybuilder_group0_rule0")
+// groupID — the ID of the group to insert the clone into     (e.g. "querybuilder_group0")
+// index   — position inside that group where the clone is inserted
+qb.cloneRule('querybuilder_group0_rule0', 'querybuilder_group0', 1);
 ```
 
 ### Clone Group
 
+Use the built-in `cloneGroup(groupID, parentGroupID, index)` method:
+
 ```typescript
-// Clone an entire group (all nested rules)
-function cloneGroup(groupId: string) {
-  const rules = qb.getRules();
-  const groupToClone = findRuleById(rules, groupId);
-  
-  if (groupToClone && groupToClone.rules) {
-    // It's a group
-    const clonedGroup = JSON.parse(JSON.stringify(groupToClone));
-    qb.addGroups([clonedGroup], 'group0');
-  }
-}
+// Clone an entire group (all nested rules) programmatically
+// groupID       — ID of the group to clone          (e.g. "querybuilder_group0")
+// parentGroupID — ID of the group to insert into    (e.g. "querybuilder_group1")
+// index         — position inside the parent group
+qb.cloneGroup('querybuilder_group0', 'querybuilder_group1', 1);
 ```
 
 ### Use Cases for Clone
@@ -164,92 +141,65 @@ function cloneGroup(groupId: string) {
 
 ## Lock Rules
 
-### Lock a Rule to Prevent Editing
+### Lock a Rule or Group Programmatically
+
+Use the built-in `lockRule(ruleID)` and `lockGroup(groupID)` methods to prevent editing:
 
 ```typescript
-import { QueryBuilder, RuleModel } from '@syncfusion/ej2-querybuilder';
-
-// Create a locked rule
-const lockedRule: RuleModel = {
-  condition: 'and',
-  rules: [
-    {
-      field: 'Status',
-      type: 'string',
-      operator: 'equal',
-      value: 'Active',
-      // lock: true  // Not a standard property, use CSS instead
-    }
-  ]
-};
+import { QueryBuilder } from '@syncfusion/ej2-querybuilder';
 
 const qb = new QueryBuilder({
-  rule: lockedRule,
+  rule: {
+    condition: 'and',
+    rules: [
+      { field: 'Status', type: 'string', operator: 'equal', value: 'Active' }
+    ]
+  },
   dataSource: employeeData,
-  columns: columns
+  columns: columns,
+  showButtons: {
+    lockRule: true,
+    lockGroup: true
+  }
 });
 
 qb.appendTo('#querybuilder');
+
+// Lock a specific rule: lockRule(ruleID)
+// ruleID  — the component-generated ID of the rule  (e.g. "querybuilder_group0_rule0")
+qb.lockRule('querybuilder_group0_rule0');
+
+// Lock an entire group: lockGroup(groupID)
+// groupID — the component-generated ID of the group (e.g. "querybuilder_group0")
+qb.lockGroup('querybuilder_group0');
 ```
 
-### Implement Lock via CSS/UI
+### Lock with Visual Indicator
 
 ```typescript
-// Add locked state to rules
-function lockRule(ruleElement: HTMLElement) {
-  ruleElement.classList.add('rule-locked');
-  
-  // Disable inputs
-  const inputs = ruleElement.querySelectorAll('input, select');
-  inputs.forEach(input => {
-    (input as HTMLInputElement).disabled = true;
+// Apply custom lock styling after rendering
+qb.created = () => {
+  const lockedElements = document.querySelectorAll('.e-rule-locked');
+  lockedElements.forEach(rule => {
+    (rule as HTMLElement).style.opacity = '0.6';
   });
-}
+};
 
 // CSS for locked rules
 const lockStyle = `
-.rule-locked {
+.e-querybuilder .e-rule-locked {
   opacity: 0.6;
   background-color: #f5f5f5;
   border-left: 4px solid #ff9800;
   padding-left: 10px;
 }
 
-.rule-locked input,
-.rule-locked select {
+.e-querybuilder .e-rule-locked input,
+.e-querybuilder .e-rule-locked select {
   cursor: not-allowed;
   background-color: #efefef;
 }
 `;
-```
-
-### Lock with Visual Indicator
-
-```typescript
-// Create lock icon and handler
-function createLockedRule(): RuleModel {
-  return {
-    condition: 'and',
-    rules: [
-      {
-        field: 'Status',
-        type: 'string',
-        operator: 'equal',
-        value: 'Active'
-        // Add custom property for lock state
-        // locked: true
-      }
-    ]
-  };
-}
-
-// Apply lock styling after rendering
-qb.addEventListener('renderComplete', () => {
-  const lockedRules = document.querySelectorAll('[data-locked="true"]');
-  lockedRules.forEach(rule => {
-    lockRule(rule as HTMLElement);
-  });
-});
 ```
 
 ### Use Cases for Locking
@@ -277,16 +227,14 @@ qb.addEventListener('renderComplete', () => {
 
 ## Separator Configuration
 
-### Separator and Connector Visuals
+### Separate Connector Property
 
 ```typescript
-// Configure display mode and connectors
+// Show AND/OR connectors between rules
 const qb = new QueryBuilder({
-  width: '100%',
+  enableSeparateConnector: true,  // Show individual connectors per rule
   dataSource: employeeData,
-  columns: columns,
-  displayMode: 'Inline',      // 'Inline' or 'Vertical'
-  separateConnector: true     // Show AND/OR connectors
+  columns: columns
 });
 
 qb.appendTo('#querybuilder');
@@ -294,7 +242,23 @@ qb.appendTo('#querybuilder');
 
 ### Display Modes
 
-**Inline Mode (Default):**
+```typescript
+// Horizontal mode (default) — rules laid out horizontally
+const qbHorizontal = new QueryBuilder({
+  displayMode: 'Horizontal',
+  dataSource: employeeData,
+  columns: columns
+});
+
+// Vertical mode — rules stacked vertically, shows hierarchy clearly
+const qbVertical = new QueryBuilder({
+  displayMode: 'Vertical',
+  dataSource: employeeData,
+  columns: columns
+});
+```
+
+**Horizontal Mode (Default):**
 ```
 (City = Seattle) AND (Salary > 50000) AND (Title = Sales Rep)
 ```
@@ -343,72 +307,39 @@ const separatorStyle = `
 `;
 ```
 
-### Separate Connector Property
-
-```typescript
-// Show/hide AND/OR connectors
-const withConnectors = new QueryBuilder({
-  separateConnector: true,  // Show connectors
-  dataSource: employeeData,
-  columns: columns
-});
-
-const withoutConnectors = new QueryBuilder({
-  separateConnector: false, // Hide connectors
-  dataSource: employeeData,
-  columns: columns
-});
-```
-
 ## Events and Handling
 
 ### Drag-Drop Events
 
 ```typescript
+import { DragEventArgs, DropEventArgs, ChangeEventArgs } from '@syncfusion/ej2-querybuilder';
+
 // Before rule is dragged
-qb.addEventListener('dragStart', (args: any) => {
+qb.addEventListener('dragStart', (args: DragEventArgs) => {
   console.log('Drag started:', args);
   // Can prevent drag if needed
   // args.cancel = true;
 });
 
 // While dragging
-qb.addEventListener('drag', (args: any) => {
+qb.addEventListener('drag', (args: DragEventArgs) => {
   console.log('Dragging:', args);
 });
 
 // After rule is dropped
-qb.addEventListener('dragStop', (args: any) => {
+qb.addEventListener('drop', (args: DropEventArgs) => {
   console.log('Dropped:', args);
   console.log('New rule order:', qb.getRules());
 });
 ```
 
-### Clone Events
+### Change Event
 
 ```typescript
-// Detect when rule is cloned (if supported)
-qb.addEventListener('ruleAdded', (args: any) => {
-  if (args.isClone) {
-    console.log('Rule cloned:', args);
-  } else {
-    console.log('New rule added:', args);
-  }
-});
-```
-
-### Lock State Events
-
-```typescript
-// Track lock state changes
-let lockedRules = new Set();
-
-qb.addEventListener('ruleUpdated', (args: any) => {
-  if (args.locked) {
-    lockedRules.add(args.ruleId);
-  } else {
-    lockedRules.delete(args.ruleId);
-  }
+// Detect any rule change (add, remove, update, clone, lock)
+qb.addEventListener('change', (args: ChangeEventArgs) => {
+  console.log('QueryBuilder changed:', args.name);
+  console.log('Current rules:', qb.getRules());
 });
 ```
 
@@ -417,15 +348,11 @@ qb.addEventListener('ruleUpdated', (args: any) => {
 ### Drag-Drop with Validation
 
 ```typescript
-// Prevent dragging rules between incompatible groups
-qb.addEventListener('dragStart', (args: any) => {
-  const rule = args.data;
-  const targetGroup = args.targetGroup;
-  
-  // Example: prevent dragging date rules to non-date groups
-  if (rule.type === 'date' && targetGroup.type !== 'date') {
+// Prevent dragging by cancelling dragStart when needed
+qb.addEventListener('dragStart', (args: DragEventArgs) => {
+  // Cancel drag for a specific rule by its component-generated ID
+  if (args.dragRuleID === 'querybuilder_group0_rule0') {
     args.cancel = true;
-    alert('Cannot move date rules to non-date groups');
   }
 });
 ```
@@ -433,68 +360,40 @@ qb.addEventListener('dragStart', (args: any) => {
 ### Clone with Modifications
 
 ```typescript
-// Clone rule but modify the value
-function cloneAndModifyRule(ruleId: string, newValue: any) {
-  const rules = qb.getRules();
-  const ruleToClone = findRuleById(rules, ruleId);
-  
-  if (ruleToClone) {
-    const cloned = JSON.parse(JSON.stringify(ruleToClone));
-    cloned.value = newValue;
-    qb.addRules([cloned], 'group0');
-  }
-}
+// Clone a rule and then update its value
+qb.cloneRule('querybuilder_group0_rule0', 'querybuilder_group0', 1);
 
-// Usage: Clone "City = Seattle" as "City = Tacoma"
-cloneAndModifyRule('rule0', 'Tacoma');
+// After cloning, retrieve the current rules and update the new rule's value
+const rules = qb.getRules();
+const lastRule = rules.rules[rules.rules.length - 1];
+if (lastRule && !(lastRule as any).rules) {
+  (lastRule as any).value = 'Tacoma';
+  qb.setRules(rules);
+}
 ```
 
 ### Protected Rules with Warnings
 
 ```typescript
-// Mark critical rules and warn before deletion
-const criticalRules = ['rule0', 'rule1']; // System rules
-
-qb.addEventListener('ruleDelete', (args: any) => {
-  if (criticalRules.includes(args.ruleId)) {
-    const confirmed = confirm(
-      'This is a critical rule. Delete anyway?'
-    );
-    args.cancel = !confirmed;
-  }
+// Warn before significant changes using the beforeChange event
+qb.addEventListener('beforeChange', (args: ChangeEventArgs) => {
+  console.log('Before change:', args.name);
+  // Use the beforeChange event to perform pre-change checks or logging.
+  // Note: ChangeEventArgs exposes only the `name` property.
 });
-
-qb.addEventListener('groupDelete', (args: any) => {
-  const group = findRuleById(qb.getRules(), args.groupId);
-  if (group && hasCriticalRules(group)) {
-    alert('Cannot delete group with critical rules');
-    args.cancel = true;
-  }
-});
-
-function hasCriticalRules(group: RuleModel): boolean {
-  return group.rules.some(rule => {
-    if (!rule.rules) {
-      return criticalRules.includes(rule.id);
-    }
-    return hasCriticalRules(rule as RuleModel);
-  });
-}
 ```
 
-### Auto-Sort Rules After Drag
+### Auto-Sort Rules After Drop
 
 ```typescript
 // Automatically sort rules alphabetically by field after drag
-qb.addEventListener('dragStop', (args: any) => {
+qb.addEventListener('drop', (args: DropEventArgs) => {
   const rules = qb.getRules();
   rules.rules.sort((a, b) => {
-    if (a.rules || b.rules) return 0; // Don't sort groups
-    return (a.field || '').localeCompare(b.field || '');
+    if ((a as any).rules || (b as any).rules) return 0; // Don't sort groups
+    return ((a as any).field || '').localeCompare((b as any).field || '');
   });
-  
-  qb.rule = rules;
-  qb.refresh();
+  qb.setRules(rules);
 });
 ```
 
@@ -508,10 +407,6 @@ style.innerHTML = `
   cursor: grab;
 }
 
-.e-querybuilder.dragging .e-rule {
-  opacity: 0.7;
-}
-
 .e-querybuilder .e-rule.drag-over {
   background-color: #e3f2fd;
   border: 2px dashed #2196F3;
@@ -523,13 +418,9 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-// Apply drag-over class
-qb.addEventListener('drag', (args: any) => {
-  const container = args.dropTarget;
-  container?.classList.add('drag-over');
-});
-
-qb.addEventListener('dragStop', (args: any) => {
+// Remove drag-over class after drop
+qb.addEventListener('drop', (args: DropEventArgs) => {
+  console.log('Dropped on group:', args.dropGroupID, 'rule:', args.dropRuleID);
   document.querySelectorAll('.drag-over').forEach(el => {
     el.classList.remove('drag-over');
   });

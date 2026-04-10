@@ -46,7 +46,6 @@ console.log('Exported JSON:', jsonString);
   "condition": "and",
   "rules": [
     {
-      "id": "rule0",
       "label": "Employee ID",
       "field": "EmployeeID",
       "type": "number",
@@ -54,11 +53,9 @@ console.log('Exported JSON:', jsonString);
       "value": 1
     },
     {
-      "id": "group1",
       "condition": "or",
       "rules": [
         {
-          "id": "rule1",
           "label": "Title",
           "field": "Title",
           "type": "string",
@@ -66,7 +63,6 @@ console.log('Exported JSON:', jsonString);
           "value": "Sales"
         },
         {
-          "id": "rule2",
           "label": "Title",
           "field": "Title",
           "type": "string",
@@ -178,8 +174,7 @@ function loadFromFile(file: File) {
       const content = event.target?.result as string;
       const rules = JSON.parse(content);
       
-      qb.rule = rules;
-      qb.refresh();
+      qb.setRules(rules);
       console.log('Query loaded from file');
     } catch (error) {
       console.error('Invalid JSON file:', error);
@@ -206,8 +201,7 @@ async function loadQueryFromDatabase(queryId: string) {
   const response = await fetch(`/api/queries/${queryId}`);
   const data = await response.json();
   
-  qb.rule = data.rules;
-  qb.refresh();
+  qb.setRules(data.rules);
   console.log('Query loaded:', data.name);
 }
 
@@ -268,8 +262,7 @@ async function safeImportRules(jsonString: string) {
       return false;
     }
     
-    qb.rule = rules;
-    qb.refresh();
+    qb.setRules(rules);
     return true;
   } catch (error) {
     console.error('Parse error:', error);
@@ -282,119 +275,60 @@ async function safeImportRules(jsonString: string) {
 
 ### Convert Rules to SQL
 
-```typescript
-// Generate SQL WHERE clause from rules
-function rulesToSQL(rules: RuleModel): string {
-  function buildSQL(ruleModel: RuleModel): string {
-    const conditions = ruleModel.rules.map(rule => {
-      if (rule.rules) {
-        // It's a group - wrap in parentheses
-        return `(${buildSQL(rule as RuleModel)})`;
-      } else {
-        // It's a rule - build condition
-        const field = rule.field;
-        const value = formatValue(rule.value, rule.type);
-        const operator = sqlOperator(rule.operator);
-        
-        switch (rule.operator) {
-          case 'between':
-            return `${field} BETWEEN ${value[0]} AND ${value[1]}`;
-          case 'notbetween':
-            return `${field} NOT BETWEEN ${value[0]} AND ${value[1]}`;
-          case 'in':
-            return `${field} IN (${value})`;
-          case 'notin':
-            return `${field} NOT IN (${value})`;
-          case 'contains':
-          case 'startswith':
-          case 'endswith':
-            return `${field} LIKE '${value}'`;
-          default:
-            return `${field} ${operator} ${value}`;
-        }
-      }
-    });
-    
-    const connector = ruleModel.condition === 'and' ? 'AND' : 'OR';
-    return conditions.join(` ${connector} `);
-  }
-  
-  function sqlOperator(op: string): string {
-    const map: {[key: string]: string} = {
-      'equal': '=',
-      'notequal': '!=',
-      'greaterthan': '>',
-      'lessthan': '<',
-      'greaterthanorequal': '>=',
-      'lessthanorequal': '<=',
-      'contains': 'LIKE',
-      'startswith': 'LIKE',
-      'endswith': 'LIKE'
-    };
-    return map[op] || '=';
-  }
-  
-  function formatValue(value: any, type: string): any {
-    if (type === 'string') {
-      return String(value).replace(/'/g, "''");
-    } else if (type === 'date') {
-      return `'${new Date(value).toISOString().split('T')[0]}'`;
-    }
-    return value;
-  }
-  
-  return `SELECT * FROM table WHERE ${buildSQL(rules)}`;
-}
+Use the built-in `getSqlFromRules(rules?)` method to generate a SQL WHERE clause:
 
-// Usage
-const rules = qb.getRules();
-const sqlQuery = rulesToSQL(rules);
+```typescript
+// Generate SQL from current rules
+const sqlQuery = qb.getSqlFromRules();
 console.log('SQL:', sqlQuery);
-// Output: SELECT * FROM table WHERE (City = 'Seattle') AND ((Title LIKE 'Sales') OR (Title LIKE 'Manager'))
+// Output: City = 'Seattle' AND (Title LIKE '%Sales%' OR Title LIKE '%Manager%')
 ```
 
-### SQL for Different Databases
+### Load Rules from SQL
+
+Use `getRulesFromSql(sqlString)` to parse a SQL string back into a `RuleModel`:
 
 ```typescript
-// MongoDB query
-function rulesToMongoQuery(rules: RuleModel): object {
-  function buildMongo(ruleModel: RuleModel): object {
-    const $and = ruleModel.rules.map(rule => {
-      if (rule.rules) {
-        return buildMongo(rule as RuleModel);
-      } else {
-        return {
-          [rule.field]: mongoOperator(rule.operator, rule.value)
-        };
-      }
-    });
-    
-    if (ruleModel.condition === 'and') {
-      return { $and };
-    } else {
-      return { $or: $and };
-    }
-  }
-  
-  function mongoOperator(op: string, value: any): object {
-    const map: {[key: string]: object} = {
-      'equal': { $eq: value },
-      'notequal': { $ne: value },
-      'greaterthan': { $gt: value },
-      'lessthan': { $lt: value },
-      'contains': { $regex: value },
-      'in': { $in: value }
-    };
-    return map[op] || { $eq: value };
-  }
-  
-  return buildMongo(rules);
-}
+// Load rules from a SQL string
+const sql = "EmployeeID > 1 AND (Title LIKE '%Sales%' OR Title LIKE '%Manager%')";
+const rules = qb.getRulesFromSql(sql);
+qb.setRules(rules);
+```
 
-// Elasticsearch query
-function rulesToElasticsearch(rules: RuleModel): object {
-  // Similar pattern with Elasticsearch query syntax
-}
+### Parameterized SQL
+
+```typescript
+import { ParameterizedSql, ParameterizedNamedSql } from '@syncfusion/ej2-querybuilder';
+
+// Get parameterized SQL (positional parameters)
+const paramSql: ParameterizedSql = qb.getParameterizedSql();
+console.log('SQL:', paramSql.sql);     // e.g. "City = ? AND Salary > ?"
+console.log('Params:', paramSql.params); // e.g. ['Seattle', 50000]
+
+// Set rules from parameterized SQL
+qb.setParameterizedSql(paramSql);
+
+// Get parameterized SQL with named parameters
+const namedSql: ParameterizedNamedSql = qb.getParameterizedNamedSql();
+console.log('SQL:', namedSql.sql);     // e.g. "City = :City AND Salary > :Salary"
+console.log('Params:', namedSql.params); // e.g. { City: 'Seattle', Salary: 50000 }
+
+// Set rules from named parameterized SQL
+qb.setParameterizedNamedSql(namedSql);
+```
+
+### MongoDB Query
+
+Use `getMongoQuery()` and `setMongoQuery()` for MongoDB support:
+
+```typescript
+// Get MongoDB query string from current rules
+const mongoQuery = qb.getMongoQuery();
+console.log('Mongo query:', mongoQuery);
+// Output: {"$and":[{"City":{"$eq":"Seattle"}},{"$or":[{"Title":{"$regex":"Sales"}},{"Title":{"$regex":"Manager"}}]}]}
+
+// Set rules from a MongoDB query string
+qb.setMongoQuery(mongoQuery);
 ```
 
 ## Data Persistence
@@ -414,8 +348,7 @@ function loadFromLocalStorage(key: string) {
   const saved = localStorage.getItem(key);
   if (saved) {
     const rules = JSON.parse(saved);
-    qb.rule = rules;
-    qb.refresh();
+    qb.setRules(rules);
     console.log('Loaded from localStorage');
   }
 }
@@ -438,8 +371,7 @@ function saveToSession() {
 function loadFromSession() {
   const saved = sessionStorage.getItem('querySession');
   if (saved) {
-    qb.rule = JSON.parse(saved);
-    qb.refresh();
+    qb.setRules(JSON.parse(saved));
   }
 }
 
@@ -490,8 +422,7 @@ async function loadFromIndexedDB(queryId: number) {
   
   request.onsuccess = () => {
     if (request.result) {
-      qb.rule = request.result.rules;
-      qb.refresh();
+      qb.setRules(request.result.rules);
     }
   };
 }
@@ -558,8 +489,7 @@ qb.addEventListener('change', () => {
 document.getElementById('undoBtn')?.addEventListener('click', () => {
   const prev = history.undo();
   if (prev) {
-    qb.rule = prev;
-    qb.refresh();
+    qb.setRules(prev);
     updateHistoryButtons();
   }
 });
@@ -567,8 +497,7 @@ document.getElementById('undoBtn')?.addEventListener('click', () => {
 document.getElementById('redoBtn')?.addEventListener('click', () => {
   const next = history.redo();
   if (next) {
-    qb.rule = next;
-    qb.refresh();
+    qb.setRules(next);
     updateHistoryButtons();
   }
 });
@@ -632,7 +561,7 @@ localStorage.setItem('compressedQuery', compressed);
 
 // Load
 const loaded = decompressRules(localStorage.getItem('compressedQuery')!);
-qb.rule = loaded;
+qb.setRules(loaded);
 ```
 
 ---

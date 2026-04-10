@@ -1455,7 +1455,7 @@ import {
     layers: [
       {
         
-        urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+        urlTemplate: 'your URL link',
   
         markerSettings: [
           {

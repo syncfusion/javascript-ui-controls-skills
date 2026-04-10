@@ -153,7 +153,7 @@ import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
 // Parent: Category
 const categorySelect = new MultiSelect({
   dataSource: new DataManager({
-    url: '/api/categories'
+    url: 'url'
   }),
   fields: { text: 'name', value: 'id' },
   placeholder: 'Select category',

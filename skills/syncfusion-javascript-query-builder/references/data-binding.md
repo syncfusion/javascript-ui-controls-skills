@@ -142,7 +142,7 @@ import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
 
 // Create DataManager with remote URL
 const dataManager = new DataManager({
-  url: 'https://api.example.com/employees',
+  url: 'url',
   adaptor: new UrlAdaptor()
 });
 
@@ -168,7 +168,7 @@ import { DataManager, ODataAdaptor } from '@syncfusion/ej2-data';
 
 // OData endpoint
 const oDataManager = new DataManager({
-  url: 'https://services.odata.org/V4/Northwind/Northwind.svc/Employees',
+  url: 'url',
   adaptor: new ODataAdaptor(),
   crossDomain: true
 });
@@ -188,7 +188,7 @@ qb.appendTo('#querybuilder');
 import { DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
 
 const odataV4Manager = new DataManager({
-  url: 'https://your-odata-v4-service.com/api/employees',
+  url: 'url',
   adaptor: new ODataV4Adaptor(),
   crossDomain: true
 });
@@ -207,15 +207,19 @@ qb.appendTo('#querybuilder');
 
 ```typescript
 interface RuleModel {
-  condition?: 'and' | 'or';           // Logical operator (default: 'and')
-  rules: (RuleModel | Rule)[];        // Child rules or groups
+  condition?: string;                             // 'and' | 'or' for groups
+  rules?: RuleModel[];                            // Child rules or groups
   
   // For leaf rules:
-  label?: string;                     // Display label
-  field?: string;                     // Column field name
-  type?: string;                      // Data type
-  operator?: string;                  // Comparison operator
-  value?: any;                        // Filter value
+  label?: string;                                 // Display label
+  field?: string;                                 // Column field name
+  type?: string;                                  // Data type
+  operator?: string;                              // Comparison operator
+  value?: string[] | number[] | string | number | boolean; // Filter value
+  
+  // Optional flags
+  isLocked?: boolean;                             // Whether the rule is locked
+  not?: boolean;                                  // Applies NOT to group condition
 }
 ```
 
@@ -324,7 +328,7 @@ const newData = [
 ];
 
 qb.dataSource = newData;
-qb.refresh();  // Refresh QueryBuilder
+qb.refresh(); // Re-render with new data source
 ```
 
 ### Add Rules Dynamically
@@ -364,7 +368,7 @@ import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
 
 const dataManager = new DataManager({
   // Endpoint URL
-  url: 'https://api.example.com/employees',
+  url: 'url',
   
   // Data adaptor (how to communicate)
   adaptor: new UrlAdaptor(),
@@ -388,7 +392,7 @@ const dataManager = new DataManager({
 
 ```typescript
 const authenticatedManager = new DataManager({
-  url: 'https://api.example.com/employees',
+  url: 'url',
   adaptor: new UrlAdaptor(),
   headers: [
     {
@@ -434,7 +438,7 @@ dataManager: { adaptor: new CustomAdaptor() }
 
 ```typescript
 const remoteManager = new DataManager({
-  url: 'https://api.example.com/employees?$skip=0&$take=50',
+  url: 'url',
   adaptor: new ODataV4Adaptor(),
   offline: false  // Always remote
 });
@@ -443,7 +447,7 @@ const qb = new QueryBuilder({
   width: '100%',
   dataSource: remoteManager,
   columns: columns,
-  displayMode: 'Inline'
+  displayMode: 'Horizontal'
 });
 
 qb.appendTo('#querybuilder');
@@ -475,8 +479,8 @@ class DataService {
 }
 
 const service = new DataService();
-service.subscribe((data) => {
-  qb.dataSource = data;
+service.subscribe((newData: any[]) => {
+  qb.dataSource = newData;
   qb.refresh();
 });
 ```
@@ -488,7 +492,7 @@ Load different datasets based on filter selection:
 ```typescript
 let currentFilter: RuleModel;
 
-qb.addEventListener('change', (args: any) => {
+qb.change = (args: ChangeEventArgs) => {
   currentFilter = qb.getRules();
   
   // Based on filter, load related data
@@ -499,11 +503,11 @@ qb.addEventListener('change', (args: any) => {
     // Load employees for that department
     loadEmployeesByDepartment(dept);
   }
-});
+};
 
 function loadEmployeesByDepartment(deptId: string) {
   const newManager = new DataManager({
-    url: `https://api.example.com/employees?department=${deptId}`,
+    url: 'url',
     adaptor: new ODataAdaptor()
   });
   
@@ -520,7 +524,7 @@ const staticValues = ['Active', 'Inactive', 'Pending'];
 
 // Remote DataManager for main data
 const remoteData = new DataManager({
-  url: 'https://api.example.com/orders',
+  url: 'url',
   adaptor: new ODataAdaptor()
 });
 

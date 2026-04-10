@@ -23,7 +23,7 @@ const bubbleData = [
 const mapConfig = {
     layers: [
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
             bubbleSettings: [{
                 visible: true,
                 dataSource: bubbleData,
@@ -338,7 +338,7 @@ const map = new Maps({
     layers: [
         // Base map
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
         },
         // Regional color mapping
         {

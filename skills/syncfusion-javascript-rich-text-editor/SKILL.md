@@ -174,6 +174,27 @@ Use this skill when the user needs to:
 - Cursor position control
 - Rename images on server
 
+### Properties Reference
+📄 **Read:** [references/properties.md](references/properties.md)
+- Complete list of all `RichTextEditor` properties with types, defaults, and descriptions
+- Sub-type details for complex model properties (toolbar, image, table, font, color, AI assistant, etc.)
+- Code examples for key properties
+
+### Methods Reference
+📄 **Read:** [references/methods.md](references/methods.md)
+- Complete list of all public instance methods with signatures and return types
+- Parameter details and usage examples
+- `executeCommand` with full `CommandName` enum and argument interfaces
+- Static `Inject` method and available module list
+
+### Events Reference
+📄 **Read:** [references/events.md](references/events.md)
+- Complete list of all component events with types and event argument details
+- Lifecycle events: `created`, `destroyed`, `blur`, `focus`, `change`
+- Upload events for images, audio, and video
+- AI Assistant events: `aiAssistantPromptRequest`, `aiAssistantToolbarClick`, `aiAssistantStopRespondingClick`
+- Toolbar, popup, dialog, quick toolbar, resize, and selection events
+
 ---
 
 ## Quick Start

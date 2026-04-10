@@ -203,7 +203,10 @@ const queryBuilder = new QueryBuilder({
     ruleDelete: true,         // Show delete button for rules
     groupDelete: true,        // Show delete button for groups
     groupInsert: true,        // Show insert group button
-    ruleInsert: true          // Show insert rule button
+    cloneRule: true,          // Show clone rule button
+    cloneGroup: true,         // Show clone group button
+    lockRule: true,           // Show lock rule button
+    lockGroup: true           // Show lock group button
   },
 
   // Initial rules
@@ -215,10 +218,10 @@ const queryBuilder = new QueryBuilder({
   },
 
   // Drag and drop
-  allowDragDrop: true,        // Enable drag-drop
-  
+  allowDragAndDrop: true,     // Enable drag-drop
+
   // Display options
-  displayMode: 'Inline'       // 'Inline' or 'Vertical' layout
+  displayMode: 'Horizontal'   // 'Horizontal' or 'Vertical' layout
 });
 ```
 

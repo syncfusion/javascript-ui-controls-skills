@@ -29,7 +29,7 @@ Free, open-source background map:
 const layerConfig = {
     layers: [
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
             type: 'OSM'
         }
     ]
@@ -92,7 +92,7 @@ Maps.Inject(Marker);
 const map = new Maps({
   layers: [
     {
-      urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+      urlTemplate: 'your URL link',
 
       markerSettings: [
         {
@@ -129,7 +129,7 @@ const bubbleData = [
 const map = new Maps({
     layers: [
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
            bubbleSettings: [
             {
               visible: true,
@@ -181,7 +181,7 @@ const map = new Maps({
     layers: [
         // Base map layer
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
             type: 'OSM'
         },
         // Markers layer
@@ -271,7 +271,7 @@ Separate concerns - one layer for background, others for data:
 // Layer 0: Background
 layers: [
     {
-        urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+        urlTemplate: 'your URL link',
        
     },
     // Layer 1: Data overlay

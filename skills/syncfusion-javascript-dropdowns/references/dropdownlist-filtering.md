@@ -89,7 +89,7 @@ import { DropDownList, FilteringEventArgs } from '@syncfusion/ej2-dropdowns';
 import { Query, DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
 
 let searchData: DataManager = new DataManager({
-    url: 'https://services.odata.org/V4/Northwind/Northwind.svc/Customers',
+    url: 'url',
     adaptor: new ODataV4Adaptor,
     crossDomain: true
 });
@@ -209,7 +209,7 @@ import { DropDownList, FilteringEventArgs, highlightSearch } from '@syncfusion/e
 import { Query, DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
 
 let searchData: DataManager = new DataManager({
-    url: 'https://services.odata.org/V4/Northwind/Northwind.svc/Customers',
+    url: 'url',
     adaptor: new ODataV4Adaptor,
     crossDomain: true
 });

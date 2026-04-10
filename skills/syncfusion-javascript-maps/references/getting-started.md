@@ -86,7 +86,7 @@ const map: Maps = new Maps(<MapsModel>{
     layers: [
         {
             type:'Layer',
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png' 
+            urlTemplate: 'your URL link' 
         }
     ]
 });
@@ -155,7 +155,7 @@ const mapConfig = {
     // Layers (required - defines the background map)
     layers: [
         {
-            urlTemplate: 'https://tile.openstreetmap.org/level/tileX/tileY.png',
+            urlTemplate: 'your URL link',
 
         }
     ]

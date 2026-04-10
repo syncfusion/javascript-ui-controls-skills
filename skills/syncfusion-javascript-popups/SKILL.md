@@ -1,6 +1,6 @@
 ---
 name: syncfusion-javascript-popups
-description: Comprehensive guide for implementing Syncfusion TypeScript popup components including Dialog. Use this when building modal or modeless dialogs, alert/confirm dialogs, popup windows, DialogUtility, dialog animations, resize, drag, nested dialogs, dialog templates, dialog accessibility, or any Dialog-related tasks in TypeScript/EJ2 projects.
+description: Comprehensive guide for implementing Syncfusion TypeScript Dialog (popup) components. Use this when building modal or modeless dialogs, alert/confirm windows, or DialogUtility-based prompts in TypeScript/EJ2 projects. Covers animations, drag, resize, nested dialogs, templates, and WAI-ARIA accessibility.
 metadata:
   author: "Syncfusion Inc"
   version: "33.1.44"

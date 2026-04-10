@@ -323,10 +323,10 @@ stopButton.element.onclick = () => {
 <head>
     <title>Essential JS 2 - SpeechToText</title>
     <meta charset="utf-8" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-base/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-buttons/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-popups/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/20.3.56/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-buttons/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-popups/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
 </head>
 <body>
     <div id='loader'>LOADING....</div>
