@@ -3,7 +3,7 @@ name: syncfusion-javascript-treegrid
 description: Implements Syncfusion Javascript TreeGrid for hierarchical data with sorting, filtering, editing, exporting, paging, virtual scrolling, and advanced features. Supports configuration, CRUD, aggregates, templates, state persistence, and performance optimization in Javascript applications.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Grids"
 ---
 

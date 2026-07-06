@@ -3,7 +3,7 @@ name: syncfusion-javascript-file-manager
 description: Build file management interfaces with Syncfusion JavaScript FileManager component. Use this when creating file browsers, implementing file operations, enabling upload/download functionality, customizing toolbars and context menus, configuring drag-and-drop, and implementing data binding for file systems. Covers virtualization, access control, localization, and enterprise-grade file operations.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "File Management"
 ---
 

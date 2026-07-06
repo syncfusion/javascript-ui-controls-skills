@@ -3,7 +3,7 @@ name: syncfusion-javascript-tab
 description: This skill enables creating and customizing Syncfusion TypeScript Tab components, including tab navigation, tab headers, styling, responsive layouts, dynamic content loading, animations, and multi-panel organization.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation Components"
 ---
 

@@ -3,7 +3,7 @@ name: syncfusion-javascript-carousel
 description: Build carousel components for displaying image galleries, news headlines, and rotating content. Use this skill when implementing image sliders, automatic content rotation, or carousel-based galleries. Covers navigation controls, slide transitions, animation effects, and indicators.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation"
 ---
 

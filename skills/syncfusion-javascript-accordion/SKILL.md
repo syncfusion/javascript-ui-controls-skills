@@ -3,7 +3,7 @@ name: syncfusion-javascript-accordion
 description: Build collapsible navigation panels with the Syncfusion TypeScript Accordion component. Use this skill when implementing vertical accordion menus, expanding/collapsing content panels, multi-step wizards, data-driven panels with dynamic content, tabbed navigation alternatives, or nested hierarchical content structures. Covers initialization, expand modes, animations, icons, templates, styling, data binding, and advanced use cases like form wizards.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation"
 ---
 

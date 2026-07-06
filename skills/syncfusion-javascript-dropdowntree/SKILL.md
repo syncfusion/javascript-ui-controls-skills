@@ -3,7 +3,7 @@ name: syncfusion-javascript-dropdowntree
 description: "Implement Syncfusion Dropdown Tree control to display hierarchical data in dropdown format. Use this skill when implementing single or multiple value selection from hierarchical data, enabling checkboxes with dependent parent-child states, lazy-loading large datasets, customizing tree items with templates, and configuring multi-language support. Comprehensive coverage of properties, methods, events, data binding modes, checkbox selection, templates, and accessibility features."
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Dropdown Components"
 ---
 

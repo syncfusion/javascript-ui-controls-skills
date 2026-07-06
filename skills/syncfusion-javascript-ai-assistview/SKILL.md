@@ -3,7 +3,7 @@ name: syncfusion-javascript-ai-assistview
 description: "Implement the Syncfusion JavaScript AI AssistView control. Use this skill when users mention AI assistant interfaces, AI chat UI, conversational AI components, prompt-response interfaces, AI integration (OpenAI, Gemini, Ollama, LiteLLM, MCP), chat toolbars, file attachments in chat, speech-to-text, text-to-speech, custom AI views, prompt suggestions, markdown responses, or implementing any interactive AI assistant interface. Use this skill immediately for AIAssistView, AI chat control, interactive chat, ej2-interactive-chat package, AI conversation UI, or AI assistance components."
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Syncfusion JavaScript AI AssistView Component

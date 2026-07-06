@@ -3,7 +3,7 @@ name: syncfusion-javascript-menu
 description: When building navigation hierarchies, implement Syncfusion Menu for multi-level nested items, data binding, animations, and event handling. Supports horizontal and vertical orientations, scrollable menus, accessibility, and real-time item management.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation Controls"
 ---
 

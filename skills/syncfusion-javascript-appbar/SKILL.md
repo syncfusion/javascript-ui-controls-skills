@@ -3,7 +3,7 @@ name: syncfusion-javascript-appbar
 description: Learn how to implement and configure the Syncfusion TypeScript AppBar control for navigation bars, app headers, and UI toolbars. This skill covers responsive positioning, color modes, sizing, styling, and component integration. Use when building navigation solutions that require flexible layout and styling options.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation"
 ---
 

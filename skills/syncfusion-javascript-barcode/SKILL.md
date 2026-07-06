@@ -3,7 +3,7 @@ name: syncfusion-javascript-barcode
 description: Generate scannable barcodes in web apps using Syncfusion JavaScript Barcode Generator (linear barcodes, QR Code, Data Matrix). Trigger for barcode rendering, sizing/margins, colors, text display, error correction, quiet zones, encoding options, validation, and exporting to PNG/JPG/PDF for e-commerce, inventory, labels, and document workflows.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Data Visualization"
 ---
 

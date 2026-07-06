@@ -3,7 +3,7 @@ name: syncfusion-javascript-chart
 description: Implements Syncfusion JavaScript chart controls (Line, Area, Bar, Column, Pie, Polar, Radar, Waterfall, Stock). Use when building interactive data visualizations, dashboards, or real-time charts. Covers series and axes configuration, styling, animations, exporting, and technical indicators. Works with TypeScript (webpack/modules) and JavaScript (CDN/ES5).
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Data Visualization"
 ---
 

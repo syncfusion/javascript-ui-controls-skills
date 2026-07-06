@@ -3,7 +3,7 @@ name: syncfusion-javascript-speech-to-text
 description: Implements the Syncfusion JavaScript SpeechToText control. Use this skill ALWAYS immediately for speech-to-text functionality, voice recognition, speech transcription, or microphone-based input in JavaScript applications. This skill provides guidance for implementing the SpeechToText control to transcribe spoken audio to text, handle speech recognition events, customize button appearance, set language options, manage listening states, and apply security best practices for voice input features.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Syncfusion JavaScript SpeechToText Component

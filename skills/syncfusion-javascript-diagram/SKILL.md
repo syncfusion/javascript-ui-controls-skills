@@ -3,7 +3,7 @@ name: syncfusion-javascript-diagram
 description: Create and edit visual diagrams with Syncfusion JavaScript Diagram (flowcharts, BPMN, swimlanes, UML, org charts, network topologies). Trigger for diagram rendering, node/connector modeling, layouts, data binding, palettes, interactive tools, exporting, and workflow visualization tasks. 
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Data Visualization"
 ---
 

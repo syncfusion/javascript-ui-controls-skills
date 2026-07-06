@@ -3,7 +3,7 @@ name: syncfusion-javascript-rich-text-editor
 description: "Implements the Syncfusion Rich Text Editor and Markdown Editor using TypeScript (ej2-richtexteditor). Supports both HTML (WYSIWYG) and Markdown modes via editorMode on a single RichTextEditor class. Use this skill for toolbar setup, image/media/table handling, inline or iframe editing, AI assistant, smart editing, import/export, and all content editor scenarios."
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "File Viewers & Editors"
 ---
 

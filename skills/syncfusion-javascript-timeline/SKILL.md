@@ -4,7 +4,7 @@ description: Create and configure Syncfusion TypeScript Timeline control for dis
 metadata:
   author: "Syncfusion Inc"
   category: "Layouts"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Implementing Syncfusion TypeScript Timeline

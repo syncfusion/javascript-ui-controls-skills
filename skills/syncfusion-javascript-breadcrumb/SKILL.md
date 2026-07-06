@@ -3,7 +3,7 @@ name: syncfusion-javascript-breadcrumb
 description: Learn to implement and configure the Syncfusion TypeScript Breadcrumb component for navigation. Use this skill when implementing breadcrumb navigation for web applications. Covers component initialization, item configuration, overflow handling, event management, and advanced customization.
 metadata:
   author: Syncfusion Inc
-  version: "33.1.44"
+  version: "34.1.29"
   category: Navigation Components
 ---
 

@@ -3,7 +3,7 @@ name: syncfusion-javascript-grid
 description: 'Implements Syncfusion JavaScript Grid component for feature-rich data tables and grids. Use this when working with data display, sorting, filtering, grouping, aggregates, editing, or exporting. This skill covers grid configuration, CRUD operations, virtual scrolling, hierarchy grids, state persistence, and advanced data management features for data-intensive applications.'
 metadata:
   author: "Syncfusion"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Grids"
 ---
 

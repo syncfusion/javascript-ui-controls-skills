@@ -3,7 +3,7 @@ name: syncfusion-javascript-avatar
 description: Implement Syncfusion TypeScript Avatar components for user representations. Use when user needs to display user profiles, avatars with different shapes (circular or rectangular), custom sizing, media formats (images, SVG, icons, letters), color customization, or integrate avatars with other controls like Badge or ListView.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Layout Components"
 ---
 

@@ -3,7 +3,7 @@ name: syncfusion-javascript-common
 description: Common utilities and features for Syncfusion JavaScript controls. Use this skill when the user needs to implement animations, drag-and-drop, state persistence, RTL support, localization, globalization, security, templates, and advanced features for Syncfusion JavaScript controls.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Common Features"
 ---
 
@@ -54,10 +54,10 @@ Syncfusion JavaScript controls include comprehensive common utilities and featur
 
 ## Quick Start
 
-### Install Syncfusion JavaScript Package
+### Install Syncfusion JavaScript control package and theme package
 
 ```bash
-npm install @syncfusion/ej2-grids@latest --save
+npm install @syncfusion/ej2-grids@latest @syncfusion/ej2-tailwind3-theme@latest --save
 ```
 
 > **Note:** The `@syncfusion/ej2-base` package is a dependency for all Syncfusion controls and will be automatically installed when you install any Syncfusion JavaScript package. You don't need to explicitly add it to your `package.json` file.
@@ -65,14 +65,7 @@ npm install @syncfusion/ej2-grids@latest --save
 ### Import Styles
 
 ```css
-@import "../node_modules/@syncfusion/ej2-base/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-calendars/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-grids/styles/tailwind3.css";
+@import "../node_modules/@syncfusion/ej2-tailwind3-theme/styles/grid/index.css";
 ```
 
 ### Register License Key

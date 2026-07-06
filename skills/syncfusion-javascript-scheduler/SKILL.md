@@ -3,7 +3,7 @@ name: syncfusion-javascript-scheduler
 description: Implement the Syncfusion Essential JS 2 TypeScript Scheduler (Schedule) component for event and appointment management. Use this when working with scheduling interfaces, calendar views, appointment CRUD operations, or resource management. This skill covers scheduler setup, views configuration, appointments handling, recurring events, resource scheduling, timeline views, editor templates, exporting functionality, timezone support, styling, and accessibility features.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Calendars"
 ---
 

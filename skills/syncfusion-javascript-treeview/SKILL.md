@@ -3,7 +3,7 @@ name: syncfusion-javascript-treeview
 description: Implement hierarchical tree structures with Syncfusion JavaScript TreeView component for selection, editing, and drag-drop functionality. Use this skill when building tree navigation interfaces, displaying hierarchical data, implementing node selection and checkboxes, performing node manipulation (add/remove/update), and customizing tree templates. Covers data binding with local and remote data sources, DataManager integration, node events, API methods, and properties.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation Controls"
 ---
 

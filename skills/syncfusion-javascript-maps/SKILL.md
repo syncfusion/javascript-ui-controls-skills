@@ -3,7 +3,7 @@ name: syncfusion-javascript-maps
 description: "Guide to implementing Syncfusion Maps in TypeScript and JavaScript. Use this skill whenever the user needs to create interactive maps, add markers, visualize geographical data, work with map layers, apply color mapping, add annotations, configure legends, or handle map interactions and events. Works with TypeScript (module-based) and JavaScript (CDN/ES5)."
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Data Visualization"
 ---
 

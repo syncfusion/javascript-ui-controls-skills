@@ -1,10 +1,18 @@
 ---
 name: syncfusion-javascript-dropdowns
-description: Comprehensive guide for implementing Syncfusion TypeScript dropdown components including AutoComplete, ComboBox, Mention, Dropdownlist and Multiselect. Use this when building selection interfaces, data binding, filtering, cascading dropdowns, custom templates, and accessible dropdown experiences.
+description: Comprehensive guide for implementing Syncfusion TypeScript dropdown components including AutoComplete, ComboBox, Mention, Dropdownlist, Multiselect, ListBox, and MultiColumn ComboBox. Use this when building selection interfaces, data binding, filtering, cascading dropdowns, dual list transfer, custom templates, and accessible dropdown experiences.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Dropdowns"
+  components:
+    - AutoComplete
+    - ComboBox
+    - DropDownList
+    - MultiSelect
+    - ListBox
+    - Mention
+    - MultiColumnComboBox
 ---
 
 # Syncfusion javascript Dropdowns
@@ -100,6 +108,13 @@ The Syncfusion DropDownList component provides a single-select dropdown with sup
 - `FieldSettingsModel` reference
 
 ---
+
+### Installation
+
+```bash
+npm install @syncfusion/ej2-dropdowns
+npm audit
+```
 
 ### Quick Start
 
@@ -1091,3 +1106,557 @@ mentionObj.appendTo('#mention-default');
 
 **Key Methods:** `showPopup()`, `hidePopup()`, `search(text, x, y)`, `disableItem(item)`, `addItem(items, index?)`, `destroy()`.
 
+---
+
+## ListBox
+
+The Syncfusion TypeScript ListBox component renders a scrollable list of items from which users can select one or multiple values. Unlike a dropdown, it is always visible — making it ideal for available/selected item lists, permission assignment interfaces, and preference panels. It supports drag-and-drop, toolbar-based dual-list transfer, filtering, grouping, sorting, and checkbox selection.
+
+**Key capabilities:**
+- Single or multiple selection via `selectionSettings.mode`
+- Checkbox selection with "Select All" — requires `ListBox.Inject(CheckBoxSelection)`
+- Drag-and-drop reordering within a single list or between two lists via `allowDragAndDrop` + `scope`
+- Dual-list (transfer list) pattern with `scope` + `toolbarSettings.items`
+- Filter bar via `allowFiltering` + `filtering` event for custom logic
+- Sort data with `sortOrder: 'Ascending' | 'Descending'`
+- Custom item rendering with `itemTemplate`
+- Enable/disable individual items with `enableItems()` or `fields.disabled`
+- Full programmatic API: `addItems`, `removeItems`, `selectItems`, `moveTo`, `moveAllTo`, `getDataList`
+
+---
+
+### Documentation and Navigation Guide
+
+#### Getting Started
+📄 **Read:** [references/listbox-getting-started.md](references/listbox-getting-started.md)
+- Installation: `npm install @syncfusion/ej2-dropdowns`
+- CSS theme imports (tailwind3, material, bootstrap5, fluent, fabric)
+- HTML setup: `<div id="listbox"></div>`
+- Basic ListBox with static data
+- `change` event handler
+- Multiple selection
+- Troubleshooting common setup issues
+
+#### Data Binding
+📄 **Read:** [references/listbox-data-binding.md](references/listbox-data-binding.md)
+- Simple string array binding
+- Object arrays with `fields` mapping (`text`, `value`, `iconCss`, `disabled`)
+- Grouping with `fields.groupBy`
+- Dynamic data: `addItems`, `dataBind`
+- Remote data with `DataManager` and `ODataV4Adaptor`
+
+#### Selection
+📄 **Read:** [references/listbox-selection.md](references/listbox-selection.md)
+- Single selection (`selectionSettings.mode: 'Single'`)
+- Multiple selection (default)
+- Pre-select via `value: ['id1', 'id2']`
+- `maximumSelectionLength` to cap selections
+- Checkbox selection: `ListBox.Inject(CheckBoxSelection)` + `selectionSettings.showCheckbox: true`
+- "Select All" with `selectionSettings.showSelectAll: true`
+- Programmatic select/deselect via `selectItems()` and `selectAll()`
+- Get selected data with `getDataByValues()`
+
+#### Features
+📄 **Read:** [references/listbox-features.md](references/listbox-features.md)
+- Filter bar: `allowFiltering`, `filterBarPlaceholder`, `filterType`
+- Custom filter via `filtering` event + `args.updateData()`
+- Sorting with `sortOrder: 'Ascending' | 'Descending'`
+- Drag-and-drop within a single list and between two lists using `scope`
+- Enable/disable items with `enableItems()` or `fields.disabled`
+- Fixed height with scroll
+
+#### Dual ListBox (Transfer List)
+📄 **Read:** [references/listbox-dual-list-box.md](references/listbox-dual-list-box.md)
+- Two-ListBox wiring via `scope: '#target-id'` + `toolbarSettings.items`
+- All 6 toolbar operations: `moveUp`, `moveDown`, `moveTo`, `moveFrom`, `moveAllTo`, `moveAllFrom`
+- Reorder-only pattern, one-direction transfer, bidirectional transfer
+- Toolbar position (`Left` / `Right`)
+- Programmatic transfer: `moveTo`, `moveAllTo`, `moveUp`, `moveDown`, `moveTop`, `moveBottom`
+- Read updated state with `getDataList()`
+- Permission assignment example
+
+#### Icons and Templates
+📄 **Read:** [references/listbox-icons-and-templates.md](references/listbox-icons-and-templates.md)
+- Icon CSS via `fields.iconCss`
+- Emoji icons in text field
+- `itemTemplate` with `${}` string template syntax
+- Template with icon + description layout
+- Template with status badge
+- `noRecordsTemplate` customization
+
+#### Style and Appearance
+📄 **Read:** [references/listbox-style-and-appearance.md](references/listbox-style-and-appearance.md)
+- CSS theme imports (tailwind3 / material / bootstrap5 / fluent / fabric)
+- Override CSS classes: `.e-listbox-wrapper`, `.e-list-item`, `.e-selected`, `.e-disabled`, `.e-list-group-item`
+- `cssClass` for scoped custom styles
+- Conditional item styling with `itemTemplate` + CSS
+- Responsive `height` and `width`, RTL support
+
+#### Accessibility
+📄 **Read:** [references/listbox-accessibility.md](references/listbox-accessibility.md)
+- WCAG 2.2 AA / Section 508 / ARIA 1.2 compliance
+- Auto-applied ARIA attributes (`role`, `aria-multiselectable`, `aria-selected`)
+- Custom ARIA via `htmlAttributes`
+- Keyboard shortcuts table (Arrow, Space, Enter, Home, End, Shift+Arrow, Ctrl+A)
+- Screen reader label association with `<label>` and `aria-live`
+- RTL: `enableRtl: true` or global `enableRtl(true)`
+
+#### How-To Guides
+📄 **Read:** [references/listbox-how-to-guides.md](references/listbox-how-to-guides.md)
+- Add single/multiple items with `addItems()`
+- Prevent duplicate items
+- Select items programmatically with `selectItems()`
+- Enable/disable items with `enableItems()`
+- Custom filter logic with `filtering` event
+- Fixed height scroller
+- Form integration: read selections with `getDataByValues()` on submit
+
+#### API Reference
+📄 **Read:** [references/listbox-api.md](references/listbox-api.md)
+- All properties with types and defaults
+- All methods: `addItems`, `enableItems`, `filter`, `getDataByValue`, `getDataByValues`, `getDataList`, `getItems`, `getSortedList`, `moveAllTo`, `moveBottom`, `moveDown`, `moveTo`, `moveTop`, `moveUp`, `removeItem`, `removeItems`, `selectAll`, `selectItems`
+- All events: `change`, `created`, `dataBound`, `destroyed`, `drag`, `dragStart`, `drop`, `filtering`, `beforeDrop`, `beforeItemRender`
+- Sub-interfaces: `FieldSettingsModel`, `SelectionSettingsModel`, `ToolbarSettingsModel`
+
+---
+
+### Quick Start
+
+```html
+<!-- index.html -->
+<link href="node_modules/@syncfusion/ej2-base/styles/tailwind3.css" rel="stylesheet" />
+<link href="node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
+<link href="node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css" rel="stylesheet" />
+
+<div id="listbox"></div>
+```
+
+```ts
+import { ListBox } from '@syncfusion/ej2-dropdowns';
+
+const data: { [key: string]: Object }[] = [
+  { text: 'JavaScript', id: '1' },
+  { text: 'TypeScript', id: '2' },
+  { text: 'React', id: '3' },
+  { text: 'Angular', id: '4' },
+  { text: 'Vue', id: '5' }
+];
+
+const listBox: ListBox = new ListBox({
+  dataSource: data,
+  fields: { text: 'text', value: 'id' },
+  change: (args) => {
+    console.log('Selected values:', args.value);
+  }
+});
+
+listBox.appendTo('#listbox');
+```
+
+#### With Checkbox Selection
+
+```ts
+import { ListBox, CheckBoxSelection } from '@syncfusion/ej2-dropdowns';
+
+ListBox.Inject(CheckBoxSelection);  // Must be called before instantiation
+
+const listBox: ListBox = new ListBox({
+  dataSource: data,
+  fields: { text: 'text', value: 'id' },
+  selectionSettings: {
+    showCheckbox: true,
+    showSelectAll: true
+  }
+});
+
+listBox.appendTo('#listbox');
+```
+
+#### Dual ListBox (Transfer List)
+
+```html
+<div id="available"></div>
+<div id="selected"></div>
+```
+
+```ts
+import { ListBox } from '@syncfusion/ej2-dropdowns';
+
+const available: ListBox = new ListBox({
+  dataSource: data,
+  fields: { text: 'text', value: 'id' },
+  scope: '#selected',
+  toolbarSettings: {
+    items: ['moveTo', 'moveFrom', 'moveAllTo', 'moveAllFrom']
+  }
+});
+
+const selected: ListBox = new ListBox({
+  dataSource: [],
+  fields: { text: 'text', value: 'id' }
+});
+
+available.appendTo('#available');
+selected.appendTo('#selected');
+```
+
+---
+
+### Common Patterns
+
+#### Pattern 1: Checkbox Selection with "Select All"
+```ts
+import { ListBox, CheckBoxSelection } from '@syncfusion/ej2-dropdowns';
+
+ListBox.Inject(CheckBoxSelection);
+
+const listBox: ListBox = new ListBox({
+  dataSource: frameworksData,
+  fields: { text: 'text', value: 'id' },
+  selectionSettings: { showCheckbox: true, showSelectAll: true },
+  maximumSelectionLength: 3  // Allow up to 3 checkboxes
+});
+
+listBox.appendTo('#listbox');
+```
+
+#### Pattern 2: Filtering
+```ts
+const listBox: ListBox = new ListBox({
+  dataSource: data,
+  fields: { text: 'text', value: 'id' },
+  allowFiltering: true,
+  filterBarPlaceholder: 'Search frameworks...',
+  filterType: 'Contains'
+});
+
+listBox.appendTo('#listbox');
+```
+
+#### Pattern 3: Read Selected Items on Form Submit
+```ts
+document.getElementById('submitBtn')!.addEventListener('click', () => {
+  const selectedValues = listBox.value as string[];
+  const selectedItems = listBox.getDataByValues(selectedValues);
+  console.log('Submitted:', selectedItems);
+});
+```
+
+---
+
+### Key Properties
+
+| Property | Type | Default | Purpose |
+|---|---|---|---|
+| `dataSource` | `array \| DataManager` | `[]` | Data to display in the list |
+| `fields` | `FieldSettingsModel` | `{}` | Map text, value, iconCss, groupBy, disabled |
+| `value` | `string[] \| number[] \| boolean[]` | `[]` | Pre-selected or currently selected values |
+| `selectionSettings` | `SelectionSettingsModel` | `{ mode: 'Multiple' }` | Selection mode and checkbox options |
+| `toolbarSettings` | `ToolbarSettingsModel` | `{ items: [] }` | Dual ListBox toolbar configuration |
+| `scope` | `string` | `''` | Target ListBox ID for drag-and-drop or toolbar transfer |
+| `allowFiltering` | `boolean` | `false` | Show filter/search bar |
+| `allowDragAndDrop` | `boolean` | `false` | Enable drag-and-drop reordering |
+| `sortOrder` | `SortOrder` | `null` | Sort items: `'Ascending'` \| `'Descending'` |
+| `height` | `string \| number` | `''` | Fixed height with scroll |
+| `itemTemplate` | `string \| Function` | `null` | Custom item rendering template |
+| `maximumSelectionLength` | `number` | `1000` | Maximum number of selectable items |
+| `enableRtl` | `boolean` | `false` | Right-to-left rendering |
+| `cssClass` | `string` | `''` | Custom CSS class for scoped styling |
+
+
+---
+
+## MultiColumn ComboBox
+
+The Syncfusion EJ2 JavaScript `MultiColumnComboBox` renders a combo box with a multi-column popup grid, enabling users to select from structured tabular data. It supports local and remote data, filtering, sorting, grouping, templates, virtualization, and full accessibility compliance.
+
+**Package:** `@syncfusion/ej2-multicolumn-combobox`
+
+### Navigation Guide
+
+#### Getting Started
+📄 **Read:** [references/multicolumn-combobox-getting-started.md](references/multicolumn-combobox-getting-started.md)
+- Installation and package setup (`npm install @syncfusion/ej2-multicolumn-combobox`)
+- CSS imports and theme configuration (Tailwind 3, Material, Bootstrap 5, Fluent, Fabric)
+- HTML `<input>` target setup
+- `new MultiColumnComboBox({...}).appendTo('#id')` initialization
+- Binding `dataSource`, `fields`, and `columns: ColumnModel[]`
+- Configuring `popupHeight` and `popupWidth`
+- Minimal working example
+
+#### Columns
+📄 **Read:** [references/multicolumn-combobox-columns.md](references/multicolumn-combobox-columns.md)
+- Defining columns with `ColumnModel` (field, header, width, textAlign)
+- `template` for cell-level custom rendering
+- `displayAsCheckBox` for boolean columns
+- `customAttributes` for column CSS customization
+- `headerTemplate` for custom column headers
+- `format` for data formatting (C2 for currency, date skeletons)
+
+#### Data Binding
+📄 **Read:** [references/multicolumn-combobox-data-binding.md](references/multicolumn-combobox-data-binding.md)
+- Binding local object arrays via `dataSource`
+- Remote data binding with `DataManager` and `WebApiAdaptor` / `ODataAdaptor` / `ODataV4Adaptor`
+- Mapping `fields` (`text`, `value`, `groupBy`)
+- Using `query` property for filtered/limited data sets
+
+#### Filtering
+📄 **Read:** [references/multicolumn-combobox-filtering.md](references/multicolumn-combobox-filtering.md)
+- Enabling/disabling filtering with `allowFiltering`
+- Changing filter mode with `filterType` (`StartsWith`, `EndsWith`, `Contains`)
+- `filtering` event for custom filter logic
+- Disabling filtering for read-only scenarios
+
+#### Sorting
+📄 **Read:** [references/multicolumn-combobox-sorting.md](references/multicolumn-combobox-sorting.md)
+- Enabling sorting with `allowSorting`
+- Setting initial sort order with `sortOrder` (`None`, `Ascending`, `Descending`)
+- Sorting multiple columns with `sortType` (`OneColumn`, `MultipleColumns`)
+- Clicking column headers to toggle sort direction
+
+#### Grouping
+📄 **Read:** [references/multicolumn-combobox-grouping.md](references/multicolumn-combobox-grouping.md)
+- Grouping data with `fields.groupBy`
+- Fixed group headers in popup
+- Using `groupTemplate` to customize group headers (`${key}`, `${field}`, `${count}` tokens)
+
+#### Templates
+📄 **Read:** [references/multicolumn-combobox-templates.md](references/multicolumn-combobox-templates.md)
+- `itemTemplate` for customizing each row
+- `headerTemplate` (on `ColumnModel`) for custom column headers
+- `groupTemplate` for group header customization
+- `footerTemplate` for popup footer content
+- `noRecordsTemplate` for empty state display
+- `actionFailureTemplate` for remote fetch error state
+
+#### Items and Configuration
+📄 **Read:** [references/multicolumn-combobox-items.md](references/multicolumn-combobox-items.md)
+- Setting initial selection with `text`, `value`, `index`
+- `placeholder` and `floatLabelType` for input label behavior
+- `showClearButton` to allow clearing selection
+- `disabled` and `readonly` states
+- `width`, `popupWidth`, `popupHeight` for sizing
+- `cssClass` for custom styling
+- `htmlAttributes` for additional HTML attributes
+- `gridSettings` for grid lines, row height, and alternate rows
+- Programmatic methods: `addItems`, `focusIn`, `focusOut`, `showPopup`, `hidePopup`, `getDataByValue`, `getItems`
+
+#### Virtualization
+📄 **Read:** [references/multicolumn-combobox-virtualization.md](references/multicolumn-combobox-virtualization.md)
+- Enabling `enableVirtualization` for large datasets
+- Virtual scrolling with local and remote data
+- Combining with `gridSettings.rowHeight` for accurate positioning
+- Best practices for datasets of 100+ items
+
+#### Events
+📄 **Read:** [references/multicolumn-combobox-events.md](references/multicolumn-combobox-events.md)
+- `change` — fired when value changes or item is selected
+- `select` — fired on item selection
+- `open` / `close` — popup open/close lifecycle
+- `filtering` — fired on character input for custom filtering
+- `actionBegin` / `actionComplete` / `actionFailure` — data fetch lifecycle
+- `created` — post-render lifecycle hook
+
+#### Localization
+📄 **Read:** [references/multicolumn-combobox-localization.md](references/multicolumn-combobox-localization.md)
+- Localizing `noRecordsTemplate` text using `L10n.load()` with the `'multicolumncombobox'` locale key
+- Setting `locale` property for culture-specific rendering
+- Loading translation objects
+- BCP 47 language tags (e.g. `'en-US'`, `'fr-BE'`, `'de'`)
+
+#### Accessibility
+📄 **Read:** [references/multicolumn-combobox-accessibility.md](references/multicolumn-combobox-accessibility.md)
+- WCAG 2.2 and Section 508 compliance
+- WAI-ARIA attributes (`role="combobox"`, `aria-expanded`, `aria-selected`, `aria-readonly`, `aria-disabled`, `aria-owns`)
+- Keyboard navigation shortcuts (`Alt+Down`/`Alt+Up`, Arrow keys, `PageUp`/`PageDown`, `Enter`, `Esc`, `Home`, `End`)
+- RTL support with `enableRtl: true`
+- Screen reader support
+
+#### API Reference
+📄 **Read:** [references/multicolumn-combobox-api.md](references/multicolumn-combobox-api.md)
+- Complete list of all properties with types and defaults
+- All events with their argument types
+- All methods: `addItems`, `focusIn`, `focusOut`, `getDataByValue`, `getItems`, `showPopup`, `hidePopup`
+- `ColumnModel` properties (field, header, width, textAlign, template, headerTemplate, displayAsCheckBox, customAttributes, format)
+- `GridSettingsModel` properties (rowHeight, gridLines, enableAltRow)
+- `FieldSettingsModel` properties (text, value, groupBy)
+
+---
+
+### Quick Start
+
+```ts
+// app.ts
+import { MultiColumnComboBox, ColumnModel } from '@syncfusion/ej2-multicolumn-combobox';
+
+const empData: { [key: string]: Object }[] = [
+  { EmpID: 1001, Name: 'Andrew Fuller',    Designation: 'Team Lead',       Country: 'England' },
+  { EmpID: 1002, Name: 'Robert',           Designation: 'Developer',       Country: 'USA'     },
+  { EmpID: 1003, Name: 'Michael',          Designation: 'HR',              Country: 'Russia'  },
+  { EmpID: 1004, Name: 'Steven Buchanan',  Designation: 'Product Manager', Country: 'Ukraine' }
+];
+
+const fields: object = { text: 'Name', value: 'EmpID' };
+
+const columns: ColumnModel[] = [
+  { field: 'EmpID',       header: 'Employee ID', width: 120 },
+  { field: 'Name',        header: 'Name',        width: 120 },
+  { field: 'Designation', header: 'Designation', width: 120 },
+  { field: 'Country',     header: 'Country',     width: 100 }
+];
+
+const mccBox: MultiColumnComboBox = new MultiColumnComboBox({
+  dataSource: empData,
+  fields: fields,
+  columns: columns,
+  placeholder: 'Select an employee'
+});
+
+mccBox.appendTo('#multicolumn');
+```
+
+```html
+<!-- index.html -->
+<input type="text" id="multicolumn" />
+```
+
+```css
+/* styles.css */
+@import '~@syncfusion/ej2-base/styles/tailwind3.css';
+@import '~@syncfusion/ej2-inputs/styles/tailwind3.css';
+@import '~@syncfusion/ej2-grids/styles/tailwind3.css';
+@import '~@syncfusion/ej2-popups/styles/tailwind3.css';
+@import '~@syncfusion/ej2-multicolumn-combobox/styles/tailwind3.css';
+```
+
+---
+
+### Common Patterns
+
+#### Pre-select an item by text
+```ts
+const mccBox: MultiColumnComboBox = new MultiColumnComboBox({
+  dataSource: empData,
+  fields: fields,
+  text: 'Michael',
+  columns: columns
+});
+mccBox.appendTo('#multicolumn');
+```
+
+#### Enable filtering with Contains mode
+```ts
+const mccBox: MultiColumnComboBox = new MultiColumnComboBox({
+  dataSource: empData,
+  fields: fields,
+  allowFiltering: true,
+  filterType: 'Contains',
+  columns: columns
+});
+mccBox.appendTo('#multicolumn');
+```
+
+#### Enable sorting (descending) with multi-column support
+```ts
+import { MultiColumnComboBox, SortOrder, ColumnModel } from '@syncfusion/ej2-multicolumn-combobox';
+
+const mccBox: MultiColumnComboBox = new MultiColumnComboBox({
+  dataSource: empData,
+  fields: fields,
+  allowSorting: true,
+  sortOrder: SortOrder.Descending,
+  sortType: 'MultipleColumns',
+  columns: columns
+});
+mccBox.appendTo('#multicolumn');
+```
+
+#### Remote data binding with OData v4 (security-first)
+
+> **Security:** Do not call arbitrary third-party endpoints from client-side code. Route external API requests through a trusted server-side proxy that validates, authenticates, and sanitizes responses.
+
+```ts
+import { MultiColumnComboBox, ColumnModel } from '@syncfusion/ej2-multicolumn-combobox';
+import { DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
+
+// Use a trusted server-side proxy. Do not embed third-party URLs directly.
+const dataSource: DataManager = new DataManager({
+  url: 'https://your-trusted-proxy.example/api/customers',
+  adaptor: new ODataV4Adaptor(),
+  crossDomain: true
+});
+
+const fields: object = { text: 'FirstName', value: 'EmployeeID' };
+
+const columns: ColumnModel[] = [
+  { field: 'EmployeeID',  header: 'Employee ID', width: 120 },
+  { field: 'FirstName',   header: 'Name',        width: 130 },
+  { field: 'Designation', header: 'Designation', width: 120 },
+  { field: 'Country',     header: 'Country',     width: 90  }
+];
+
+const mccBox: MultiColumnComboBox = new MultiColumnComboBox({
+  dataSource: dataSource,
+  fields: fields,
+  placeholder: 'Select a name',
+  popupHeight: '230px',
+  columns: columns
+});
+mccBox.appendTo('#multicolumn');
+```
+
+#### Handle the value change event
+```ts
+import { MultiColumnComboBox, ChangeEventArgs } from '@syncfusion/ej2-multicolumn-combobox';
+
+const mccBox: MultiColumnComboBox = new MultiColumnComboBox({
+  dataSource: empData,
+  fields: fields,
+  columns: columns,
+  change: (args: ChangeEventArgs) => {
+    console.log('Selected value:', args.value);
+    console.log('Display text:', args.text);
+    console.log('Item data:', args.itemData);
+  }
+});
+mccBox.appendTo('#multicolumn');
+```
+
+---
+
+### Key Properties
+
+| Property | Type | Default | Purpose |
+|---|---|---|---|
+| `dataSource` | `Object[] \| DataManager` | `[]` | Data to populate the popup grid |
+| `fields` | `FieldSettingsModel` | `{text:null, value:null, groupBy:null}` | Maps data keys to display text, hidden value, and group-by |
+| `columns` | `ColumnModel[]` | `[]` | Column definitions for the popup grid |
+| `value` | `string` | `null` | Pre-selects an item by its value |
+| `text` | `string` | `null` | Pre-selects an item by its display text |
+| `index` | `number` | `null` | Pre-selects an item by zero-based index |
+| `placeholder` | `string` | `null` | Hint text for the input |
+| `floatLabelType` | `'Never' \| 'Always' \| 'Auto'` | `'Never'` | Floating label behavior |
+| `allowFiltering` | `boolean` | `true` | Enables the filter input |
+| `filterType` | `'StartsWith' \| 'EndsWith' \| 'Contains'` | `'StartsWith'` | Filter match strategy |
+| `allowSorting` | `boolean` | `true` | Enables column-header sorting |
+| `sortOrder` | `SortOrder` | `SortOrder.None` | Initial sort direction |
+| `sortType` | `SortType` | `'OneColumn'` | One or multi-column sort |
+| `enableVirtualization` | `boolean` | `false` | Virtual scrolling for large datasets |
+| `enableRtl` | `boolean` | `false` | Right-to-left rendering |
+| `enablePersistence` | `boolean` | `false` | Persist `value` across page reloads |
+| `readonly` | `boolean` | `false` | Prevent user input |
+| `disabled` | `boolean` | `false` | Fully disable the component |
+| `showClearButton` | `boolean` | `false` | Show a clear (×) button |
+| `cssClass` | `string` | `''` | Custom CSS class on the root element |
+| `popupHeight` | `string \| number` | `'300px'` | Height of the popup |
+| `popupWidth` | `string \| number` | `'100%'` | Width of the popup |
+| `width` | `string \| number` | `'100%'` | Width of the input element |
+| `gridSettings` | `GridSettingsModel` | `{rowHeight:null, gridLines:'Default', enableAltRow:false}` | Popup grid appearance |
+| `query` | `Query` | `null` | Query for remote data |
+| `htmlAttributes` | `{ [key: string]: string }` | `{}` | HTML attributes on the input |
+| `locale` | `string` | `''` | Locale code (e.g. `'fr-BE'`) |
+| `itemTemplate` | `string \| Function` | `null` | Custom row template |
+| `groupTemplate` | `string \| Function` | `null` | Custom group header template |
+| `footerTemplate` | `string \| Function` | `null` | Custom footer template |
+| `noRecordsTemplate` | `string \| Function` | `'No records found'` | Empty-state template |
+| `actionFailureTemplate` | `string \| Function` | `'Request failed'` | Remote error template |

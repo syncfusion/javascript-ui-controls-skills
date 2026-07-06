@@ -3,7 +3,7 @@ name: syncfusion-javascript-query-builder
 description: How to implement Syncfusion JavaScript QueryBuilder component with comprehensive guidance on columns, data binding, rules management, filtering, templates, drag-drop interactions, import/export, and accessibility. Use this skill when users need help with QueryBuilder setup, rule creation, complex query building, advanced customization, or dynamic filter UI requirements in TypeScript applications.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Forms"
 ---
 

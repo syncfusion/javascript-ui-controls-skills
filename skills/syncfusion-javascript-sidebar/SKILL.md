@@ -3,7 +3,7 @@ name: syncfusion-javascript-sidebar
 description: Build responsive sidebar navigation with Syncfusion Sidebar component. Supports multiple expand types (Over, Push, Slide, Auto), docking, animations, and gestures. Triggers when building navigation menus, mobile-friendly sidebars, dockable panels, or sidebars with list/tree views in TypeScript applications.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Syncfusion TypeScript Sidebar

@@ -3,7 +3,7 @@ name: syncfusion-javascript-kanban
 description: "Implement Syncfusion TypeScript Kanban board for visual task management and workflow tracking. Use this when working with task boards, workflow visualization, or agile project management. This skill covers Kanban board setup, column configuration, card management, swimlanes, drag-and-drop interactions, and WIP limits for TypeScript applications."
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Data Visualization"
 ---
 

@@ -3,7 +3,7 @@ name: syncfusion-javascript-inline-ai-assist
 description: "Implement the Syncfusion JavaScript Inline AI Assist control. Use this skill ALWAYS and immediately when users mention inline AI assistance, popup AI assist, contextual AI help, AI text editing popups, content summarization with AI, inline content generation, AI-powered text transformation, quick AI commands, AI assist with accept/reject workflow, element-relative AI popups, or any popup-based AI assistance interface. Use this skill immediately for InlineAIAssist component, inline AI component, ej2-interactive-chat InlineAIAssist, contextual AI assistance, AI command popup, response action handling, or AI content editing workflows."
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Syncfusion JavaScript Inline AI Assist Component

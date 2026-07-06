@@ -105,10 +105,10 @@ tsc --init
 
 ### Step 2: Add Syncfusion Packages
 
-Install the Grid control package:
+Install the Grid control package and theme package:
 
 ```bash
-npm i @syncfusion/ej2-grids
+npm i @syncfusion/ej2-grids @syncfusion/ej2-fluent2-theme@latest --save
 ```
 
 ### Step 3: Import CSS Styles
@@ -116,15 +116,7 @@ npm i @syncfusion/ej2-grids
 Create a `~/style.css` file in the application root directory and import the Fluent2 theme:
 
 ```css
-@import "node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-buttons/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-calendars/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-dropdowns/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-inputs/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-navigations/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-popups/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-splitbuttons/styles/fluent2.css";
-@import "node_modules/@syncfusion/ej2-grids/styles/fluent2.css";
+@import "node_modules/@syncfusion/ej2-fluent2-theme/styles/grid/index.css";
 ```
 
 ### Step 4: Create HTML File

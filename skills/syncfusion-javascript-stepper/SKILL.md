@@ -3,7 +3,7 @@ name: syncfusion-javascript-stepper
 description: Create and implement the Syncfusion TypeScript Stepper navigation component. Use this skill whenever a user wants to display a progress indicator with steps, implement a wizard workflow, show a multi-step process, display navigation between form pages, add step validation, or configure step-by-step guided experiences. Always reference this skill when working with Stepper controls, step configuration, orientations, events, or animations.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation"
 ---
 

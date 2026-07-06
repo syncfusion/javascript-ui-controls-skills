@@ -3,7 +3,7 @@ name: syncfusion-javascript-toolbar
 description: Implement Syncfusion TypeScript Toolbar control for creating command-based navigation interfaces. Use this skill whenever the user needs to build toolbars, add toolbar items (buttons, separators, inputs), configure responsive modes (scrollable/popup), handle toolbar events, customize styling, add tooltips/icons, implement RTL support, or ensure accessibility compliance. This is the primary skill for all Toolbar component implementation questions.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Navigation Components"
 ---
 

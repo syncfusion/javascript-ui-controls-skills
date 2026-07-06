@@ -3,7 +3,7 @@ name: syncfusion-javascript-gantt-chart
 description: "Implement Syncfusion Gantt Chart using JavaScript/TypeScript (Essential JS 2). Use this when working with ej2-gantt component for project scheduling, task dependencies, and timeline management. Covers full Gantt implementation including data binding, task scheduling, columns, resources, timeline configuration, WBS, resource view, critical path, baseline tracking, filtering, sorting, editing, and export functionality (Excel/PDF)."
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Implementing Syncfusion Gantt Chart

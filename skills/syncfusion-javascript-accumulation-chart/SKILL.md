@@ -3,7 +3,7 @@ name: syncfusion-javascript-accumulation-chart
 description: Implements Syncfusion JavaScript accumulation charts (Pie, Doughnut, Funnel, Pyramid) for proportional and percentage-based visualizations. Use when displaying categorical or proportional data. Covers legend and label configuration, interactivity, accessibility, and customization. Works with TypeScript (modules) and JavaScript (CDN/ES5).
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Data Visualization"
 ---
 

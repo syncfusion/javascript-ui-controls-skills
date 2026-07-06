@@ -3,7 +3,7 @@ name: syncfusion-javascript-ribbon
 description: Use this skill ALWAYS when the user needs to implement, configure, or troubleshoot Syncfusion JavaScript Ribbon control. The Ribbon provides a Microsoft Office-style command interface with tabs, groups, and various item types. Immediately apply this skill for ribbon layouts, built-in items (buttons, dropdowns, galleries), file menus, backstage views, contextual tabs, keytips, tooltips, resizing behavior, and event handling.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Syncfusion JavaScript Ribbon Control

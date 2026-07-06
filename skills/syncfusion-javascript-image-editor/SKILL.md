@@ -3,7 +3,7 @@ name: syncfusion-javascript-image-editor
 description: Implement the Syncfusion TypeScript Image Editor control for image editing, annotation, and manipulation. Use this when the user needs to add image editing capabilities, work with filters, transformations, cropping, or drawing features in TypeScript applications. Covers setup, image operations, annotations, filters, accessibility, and customization patterns.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "File Viewers & Editors"
 ---
 

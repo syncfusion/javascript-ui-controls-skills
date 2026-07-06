@@ -3,7 +3,7 @@ name: syncfusion-javascript-context-menu
 description: A comprehensive guide for implementing Syncfusion TypeScript ContextMenu component. Use this skill when building context menus that appear on right-click or touch-hold, including features like nested menus, dynamic items, animations, events, styling, and data binding. This skill covers everything from basic setup to advanced features like scrolling, accessibility, and custom templates.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
 ---
 
 # Implementing ContextMenu

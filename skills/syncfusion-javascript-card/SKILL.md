@@ -3,7 +3,7 @@ name: syncfusion-javascript-card
 description: Create flexible, responsive card layouts with headers, images, action buttons, and custom styling. Use when building UI containers for displaying content, product cards, service offerings, or dashboard components. Customize with CSS styling, add headers, images, and action buttons as needed.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Layout Components"
 ---
 

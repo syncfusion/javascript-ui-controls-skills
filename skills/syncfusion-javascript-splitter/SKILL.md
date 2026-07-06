@@ -3,7 +3,7 @@ name: syncfusion-javascript-splitter
 description: Implement and configure the Syncfusion TypeScript Splitter control for creating responsive multi-pane interfaces. Use this skill when implementing pane configuration, orientation changes, resizing, collapse/expand functionality, and content loading. This skill covers nested layouts, styling customization, and all API properties, methods, and events for the Splitter component.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Layout Components"
 ---
 

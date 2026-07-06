@@ -3,7 +3,7 @@ name: syncfusion-javascript-dashboard-layout
 description: Build responsive dashboard layouts with drag-and-drop panels, dynamic resizing, and state persistence. Guide users to implement DashboardLayout control with panel management, dragging, resizing, floating, and persistence features. Includes event handling, dynamic panel addition/removal, and comprehensive API reference.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Layout Controls"
 ---
 

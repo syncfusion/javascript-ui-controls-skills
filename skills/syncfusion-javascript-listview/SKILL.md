@@ -3,7 +3,7 @@ name: syncfusion-javascript-listview
 description: Build responsive ListView components with Syncfusion TypeScript. Implement this skill when working with list-based interfaces, data binding, templates, selection handling, nested lists, grouping, filtering, virtualization, and advanced features like drag-drop and paging. Covers single/multi-select, checkboxes, animations, remote data binding, custom templates, and use cases such as chat windows, contact lists, and data tables.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "layout"
 ---
 

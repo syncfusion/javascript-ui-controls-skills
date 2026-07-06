@@ -33,41 +33,74 @@ Each theme provides:
 - Accessibility compliance (WCAG 2.1)
 - Consistent visual language across all controls
 
+## Theme packages
+
+Syncfusion built-in themes are distributed as theme packages available on npm. These packages include CSS/SCSS files for all controls. The following table lists all available theme packages:
+
+| Theme | Light Package | Dark Package |
+|-------|---------------|---------------|
+| Tailwind 3 | [`@syncfusion/ej2-tailwind3-theme`](https://www.npmjs.com/package/@syncfusion/ej2-tailwind3-theme) | [`@syncfusion/ej2-tailwind3-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-tailwind3-dark-theme) |
+| Bootstrap 5.3 | [`@syncfusion/ej2-bootstrap5.3-theme`](https://www.npmjs.com/package/@syncfusion/ej2-bootstrap5.3-theme) | [`@syncfusion/ej2-bootstrap5.3-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-bootstrap5.3-dark-theme) |
+| Fluent 2 | [`@syncfusion/ej2-fluent2-theme`](https://www.npmjs.com/package/@syncfusion/ej2-fluent2-theme) | [`@syncfusion/ej2-fluent2-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-fluent2-dark-theme) |
+| Material 3 | [`@syncfusion/ej2-material3-theme`](https://www.npmjs.com/package/@syncfusion/ej2-material3-theme) | [`@syncfusion/ej2-material3-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-material3-dark-theme) |
+| Bootstrap 5 | [`@syncfusion/ej2-bootstrap5-theme`](https://www.npmjs.com/package/@syncfusion/ej2-bootstrap5-theme) | [`@syncfusion/ej2-bootstrap5-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-bootstrap5-dark-theme) |
+| Bootstrap 4 | [`@syncfusion/ej2-bootstrap4-theme`](https://www.npmjs.com/package/@syncfusion/ej2-bootstrap4-theme) | - |
+| Bootstrap | [`@syncfusion/ej2-bootstrap-theme`](https://www.npmjs.com/package/@syncfusion/ej2-bootstrap-theme) | [`@syncfusion/ej2-bootstrap-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-bootstrap-dark-theme) |
+| Material | [`@syncfusion/ej2-material-theme`](https://www.npmjs.com/package/@syncfusion/ej2-material-theme) | [`@syncfusion/ej2-material-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-material-dark-theme) |
+| Tailwind | [`@syncfusion/ej2-tailwind-theme`](https://www.npmjs.com/package/@syncfusion/ej2-tailwind-theme) | [`@syncfusion/ej2-tailwind-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-tailwind-dark-theme) |
+| Fluent | [`@syncfusion/ej2-fluent-theme`](https://www.npmjs.com/package/@syncfusion/ej2-fluent-theme) | [`@syncfusion/ej2-fluent-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-fluent-dark-theme) |
+| Fabric | [`@syncfusion/ej2-fabric-theme`](https://www.npmjs.com/package/@syncfusion/ej2-fabric-theme) | [`@syncfusion/ej2-fabric-dark-theme`](https://www.npmjs.com/package/@syncfusion/ej2-fabric-dark-theme) |
+| High Contrast | [`@syncfusion/ej2-highcontrast-theme`](https://www.npmjs.com/package/@syncfusion/ej2-highcontrast-theme) | - |
+
+
 ## Applying Themes via npm
 
 Themes are shipped as both combined and individual CSS/SCSS files.
 
-### All Controls (Combined)
+### Individual Theme Packages
 
-**Step 1: Install the ej2 package**
+Each theme has its own package — install only the theme you need:
 
 ```bash
-npm install @syncfusion/ej2
+# Pick one theme package only
+npm install @syncfusion/ej2-tailwind3-theme
+npm install @syncfusion/ej2-bootstrap5-theme
+npm install @syncfusion/ej2-material3-theme
+npm install @syncfusion/ej2-fluent2-theme
+```
+
+| Framework | Syncfusion Theme | Package Name | Import Statement |
+|-----------|------------------|--------------|-------------------|
+| **Tailwind** | Tailwind3 | `@syncfusion/ej2-tailwind3-theme` | `import '@syncfusion/ej2-tailwind3-theme/styles/tailwind3.css'` |
+| **Bootstrap** | Bootstrap5.3 | `@syncfusion/ej2-bootstrap5.3-theme` | `import '@syncfusion/ej2-bootstrap5.3-theme/styles/bootstrap5.3.css'` |
+| **Material** | Material3 | `@syncfusion/ej2-material3-theme` | `import '@syncfusion/ej2-material3-theme/styles/material3.css'` |
+| **Fluent** | Fluent2 | `@syncfusion/ej2-fluent2-theme` | `import '@syncfusion/ej2-fluent2-theme/styles/fluent2.css'` |
+
+Import at your app entry point (before components render) to ensure consistent styling.
+
+### All Components (Combined)
+
+**Step 1: Install the specific theme package**
+
+```bash
+npm install @syncfusion/ej2-tailwind3-theme --save
 ```
 
 **Step 2: Import theme CSS**
 
 ```css
 /* src/App.css */
-@import "./node_modules/@syncfusion/ej2/tailwind3.css";
+@import "@syncfusion/ej2-tailwind3-theme/styles/tailwind3.css";
 ```
 
 Or import SCSS for variable access:
 
-```css
+```scss
 /* src/App.scss */
-@import "./node_modules/@syncfusion/ej2/tailwind3.scss";
+@use "@syncfusion/ej2-tailwind3-theme/styles/tailwind3.scss" as *;
 ```
 
-**Available combined themes:**
-- `@syncfusion/ej2/tailwind3.css`
-- `@syncfusion/ej2/tailwind3-dark.css`
-- `@syncfusion/ej2/bootstrap5.3.css`
-- `@syncfusion/ej2/bootstrap5.3-dark.css`
-- `@syncfusion/ej2/fluent2.css`
-- `@syncfusion/ej2/fluent2-dark.css`
-- `@syncfusion/ej2/material3.css`
-- `@syncfusion/ej2/material3-dark.css`
+**Available themes packages: refer to the [theme-packages](#theme-packages) section**
 
 ## Applying Themes via CDN
 
@@ -124,46 +157,21 @@ Replace `{VERSION}` with your installed version (e.g., 27.2.2, 28.1.33, 33.1.44)
 
 ## Individual Control Themes
 
-For smallest bundle size, import only the component themes you need.
+For smallest bundle size, import only the control themes you need.
 
-### From Individual Packages (Recommended)
-
-```css
-/* Import base styles first (required) */
-@import "ej2-base/styles/tailwind3.css";
-
-/* Import specific component styles */
-@import "ej2-buttons/styles/tailwind3.css";
-@import "ej2-grids/styles/tailwind3.css";
-```
-
-### From @syncfusion/ej2 Package
+### Individual control styles from theme packages
 
 ```css
-/* Import base styles first (required) */
-@import "ej2/base/tailwind3.css";
-
-/* Import specific component styles */
-@import "ej2/button/tailwind3.css";
-@import "ej2/grid/tailwind3.css";
+/* src/App.css */
+@import "@syncfusion/ej2-tailwind3-theme/styles/grid/index.css";
 ```
 
-### Dependency Order
+Or import SCSS for variable access:
 
-Some controls require styles from dependent controls. Example for Grid:
-
-```css
-@import "ej2-base/styles/tailwind3.css";           /* Required base */
-@import "ej2-buttons/styles/tailwind3.css";        /* Grid uses buttons */
-@import "ej2-inputs/styles/tailwind3.css";         /* Grid uses inputs */
-@import "ej2-calendars/styles/tailwind3.css";      /* Grid date filtering */
-@import "ej2-dropdowns/styles/tailwind3.css";      /* Grid filtering */
-@import "ej2-navigations/styles/tailwind3.css";    /* Grid pager */
-@import "ej2-popups/styles/tailwind3.css";         /* Grid dialogs */
-@import "ej2-grids/styles/tailwind3.css";          /* Grid itself */
+```scss
+/* src/App.scss */
+@use "@syncfusion/ej2-tailwind3-theme/styles/grid/index.scss" as *;
 ```
-
-Refer to each component's documentation for its specific dependencies.
 
 ## Optimized (Lite) CSS Files
 
@@ -174,7 +182,7 @@ Syncfusion provides **optimized (lite)** theme variants that exclude "bigger" si
 | Theme | Default Size | Lite Size | Reduction |
 |-------|-------------|-----------|-----------|
 | Fluent 2 | 3.97 MB | 2.96 MB | ~25% |
-| Tailwind 3.4 | 3.85 MB | 2.88 MB | ~25% |
+| Tailwind 3 | 3.85 MB | 2.88 MB | ~25% |
 | Material 3 | 3.92 MB | 2.94 MB | ~25% |
 
 ### Using Lite Versions
@@ -183,20 +191,27 @@ Syncfusion provides **optimized (lite)** theme variants that exclude "bigger" si
 
 ```css
 /* src/App.css */
-@import "@syncfusion/ej2/tailwind3-lite.css";
+@import "@syncfusion/ej2-tailwind3-theme/styles/tailwind3-lite.css";
 ```
 
 Or SCSS:
 
 ```css
 /* src/App.scss */
-@import "@syncfusion/ej2/tailwind3-lite.scss";
+@use "@syncfusion/ej2-tailwind3-theme/styles/tailwind3-lite.scss" as *;
 ```
 
 **Individual controls:**
 
 ```css
-@import "@syncfusion/ej2-buttons/styles/tailwind3-lite.css";
+@import "@syncfusion/ej2-tailwind3-theme/styles/button/index-lite.css";
+```
+
+Or SCSS:
+
+```css
+/* src/App.scss */
+@use "@syncfusion/ej2-tailwind3-theme/styles/button/index-lite.scss" as *;
 ```
 
 **CDN:**

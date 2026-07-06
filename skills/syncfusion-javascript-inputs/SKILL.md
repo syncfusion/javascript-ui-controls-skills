@@ -1,10 +1,22 @@
 ---
 name: syncfusion-javascript-inputs
-description: Comprehensive guide for implementing Syncfusion TypeScript input components including ColorPicker, MaskedTextBox, OtpInput, Slider, TextArea, NumericTextBox, Rating, Signature, TextBox, uploader. Use this when adding color selection, masked formatting, OTP entry, range sliders, multiline text, numeric inputs, file upload, star ratings, signature capture, or text inputs to a TypeScript application.
+description: Comprehensive guide for implementing Syncfusion EJ2 JavaScript input components including CheckBox, ColorPicker, MaskedTextBox, NumericTextBox, OTP Input, RangeSlider, Rating, Signature, TextArea, TextBox, and Uploader. Use this when adding checkboxes, color selection, masked formatting, numeric inputs, OTP entry, range sliders, star ratings, signature capture, text inputs, or file upload to TypeScript/JavaScript applications.
 metadata:
   author: "Syncfusion Inc"
-  version: "33.1.44"
+  version: "34.1.29"
   category: "Inputs"
+  components:
+    - CheckBox
+    - ColorPicker
+    - MaskedTextBox
+    - NumericTextBox
+    - OTP Input
+    - RangeSlider
+    - Rating
+    - Signature
+    - TextArea
+    - TextBox
+    - Uploader
 ---
 
 # Syncfusion javascript inputs
@@ -184,6 +196,7 @@ The MaskedTextBox (`@syncfusion/ej2-inputs`) enforces structured input by applyi
 - `appendTemplate` — inject HTML after the input (buttons, icons, unit suffixes)
 - `e-input-separator` class for visual dividers
 - Common adornment patterns table
+- ⚠️ **Security:** If template HTML contains values derived from user input or remote sources, sanitize/encode them before binding to prevent XSS injection.
 
 #### Events and Interaction
 📄 **Read:** [references/events.md](references/maskedtextbox-events.md)
@@ -782,6 +795,7 @@ The Syncfusion EJ2 TypeScript NumericTextBox (`@syncfusion/ej2-inputs`) is a fea
 
 ```bash
 npm install @syncfusion/ej2-inputs
+npm audit
 ```
 
 ```html
@@ -1167,6 +1181,7 @@ The Syncfusion EJ2 TypeScript Signature (`@syncfusion/ej2-inputs`) is a canvas-b
 
 ```bash
 npm install @syncfusion/ej2-inputs
+npm audit
 ```
 
 ```html
@@ -1322,6 +1337,7 @@ The Syncfusion EJ2 TypeScript TextBox (`@syncfusion/ej2-inputs`) is a feature-ri
 
 ```bash
 npm install @syncfusion/ej2-inputs
+npm audit
 ```
 
 ```html
@@ -1589,6 +1605,13 @@ The Uploader component offers:
 
 ---
 
+### Installation
+
+```bash
+npm install @syncfusion/ej2-inputs
+npm audit
+```
+
 ### Quick Start Example
 
 Here's a minimal TypeScript example to get started:
@@ -1597,10 +1620,12 @@ Here's a minimal TypeScript example to get started:
 import { Uploader } from '@syncfusion/ej2-inputs';
 
 // Initialize Uploader component
+// ⚠️ DEMO ONLY: Replace saveUrl and removeUrl with your own production server endpoints.
+//    Do NOT use services.syncfusion.com URLs in production applications.
 const uploaderObj = new Uploader({
   asyncSettings: {
-    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Save',
-    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Remove'
+    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Save',  // Replace in production
+    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Remove'  // Replace in production
   },
   allowedExtensions: '.jpg,.png,.pdf'
 });
@@ -1632,10 +1657,11 @@ HTML element:
 Restrict uploads to specific file types and sizes:
 
 ```typescript
+// ⚠️ Replace saveUrl and removeUrl with your own server endpoints before deploying to production.
 const uploader = new Uploader({
   asyncSettings: {
-    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save',
-    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove'
+    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save',  // Replace in production
+    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove'  // Replace in production
   },
   allowedExtensions: '.jpg,.jpeg,.png,.gif',
   minFileSize: 5000,      // 5 KB
@@ -1648,10 +1674,11 @@ uploader.appendTo('#fileupload');
 Enable modern file upload UX:
 
 ```typescript
+// ⚠️ Replace saveUrl and removeUrl with your own server endpoints before deploying to production.
 const uploader = new Uploader({
   asyncSettings: {
-    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save',
-    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove'
+    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save',  // Replace in production
+    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove'  // Replace in production
   },
   dropEffect: 'Copy',
   multiple: true,
@@ -1669,10 +1696,11 @@ uploader.selected = (args: SelectedEventArgs) => {
 Handle large files with resumable chunks:
 
 ```typescript
+// ⚠️ Replace saveUrl and removeUrl with your own server endpoints before deploying to production.
 const uploader = new Uploader({
   asyncSettings: {
-    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save-chunk',
-    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove',
+    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save-chunk',  // Replace in production
+    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove',  // Replace in production
     chunkSize: 5242880 // 5 MB chunks
   },
   allowedExtensions: '.iso,.zip,.rar',
@@ -1693,10 +1721,11 @@ uploader.chunkFailure = (args: any) => {
 Display images and details before uploading:
 
 ```typescript
+// ⚠️ Replace saveUrl and removeUrl with your own server endpoints before deploying to production.
 const uploader = new Uploader({
   asyncSettings: {
-    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save',
-    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove'
+    saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/save',  // Replace in production
+    removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/remove'  // Replace in production
   },
   allowedExtensions: '.jpg,.jpeg,.png'
 });
@@ -1796,5 +1825,330 @@ JWT authentication, server validation, error handling → See `references/upload
 ---
 
 **Next Step:** Start with `references/uploader-getting-started.md` to learn installation and basic setup, jump directly to the reference matching your use case, or consult `references/uploader-api.md` for the complete API reference.
+
+## CheckBox
+
+The CheckBox component (`@syncfusion/ej2-buttons`) is a selection control that allows users to select one or more options from a set. It supports three states (checked, unchecked, indeterminate), labels, custom styling, form integration, and full WCAG 2.2 accessibility compliance.
+
+### Quick Start
+
+```bash
+npm install @syncfusion/ej2-buttons
+npm audit
+```
+
+```html
+<input type="checkbox" id="checkbox" />
+```
+
+```typescript
+import { CheckBox, ChangeEventArgs } from '@syncfusion/ej2-buttons';
+
+let checkbox: CheckBox = new CheckBox({
+  label: 'Accept terms and conditions',
+  checked: false,
+  change: (args: ChangeEventArgs) => {
+    console.log('Checked:', args.checked);
+  }
+});
+checkbox.appendTo('#checkbox');
+```
+
+### Documentation and Navigation Guide
+
+#### Getting Started
+📄 **Read:** [references/checkbox-getting-started.md](references/checkbox-getting-started.md)
+- Installation and package setup (`@syncfusion/ej2-buttons`)
+- Required CSS imports and theme configuration
+- Basic CheckBox initialization
+- Label configuration
+- Ripple effect setup
+- Running the application
+
+#### Label and Size
+📄 **Read:** [references/checkbox-label-and-size.md](references/checkbox-label-and-size.md)
+- `label` property — string and HTML labels
+- `labelPosition` — Before or After (default)
+- `cssClass: 'e-small'` — small variant
+- Custom size with CSS overrides
+- Rich text labels with links and formatting
+
+#### States
+📄 **Read:** [references/checkbox-states.md](references/checkbox-states.md)
+- Three states: checked, unchecked, indeterminate
+- `disabled` property — disable interaction
+- `readonly` property — non-editable but focusable
+- Programmatic state control
+- `change` event with `ChangeEventArgs`
+- Master-detail / select-all pattern
+- Form integration
+
+#### Style and Appearance
+📄 **Read:** [references/checkbox-style-and-appearance.md](references/checkbox-style-and-appearance.md)
+- Custom checked color
+- Border width and radius
+- Pill / switch-like checkboxes
+- Custom shapes (square, circle)
+- Hover and focus effects
+- Dark and light themes
+- Gradient and glassmorphism effects
+- Animated checkmark
+
+#### How-To Patterns
+📄 **Read:** [references/checkbox-how-to.md](references/checkbox-how-to.md)
+- Form submission with `name` and `value`
+- Master-detail select-all pattern
+- Required field validation
+- Dynamic enable/disable
+- Tristate checkbox cycle
+- Group selection (radio-like behavior)
+- localStorage state persistence
+- AJAX form submission
+- Custom HTML in labels (links, etc.)
+
+#### Accessibility
+📄 **Read:** [references/checkbox-accessibility.md](references/checkbox-accessibility.md)
+- WAI-ARIA attributes (`role="checkbox"`, `aria-checked`)
+- Keyboard navigation (Tab, Space, Enter)
+- WCAG 2.2, Section 508, ADA compliance
+- Screen reader support (JAWS, NVDA, VoiceOver)
+- Focus management and visible indicators
+- Color contrast (4.5:1 minimum)
+- Touch-friendly target sizes (44x44px)
+- RTL support
+
+#### API Reference
+📄 **Read:** [references/checkbox-api.md](references/checkbox-api.md)
+- All properties with types and defaults
+- All methods (`check`, `uncheck`, `toggle`, `focusIn`, `focusOut`, `click`, `destroy`)
+- All events (`change`, `created`, `destroyed`)
+- `ChangeEventArgs` interface
+- `CheckBoxModel` interface
+- `LabelPosition` enum
+
+---
+
+### Common Patterns
+
+#### Simple CheckBox
+```typescript
+import { CheckBox } from '@syncfusion/ej2-buttons';
+
+let checkbox: CheckBox = new CheckBox({
+  label: 'I agree to the terms',
+  checked: false
+});
+checkbox.appendTo('#checkbox');
+```
+
+#### Pre-Checked with Validation
+```typescript
+import { CheckBox, ChangeEventArgs } from '@syncfusion/ej2-buttons';
+import { Button } from '@syncfusion/ej2-buttons';
+
+let terms: CheckBox = new CheckBox({
+  label: 'I accept the terms and conditions',
+  change: (args: ChangeEventArgs) => {
+    const submitBtn: Button = (document.getElementById('submit-btn') as any).ej2_instances[0];
+    submitBtn.disabled = !args.checked;
+  }
+});
+terms.appendTo('#terms');
+
+let submitButton: Button = new Button({
+  content: 'Continue',
+  disabled: true,
+  cssClass: 'e-primary'
+});
+submitButton.appendTo('#submit-btn');
+```
+
+#### Master-Detail (Select All)
+```typescript
+import { CheckBox, ChangeEventArgs } from '@syncfusion/ej2-buttons';
+
+const childCheckboxes: CheckBox[] = [];
+
+let selectAll: CheckBox = new CheckBox({
+  label: 'Select All',
+  change: (args: ChangeEventArgs) => {
+    childCheckboxes.forEach(cb => {
+      cb.checked = args.checked;
+    });
+  }
+});
+selectAll.appendTo('#select-all');
+
+['Option 1', 'Option 2', 'Option 3'].forEach((label, index) => {
+  let child: CheckBox = new CheckBox({
+    label: label,
+    change: () => updateSelectAllState()
+  });
+  child.appendTo(`#child-${index}`);
+  childCheckboxes.push(child);
+});
+
+function updateSelectAllState(): void {
+  const checkedCount: number = childCheckboxes.filter(cb => cb.checked).length;
+  if (checkedCount === 0) {
+    selectAll.checked = false;
+    selectAll.indeterminate = false;
+  } else if (checkedCount === childCheckboxes.length) {
+    selectAll.checked = true;
+    selectAll.indeterminate = false;
+  } else {
+    selectAll.checked = false;
+    selectAll.indeterminate = true;
+  }
+}
+```
+
+#### Indeterminate State
+```typescript
+import { CheckBox } from '@syncfusion/ej2-buttons';
+
+let parentCheckbox: CheckBox = new CheckBox({
+  label: 'Select all (partial)',
+  indeterminate: true
+});
+parentCheckbox.appendTo('#parent');
+```
+
+#### Disabled Checkbox
+```typescript
+import { CheckBox } from '@syncfusion/ej2-buttons';
+
+let disabledCheckbox: CheckBox = new CheckBox({
+  label: 'This option is unavailable',
+  disabled: true,
+  checked: false
+});
+disabledCheckbox.appendTo('#disabled-checkbox');
+```
+
+#### Small Size
+```typescript
+import { CheckBox } from '@syncfusion/ej2-buttons';
+
+let smallCheckbox: CheckBox = new CheckBox({
+  label: 'Compact option',
+  cssClass: 'e-small'
+});
+smallCheckbox.appendTo('#small-checkbox');
+```
+
+#### Custom Styled
+```typescript
+import { CheckBox } from '@syncfusion/ej2-buttons';
+
+let customCheckbox: CheckBox = new CheckBox({
+  label: 'Custom branded',
+  checked: true,
+  cssClass: 'brand-checkbox'
+});
+customCheckbox.appendTo('#custom-checkbox');
+```
+
+```css
+.brand-checkbox .e-checkbox-wrapper .e-frame.e-check {
+  background-color: #ff6b35;
+  border-color: #ff6b35;
+}
+```
+
+#### Form Submission
+```typescript
+import { CheckBox } from '@syncfusion/ej2-buttons';
+
+let newsletter: CheckBox = new CheckBox({
+  label: 'Subscribe to newsletter',
+  name: 'newsletter',
+  value: 'subscribed'
+});
+newsletter.appendTo('#newsletter');
+```
+
+```html
+<form id="signup-form">
+  <input type="checkbox" id="newsletter" />
+  <button type="submit">Submit</button>
+</form>
+```
+
+---
+
+### Key Props at a Glance
+
+| Property | Type | Default | Purpose |
+|---|---|---|---|
+| `label` | `string \| HTMLElement` | `''` | Checkbox label text |
+| `checked` | `boolean` | `false` | Checked state |
+| `indeterminate` | `boolean` | `false` | Indeterminate state (parent checkbox) |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `readonly` | `boolean` | `false` | Read-only mode |
+| `labelPosition` | `string` | `'After'` | Label position: `Before` or `After` |
+| `name` | `string` | `''` | Form submission name |
+| `value` | `string` | `''` | Form submission value |
+| `cssClass` | `string` | `''` | Custom CSS class (use `e-small` for small) |
+| `enableRtl` | `boolean` | `false` | Right-to-left layout |
+| `enablePersistence` | `boolean` | `false` | Persist state across reloads |
+| `locale` | `string` | `'en-US'` | Culture code |
+
+### Methods at a Glance
+
+| Method | Purpose |
+|---|---|
+| `check()` | Sets checked state to true |
+| `uncheck()` | Sets checked state to false |
+| `toggle()` | Toggles between checked/unchecked |
+| `focusIn()` | Programmatically focuses the checkbox |
+| `focusOut()` | Removes focus from the checkbox |
+| `click()` | Programmatically clicks the checkbox |
+| `destroy()` | Destroys the component instance |
+
+### Events at a Glance
+
+| Event | Triggered | Use Case |
+|---|---|---|
+| `change` | Checked state changes | Form validation, conditional logic |
+| `created` | Component ready | Post-init setup |
+| `destroyed` | Component destroyed | Cleanup |
+
+---
+
+### Common Use Cases
+
+**Use Case 1: Terms Acceptance** — Require users to accept terms before form submission
+**Use Case 2: Newsletter Subscription** — Allow users to opt-in/out of communications
+**Use Case 3: Multi-Select Lists** — Let users select multiple items from a list
+**Use Case 4: Settings Toggles** — Enable/disable features in user preferences
+**Use Case 5: Filter Controls** — Filter data based on selected criteria
+**Use Case 6: Bulk Actions** — Select multiple items for batch operations
+**Use Case 7: Master-Detail** — Select-all pattern with parent/child relationships
+**Use Case 8: Form Validation** — Require specific checkboxes for form submission
+
+---
+
+### Common CSS Classes
+
+| Class | Purpose |
+|---|---|
+| `e-small` | Small-sized checkbox |
+| `e-success` | Green success color |
+| `e-warning` | Yellow warning color |
+| `e-danger` | Red error color |
+| `e-info` | Blue info color |
+
+---
+
+### Related Skills
+- Implementing Form Validation
+- Building Toggle / Switch UIs
+- RadioButton (single-select counterpart)
+- ButtonGroup (multi-button selection)
+
+---
+
+**Next Step:** Start with `references/checkbox-getting-started.md` to learn installation and basic setup, jump directly to the reference matching your use case, or consult `references/checkbox-api.md` for the complete API reference.
 
 
