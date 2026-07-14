@@ -208,7 +208,7 @@ Properties for Image blocks.
 
 ```typescript
 interface ImageProps {
-    src: string;                      // Image source URL or base64 data
+    src: string;                      // Image source URL or blob data
     altText?: string;                 // Alternative text for accessibility
     width?: string;                   // Display width (e.g., '100%', '500px')
     height?: string;                  // Display height
@@ -219,7 +219,7 @@ interface ImageProps {
     cssClass?: string;                // Custom CSS classes
     readOnly?: boolean;               // Prevent editing/removal
     allowedTypes?: string[];          // Allowed file types ['.jpg', '.png']
-    saveFormat?: 'Base64' | 'Blob';   // Save format for uploaded images
+    saveFormat?: 'Blob' | 'Base64';   // Save format for uploaded images
 }
 ```
 

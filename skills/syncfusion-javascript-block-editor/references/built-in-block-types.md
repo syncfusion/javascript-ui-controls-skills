@@ -502,7 +502,7 @@ Display images with upload support and constraints.
 **BlockType:** `BlockType.Image`
 
 **Properties:**
-- `src` (string, required): Image URL or base64 data
+- `src` (string, required): Image URL or blob data
 - `altText` (string, optional): Alternative text for accessibility
 - `width` (string, optional): Display width
 - `height` (string, optional): Display height
@@ -512,8 +512,7 @@ Display images with upload support and constraints.
 - `minHeight` (string|number, optional): Minimum height constraint
 - `cssClass` (string, optional): Custom CSS classes
 - `readOnly` (boolean, optional): Prevent editing
-- `saveFormat` ('Base64'|'Blob', optional): Save format for uploads
-
+- `saveFormat` ('Blob'|'Base64', optional): Save format for uploads
 **Example:**
 ```typescript
 {
@@ -547,7 +546,7 @@ const editor = new BlockEditor({
         enableResize: true,
         width: '100%',
         height: 'auto',
-        saveFormat: 'Base64'  // or 'Blob'
+        saveFormat: 'Blob'  // or 'Base64'
     },
     fileUploadSuccess: (args) => {
         console.log('Image uploaded:', args.fileUrl);
@@ -904,5 +903,5 @@ editor.appendTo('#blockeditor');
 - Content array can be empty for blocks with placeholders
 - Multiple content items within a block allow mixed formatting
 - Nested structures use `indent` (lists) or `children` (collapsible blocks)
-- Image blocks support both URL sources and base64-encoded images
+- Image blocks support both URL sources and blob-encoded images
 - Code blocks support syntax highlighting when language is specified

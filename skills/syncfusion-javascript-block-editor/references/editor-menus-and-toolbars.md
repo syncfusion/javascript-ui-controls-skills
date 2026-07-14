@@ -140,7 +140,8 @@ The Context menu offers the following built-in options:
 - **Undo/Redo**: Reverses or re-applies the last action
 - **Cut/Copy/Paste**: Standard clipboard actions for selected content
 - **Indent**: Increases or decreases the indent level of the selected block
-- **Link**: Adds or edits a hyperlink for the selected text
+- **Link**: Adds or edits a hyperlink for the selected text. When the cursor is focused on an existing link, the context menu also exposes `Open Link`, `Edit Link`, `Copy Link`, and `Remove Link` options
+- **Table**: Provides `Insert` and `Delete` actions for rows and columns. These options appear when the cursor is focused within a table cell and the context menu is opened
 
 ### Context Menu Custom Items
 
@@ -162,6 +163,11 @@ const customContextMenuItems: ContextMenuItemModel[] = [
                 id: 'italic-item',
                 text: 'Italic',
                 iconCss: 'e-icons e-italic',
+            },
+            {
+                id: 'underline-item',
+                text: 'Underline',
+                iconCss: 'e-icons e-underline',
             }
         ]
     },
@@ -170,6 +176,28 @@ const customContextMenuItems: ContextMenuItemModel[] = [
         id: 'statistics-item',
         text: 'Block Statistics',
         iconCss: 'e-icons e-chart'
+    },
+    {
+        id: 'export-item',
+        text: 'Export Options',
+        iconCss: 'e-icons e-export',
+        items: [
+            {
+                id: 'export-json',
+                text: 'Export as JSON',
+                iconCss: 'e-icons e-file-json'
+            },
+            {
+                id: 'export-html',
+                text: 'Export as HTML',
+                iconCss: 'e-icons e-file-html'
+            },
+            {
+                id: 'export-pdf',
+                text: 'Export as PDF',
+                iconCss: 'e-icons e-file-pdf'
+            }
+        ]
     }
 ];
 ```
@@ -577,9 +605,11 @@ blockEditor.appendTo('#blockeditor');
 
 ### Complete Context Menu Example
 
+This example also demonstrates the built-in **Table** and **Link** context menu options: right-clicking inside a table cell surfaces row/column `Insert`/`Delete` actions, and right-clicking on a link surfaces `Open Link`, `Edit Link`, `Copy Link`, and `Remove Link`.
+
 ```typescript
 import { BlockEditor, ContentType, ContextMenuItemModel } from '@syncfusion/ej2-blockeditor';
-import { ContextMenuOpeningEventArgs, ContextMenuItemSelectEventArgs } from '@syncfusion/ej2-blockeditor';
+import { ContextMenuOpeningEventArgs, ContextMenuClosingEventArgs, ContextMenuItemSelectEventArgs } from '@syncfusion/ej2-blockeditor';
 
 const customContextMenuItems: ContextMenuItemModel[] = [
     {
@@ -596,10 +626,20 @@ const customContextMenuItems: ContextMenuItemModel[] = [
                 id: 'italic-item',
                 text: 'Italic',
                 iconCss: 'e-icons e-italic',
+            },
+            {
+                id: 'underline-item',
+                text: 'Underline',
+                iconCss: 'e-icons e-underline',
             }
         ]
     },
     { separator: true },
+    {
+        id: 'statistics-item',
+        text: 'Block Statistics',
+        iconCss: 'e-icons e-chart'
+    },
     {
         id: 'export-item',
         text: 'Export Options',
@@ -614,21 +654,154 @@ const customContextMenuItems: ContextMenuItemModel[] = [
                 id: 'export-html',
                 text: 'Export as HTML',
                 iconCss: 'e-icons e-file-html'
+            },
+            {
+                id: 'export-pdf',
+                text: 'Export as PDF',
+                iconCss: 'e-icons e-file-pdf'
             }
         ]
     }
 ];
 
+// Initialize BlockEditor with custom context menu configuration
 const blockEditor: BlockEditor = new BlockEditor({
     blocks: [
+        {
+            blockType: 'Heading',
+            properties: { level: 1 },
+            content: [
+                {
+                    contentType: ContentType.Text,
+                    content: 'Context Menu'
+                }
+            ]
+        },
         {
             blockType: 'Paragraph',
             content: [
                 {
                     contentType: ContentType.Text,
-                    content: 'Right-click to see the custom context menu.'
+                    content: 'This is a sample text with a '
+                },
+                {
+                    contentType: ContentType.Link,
+                    content: 'link',
+                    url: 'https://ej2.syncfusion.com/documentation/block-editor/getting-started',
+                    title: 'Block Editor Documentation'
+                },
+                {
+                    contentType: ContentType.Text,
+                    content: '. Right-click the link to see link context menu options.'
                 }
             ]
+        },
+        {
+            blockType: 'Quote',
+            properties: {
+                children: [
+                    {
+                        blockType: 'Paragraph',
+                        content: [
+                            {
+                                contentType: ContentType.Text,
+                                content: 'When the cursor is focused on a link, right-click to open the context menu with options like Open Link, Edit Link, Copy Link, and Remove Link.'
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            blockType: 'Table',
+            properties: {
+                columns: [
+                    { id: 'col1', headerText: 'Column 1' },
+                    { id: 'col2', headerText: 'Column 2' }
+                ],
+                rows: [
+                    {
+                        cells: [
+                            {
+                                columnId: 'col1',
+                                blocks: [
+                                    {
+                                        blockType: 'Paragraph',
+                                        content: [
+                                            {
+                                                contentType: ContentType.Text,
+                                                content: 'Cell 1'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                columnId: 'col2',
+                                blocks: [
+                                    {
+                                        blockType: 'Paragraph',
+                                        content: [
+                                            {
+                                                contentType: ContentType.Text,
+                                                content: 'Cell 2'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        cells: [
+                            {
+                                columnId: 'col1',
+                                blocks: [
+                                    {
+                                        blockType: 'Paragraph',
+                                        content: [
+                                            {
+                                                contentType: ContentType.Text,
+                                                content: 'Cell 3'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                columnId: 'col2',
+                                blocks: [
+                                    {
+                                        blockType: 'Paragraph',
+                                        content: [
+                                            {
+                                                contentType: ContentType.Text,
+                                                content: 'Cell 4'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            blockType: 'Quote',
+            properties: {
+                children: [
+                    {
+                        blockType: 'Paragraph',
+                        content: [
+                            {
+                                contentType: ContentType.Text,
+                                content: 'Right-click inside a table cell to open the context menu, where you can access options such as inserting or deleting rows/columns and formatting the table.'
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     ],
     contextMenuSettings: {
@@ -637,6 +810,9 @@ const blockEditor: BlockEditor = new BlockEditor({
         items: customContextMenuItems,
         opening: (args: ContextMenuOpeningEventArgs) => {
             console.log('Opening context menu');
+        },
+        closing: (args: ContextMenuClosingEventArgs) => {
+            console.log('Closing context menu');
         },
         itemSelect: (args: ContextMenuItemSelectEventArgs) => {
             console.log('Selected:', args.item.text);

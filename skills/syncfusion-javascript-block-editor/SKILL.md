@@ -1,6 +1,6 @@
 ---
 name: syncfusion-javascript-block-editor
-description: "Implement the Syncfusion JavaScript BlockEditor control - a modern block-based text editor with drag-and-drop, slash commands, and extensive formatting capabilities. Use this skill IMMEDIATELY for: BlockEditor implementation, block-based editors, content editing with blocks, document editors with block structure, text editing with modern UI, slash command menus, drag-and-drop content reordering, inline toolbars, collaborative editing features, structured content creation, @mentions and labels, code blocks with syntax highlighting, tables and lists, collapsible sections, or any Syncfusion EJ2 BlockEditor control usage in JavaScript applications."
+description: "Implement the Syncfusion JavaScript BlockEditor control - a modern block-based text editor with drag-and-drop, slash commands, extensive formatting capabilities, and real-time collaborative editing. Use this skill IMMEDIATELY for: BlockEditor implementation, block-based editors, content editing with blocks, document editors with block structure, text editing with modern UI, slash command menus, drag-and-drop content reordering, inline toolbars, collaborative editing features, real-time multi-user editing, Yjs integration, user presence and remote cursors, document version history, structured content creation, @mentions and labels, code blocks with syntax highlighting, tables and lists, collapsible sections, or any Syncfusion EJ2 BlockEditor control usage in JavaScript applications."
 metadata:
   author: "Syncfusion Inc"
   version: "34.1.29"
@@ -15,6 +15,7 @@ The Syncfusion JavaScript BlockEditor is a modern, block-based text editor that 
 - **Block Types**: 14 built-in block types including typography, lists, tables, images, code, and collapsible sections
 - **Content Model**: Structured content with BlockModel and ContentModel for programmatic manipulation
 - **Intuitive UX**: Slash commands (/), drag handles, inline toolbars, and context menus
+- **Collaborative Editing**: Real-time multi-user editing powered by Yjs, with presence, remote cursors, and version history
 - **Extensibility**: Custom blocks, commands, menu items, and templates
 - **Data Formats**: Import/export as HTML or JSON for flexible storage and interchange
 - **Accessibility**: Keyboard navigation, ARIA attributes, and screen reader support
@@ -97,7 +98,7 @@ The Syncfusion JavaScript BlockEditor is a modern, block-based text editor that 
 
 ### Paste, Undo/Redo, and Keyboard
 📄 **Read:** [references/paste-undo-redo-keyboard.md](references/paste-undo-redo-keyboard.md)
-- Paste cleanup configuration (pasteCleanupSettings with keepFormat, plainText, allowedStyles, deniedTags)
+- Paste cleanup configuration (pasteCleanupSettings with keepFormat, plainText, deniedTags)
 - Paste events for interception and modification
 - Undo/redo stack configuration (undoRedoStack property)
 - Keyboard shortcuts (keyConfig property for custom shortcuts)
@@ -127,6 +128,20 @@ The Syncfusion JavaScript BlockEditor is a modern, block-based text editor that 
 - Paste security with deniedTags
 - Safe content handling best practices
 - Compliance considerations
+
+### Collaborative Editing
+📄 **Read:** [references/collaborative-editing.md](references/collaborative-editing.md)
+- Real-time collaborative editing powered by Yjs (CRDT-based sync and conflict resolution)
+- Injecting the `Collaboration` and `VersionHistory` modules
+- `collaborationSettings` property (provider, adapter, enableAwareness, versionHistory)
+- Choosing a Yjs provider (y-websocket, y-webrtc, y-indexeddb, Hocuspocus, Liveblocks, PartyKit)
+- Setting up a Yjs document, `YjsAdapter`, and provider
+- User presence, remote cursors, and text selection overlays (enableAwareness)
+- Configuring the current user via `users` and `currentUserId`
+- Version history: creating, listing, renaming, restoring, comparing, exporting, and importing snapshots
+- Custom snapshot storage via the `IVersionStorage` interface
+- Version history events: `snapshotCreated`, `snapshotRestored`
+- Best practices and troubleshooting for collaboration setups
 
 ## Quick Start Example
 
@@ -272,6 +287,34 @@ const editor = new BlockEditor({
 });
 ```
 
+### Enabling Real-Time Collaborative Editing
+
+```typescript
+import { BlockEditor, Collaboration, YjsAdapter } from '@syncfusion/ej2-blockeditor';
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+
+BlockEditor.Inject(Collaboration);
+
+const yDoc = new Y.Doc();
+const yFragment = yDoc.getXmlFragment('blockeditor');
+const adapter = new YjsAdapter({ yRuntime: Y, yXmlFragment: yFragment });
+const provider = new WebsocketProvider('wss://your-server-url', 'document-room-id', yDoc);
+
+const editor = new BlockEditor({
+    users: [{ id: 'user-1', user: 'John Doe', avatarBgColor: '#e74c3c' }],
+    currentUserId: 'user-1',
+    collaborationSettings: {
+        provider: provider,
+        adapter: adapter,
+        enableAwareness: true,
+        versionHistory: true
+    }
+});
+
+editor.appendTo('#blockeditor');
+```
+
 ### Image Upload Configuration
 
 ```typescript
@@ -284,7 +327,7 @@ const editor = new BlockEditor({
         maxWidth: 1200,
         maxHeight: 800,
         enableResize: true,
-        saveFormat: 'Base64' // or 'Blob'
+        saveFormat: 'Blob' // or 'Base64'
     },
     fileUploadSuccess: (args) => {
         console.log('File uploaded:', args.fileUrl);
@@ -326,6 +369,13 @@ const editor = new BlockEditor({
 
 - **fontColorSettings**: `FontColorSettingsModel` - Text color palette
 - **backgroundColorSettings**: `BackgroundColorSettingsModel` - Background/highlight color palette
+
+### Collaboration Settings
+
+- **collaborationSettings**: `CollaborationSettingsModel` - Real-time collaboration configuration (provider, adapter, enableAwareness, versionHistory)
+- **users**: `UserModel[]` - Connected users, also used for mentions and presence
+- **currentUserId**: `string` - Identifies the local user for presence and cursor highlighting
+- Requires injecting the **Collaboration** module (and **VersionHistory** for snapshot support) via `BlockEditor.Inject(...)`
 
 ### Localization and RTL
 

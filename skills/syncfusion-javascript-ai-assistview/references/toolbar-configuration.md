@@ -23,6 +23,8 @@ The AI AssistView provides four customizable toolbars:
 3. **Response Toolbar** (`responseToolbarSettings`) - Actions for AI responses
 4. **Prompt Toolbar** (`promptToolbarSettings`) - Actions for user prompts
 
+The response toolbar also supports a built-in **Regenerate** action, which lets users request alternative AI responses for an existing prompt — see [Regenerate Responses](#regenerate-responses).
+
 ---
 
 ## Header Toolbar
@@ -239,6 +241,133 @@ responseToolbarSettings: {
     items: [...]
 }
 ```
+
+---
+
+### Regenerate Responses
+
+The AI AssistView allows users to **regenerate** responses to request a new response for the same prompt, without resubmitting the original query. When more than one response is available for a prompt — either regenerated or preloaded via `regeneratedResponses` — navigation controls (`previous`/`next` buttons with a counter, e.g. `1 / 3`) automatically appear alongside the response, letting users step through all available responses.
+
+#### Adding the Regenerate Item
+
+Enable the regenerate button by adding the `e-assist-regenerate` icon to the `items` collection of `responseToolbarSettings`.
+
+```typescript
+responseToolbarSettings: {
+    items: [
+        { type: 'Button', iconCss: 'e-icons e-assist-copy', tooltip: 'Copy' },
+        { type: 'Button', iconCss: 'e-icons e-assist-like', tooltip: 'Like' },
+        { type: 'Button', iconCss: 'e-icons e-assist-dislike', tooltip: 'Need Improvement' },
+        { type: 'Button', iconCss: 'e-icons e-assist-regenerate', tooltip: 'Regenerate' }
+    ]
+}
+```
+
+#### How Regeneration Works
+
+Clicking the regenerate button re-fires the `promptRequest` event with the existing prompt text. Handle it the same way as a normal prompt — call your AI service again and push the new response with `addPromptResponse()`. The AI AssistView automatically stores it alongside any prior responses for that prompt and shows the navigation UI.
+
+#### Example
+
+```typescript
+import { AIAssistView, PromptRequestEventArgs, PromptModel } from '@syncfusion/ej2-interactive-chat';
+import { enableRipple } from '@syncfusion/ej2-base';
+
+enableRipple(true);
+
+let promptsData: PromptModel[] = [
+    {
+        prompt: "What is AI?",
+        response: "AI stands for Artificial Intelligence, enabling machines to mimic human intelligence for tasks such as learning, problem-solving, and decision-making."
+    }
+];
+
+const regenerateResponses: string[] = [
+    "AI, or Artificial Intelligence, refers to the simulation of human intelligence in machines programmed to think and learn like humans.",
+    "Artificial Intelligence is the development of computer systems capable of performing tasks that typically require human intelligence.",
+    "AI is a branch of computer science focused on building machines that can perform tasks requiring human-like intelligence."
+];
+
+let aiAssistView: AIAssistView = new AIAssistView({
+    prompts: promptsData,
+    responseToolbarSettings: {
+        items: [
+            { type: 'Button', iconCss: 'e-icons e-assist-copy', tooltip: 'Copy' },
+            { type: 'Button', iconCss: 'e-icons e-assist-like', tooltip: 'Like' },
+            { type: 'Button', iconCss: 'e-icons e-assist-dislike', tooltip: 'Need Improvement' },
+            { type: 'Button', iconCss: 'e-icons e-assist-regenerate', tooltip: 'Regenerate' }
+        ]
+    },
+    promptRequest: (args: PromptRequestEventArgs) => {
+        setTimeout(() => {
+            // args.prompt holds the existing prompt text on regenerate
+            const isRegenerate: boolean = promptsData.some((p: PromptModel) => p.prompt === args.prompt);
+            const response: string = isRegenerate
+                ? regenerateResponses[Math.floor(Math.random() * regenerateResponses.length)]
+                : 'For real-time prompt processing, connect the AIAssistView component to your preferred AI service, such as OpenAI or Azure Cognitive Services.';
+            aiAssistView.addPromptResponse(response);
+        }, 1000);
+    }
+});
+
+aiAssistView.appendTo('#aiAssistView');
+```
+
+#### Pre-loading Regenerated Responses
+
+Use the `regeneratedResponses` property on a `PromptModel` (in the `prompts` collection) to pre-load multiple responses for a prompt at initial render, without requiring the user to trigger regenerate first. Users can immediately navigate between the preloaded responses using the `previous`/`next` buttons.
+
+```typescript
+import { AIAssistView, PromptRequestEventArgs, PromptModel } from '@syncfusion/ej2-interactive-chat';
+import { enableRipple } from '@syncfusion/ej2-base';
+
+enableRipple(true);
+
+let promptsData: PromptModel[] = [
+    {
+        prompt: "What is AI?",
+        response: "AI stands for Artificial Intelligence, enabling machines to mimic human intelligence for tasks such as learning, problem-solving, and decision-making.",
+        regeneratedResponses: [
+            "AI, or Artificial Intelligence, refers to the simulation of human intelligence in machines programmed to think and learn like humans.",
+            "Artificial Intelligence is the development of computer systems capable of performing tasks that typically require human intelligence.",
+            "AI is a branch of computer science focused on building machines that can perform tasks requiring human-like intelligence."
+        ]
+    }
+];
+
+let aiAssistView: AIAssistView = new AIAssistView({
+    prompts: promptsData,
+    responseToolbarSettings: {
+        items: [
+            { type: 'Button', iconCss: 'e-icons e-assist-copy', tooltip: 'Copy' },
+            { type: 'Button', iconCss: 'e-icons e-assist-like', tooltip: 'Like' },
+            { type: 'Button', iconCss: 'e-icons e-assist-dislike', tooltip: 'Need Improvement' },
+            { type: 'Button', iconCss: 'e-icons e-assist-regenerate', tooltip: 'Regenerate' }
+        ]
+    },
+    promptRequest: (args: PromptRequestEventArgs) => {
+        setTimeout(() => {
+            aiAssistView.addPromptResponse('For real-time prompt processing, connect the AIAssistView component to your preferred AI service, such as OpenAI or Azure Cognitive Services.');
+        }, 1000);
+    }
+});
+
+aiAssistView.appendTo('#aiAssistView');
+```
+
+#### PromptModel Addition
+
+```typescript
+interface PromptModel {
+    // ...existing fields
+    regeneratedResponses?: string[];  // Pre-loaded alternate responses for this prompt
+}
+```
+
+**Use cases:**
+- Let users request a better/alternate answer without retyping the prompt
+- Preload multiple AI-generated variants (e.g., from a batch generation call) for the user to pick from
+- A/B compare tone or phrasing across regenerated answers via the built-in prev/next navigation
 
 ---
 
@@ -529,6 +658,7 @@ const aiAssistView: AIAssistView = new AIAssistView({
 - Footer toolbar (`footerToolbarSettings`) - Input area actions with positioning
 - Response toolbar (`responseToolbarSettings`) - AI response actions
 - Prompt toolbar (`promptToolbarSettings`) - User prompt actions
+- Regenerate responses - Alternative answer flow for response toolbars
 
 **Key Properties:**
 - `items`: Array of ToolbarItemModel

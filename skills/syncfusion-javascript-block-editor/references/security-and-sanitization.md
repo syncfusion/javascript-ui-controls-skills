@@ -415,7 +415,6 @@ const blockEditor: BlockEditor = new BlockEditor({
     // Paste cleanup
     pasteCleanupSettings: {
         deniedTags: ['script', 'iframe', 'embed', 'object', 'applet', 'link', 'meta', 'style'],
-        allowedStyles: ['font-weight', 'font-style', 'text-decoration'],
         keepFormat: true,
         plainText: false
     },

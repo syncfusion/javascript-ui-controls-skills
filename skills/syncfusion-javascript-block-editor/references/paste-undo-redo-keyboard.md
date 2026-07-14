@@ -40,49 +40,11 @@ Configure paste behavior using the `pasteCleanupSettings` property:
 ```typescript
 const editor = new BlockEditor({
     pasteCleanupSettings: {
-        allowedStyles: ['font-weight', 'font-style'],
         deniedTags: ['script', 'iframe'],
         keepFormat: true,
         plainText: false
     }
 });
-```
-
-### Allowed Styles
-
-The `allowedStyles` property lets you define which CSS styles are permitted in pasted content. Any style not in this list is stripped out.
-
-**Default Allowed Styles:**
-```typescript
-['font-weight', 'font-style', 'text-decoration', 'text-transform']
-```
-
-**Configuration:**
-```typescript
-pasteCleanupSettings: {
-    allowedStyles: ['font-weight', 'font-style', 'color', 'text-decoration']
-}
-```
-
-**Example:**
-```typescript
-import { BlockEditor, AfterPasteCleanupEventArgs } from '@syncfusion/ej2-blockeditor';
-
-const blockEditor: BlockEditor = new BlockEditor({
-    blocks: [
-        {
-            blockType: 'Paragraph'
-        }
-    ],
-    pasteCleanupSettings: {
-        allowedStyles: ['font-weight', 'font-style']
-    },
-    afterPasteCleanup: (args: AfterPasteCleanupEventArgs) => {
-        console.log('Processed content:', args.content.length, 'characters');
-    }
-});
-
-blockEditor.appendTo('#blockeditor');
 ```
 
 ### Denied Tags
@@ -110,7 +72,6 @@ const blockEditor: BlockEditor = new BlockEditor({
         }
     ],
     pasteCleanupSettings: {
-        allowedStyles: ['text-decoration'],
         deniedTags: ['script', 'iframe', 'embed', 'object', 'style']
     }
 });
@@ -131,7 +92,7 @@ pasteCleanupSettings: {
 }
 ```
 
-When disabled, the editor primarily pastes content as plain text, regardless of the `allowedStyles` configuration.
+When disabled, the editor primarily pastes content as plain text.
 
 **Example:**
 ```typescript
@@ -424,7 +385,6 @@ commandMenuSettings: {
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `allowedStyles` | `string[]` | `['font-weight', 'font-style', 'text-decoration', 'text-transform']` | Allowed CSS styles in pasted content |
 | `deniedTags` | `string[]` | `[]` | HTML tags to be removed from pasted content |
 | `keepFormat` | `boolean` | `true` | Whether to keep formatting of pasted content |
 | `plainText` | `boolean` | `false` | Whether to paste as plain text |
@@ -479,7 +439,6 @@ const blockEditor: BlockEditor = new BlockEditor({
     ],
     
     pasteCleanupSettings: {
-        allowedStyles: ['font-weight', 'font-style', 'text-decoration'],
         deniedTags: ['script', 'iframe', 'embed', 'object', 'style'],
         keepFormat: true,
         plainText: false

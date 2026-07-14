@@ -6,6 +6,7 @@
 - [Attachment Settings](#attachment-settings)
 - [Save and Remove URLs](#save-and-remove-urls)
 - [File Type Restrictions](#file-type-restrictions)
+- [Attachment Templates](#attachment-templates)
 - [File Size Limits](#file-size-limits)
 - [Maximum File Count](#maximum-file-count)
 - [Complete Example](#complete-example)
@@ -218,6 +219,47 @@ allowedFileTypes: '.txt,.md,.csv,.json,.xml'
 
 // Images and documents
 allowedFileTypes: 'image/*,.pdf,.docx'
+```
+
+---
+
+## Attachment Templates
+
+### attachmentTemplate Property
+
+Control how attachments appear inside message bubbles after sending.
+
+**Property**: `attachmentTemplate: string | Function`
+
+**Template Context**:
+- `selectedFile`: File object with properties (name, size, type, fileSource)
+
+### Template Example
+
+```typescript
+import { AIAssistView } from '@syncfusion/ej2-interactive-chat';
+
+// Attachment template - displays in message bubble
+function attachmentTemplate(context: any): string {
+
+    return `
+        <div class="e-attached-file-temp">
+            <div class="attached-file-name">${context.selectedFile.name}</div>
+            <div class="attached-file-type">${context.selectedFile.type}</div>
+        </div>
+    `;
+}
+
+const aiAssistView: AIAssistView = new AIAssistView({
+    enableAttachments: true,
+    attachmentSettings: {
+        saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Save',
+        removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Remove',
+        attachmentTemplate: attachmentTemplate,
+    }
+});
+
+aiAssistView.appendTo('#template');
 ```
 
 ---

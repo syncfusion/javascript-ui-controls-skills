@@ -1,6 +1,6 @@
 ---
 name: syncfusion-javascript-ai-assistview
-description: "Implement the Syncfusion JavaScript AI AssistView control. Use this skill when users mention AI assistant interfaces, AI chat UI, conversational AI components, prompt-response interfaces, AI integration (OpenAI, Gemini, Ollama, LiteLLM, MCP), chat toolbars, file attachments in chat, speech-to-text, text-to-speech, custom AI views, prompt suggestions, markdown responses, or implementing any interactive AI assistant interface. Use this skill immediately for AIAssistView, AI chat control, interactive chat, ej2-interactive-chat package, AI conversation UI, or AI assistance components."
+description: "Implement the Syncfusion JavaScript AI AssistView control. Use this skill when users mention AI assistant interfaces, AI chat UI, conversational AI components, prompt-response interfaces, AI integration (OpenAI, Gemini, Ollama, LiteLLM, MCP), chat toolbars, file attachments in chat, speech-to-text, text-to-speech, custom AI views, prompt suggestions, markdown responses, chain of thoughts, thinking blocks, reasoning visualization, AssistThinking, generative UI, dynamic AI-rendered components, interactive tool cards, registerToolUI, or implementing any interactive AI assistant interface. Use this skill immediately for AIAssistView, AI chat control, interactive chat, ej2-interactive-chat package, AI conversation UI, or AI assistance components."
 metadata:
   author: "Syncfusion Inc"
   version: "34.1.29"
@@ -23,6 +23,9 @@ The AI AssistView component provides:
 - **Templates**: Customize banner, prompt items, response items, suggestions, and footer
 - **Markdown Support**: Automatic markdown-to-HTML conversion for responses
 - **Streaming Responses**: Real-time response streaming for AI outputs
+- **Chain of Thoughts**: Collapsible thinking/reasoning blocks with staged, streamable status updates via the `AssistThinking` module
+- **Generative UI**: Render interactive tools and dynamic UI (cards, charts, forms, custom components) within AI responses via `blocks` and `registerToolUI`
+- **Regenerate Responses**: Request alternative AI responses for an existing prompt via the built-in `e-assist-regenerate` toolbar item, with automatic previous/next navigation between saved responses (`regeneratedResponses`)
 - **Accessibility**: WCAG compliance with keyboard navigation and ARIA support
 
 ---
@@ -60,6 +63,26 @@ The AI AssistView component provides:
 - `promptRequest` event best practices
 - Error handling and response formatting
 
+### Chain of Thoughts (Thinking Blocks)
+📄 **Read:** [references/chain-of-thoughts.md](references/chain-of-thoughts.md)
+- Enabling reasoning visualization via the injectable `AssistThinking` module (`AIAssistView.Inject(AssistThinking)`)
+- Response block types: `thinking`, `text`, `tool` blocks within the `blocks` array
+- Configuring thinking blocks (`blockType`, `title`, `content`, `isActive`, `collapsed`, `collapsible`, `stages`)
+- Adding reasoning stages (`ThinkingStage`) with Timeline-based rendering
+- Stage status indicators (`completed`, `inprogress`, `failed`) for streaming reasoning progress
+- Inline clickable context badges (`editableContext`, `ThinkingContextItem`) with `{index}` placeholders
+- Handling the `editableContextClicked` event
+- Custom thinking block rendering (`blockTemplate`) and stage item rendering (`itemTemplate`)
+
+### Generative UI
+📄 **Read:** [references/generative-ui.md](references/generative-ui.md)
+- Registering custom tools with `registerToolUI({ toolName, template, handler? })`
+- Configuring tool templates (string or function) and interactivity handlers
+- Adding `tool` blocks (`blockType: 'tool'`, `toolName`, `props`) to responses via `addPromptResponse`
+- Mixing `text` and `tool` blocks in a single response
+- Configuring an AI service's system prompt to return structured `blocks` JSON for generative UI
+- Multi-step generative flows: capturing tool state and triggering follow-up responses with `executePrompt`
+
 ### Toolbar Configuration
 📄 **Read:** [references/toolbar-configuration.md](references/toolbar-configuration.md)
 - Header toolbar configuration (`toolbarSettings`)
@@ -69,6 +92,8 @@ The AI AssistView component provides:
 - Custom toolbar items (text, icons, tooltips, alignment, templates)
 - Toolbar item click events (`ToolbarItemClickedEventArgs`)
 - Built-in toolbar items (send, attachment)
+- Regenerating responses via the built-in `e-assist-regenerate` response toolbar item
+- Pre-loading alternate responses with `regeneratedResponses` (`PromptModel`) and the automatic previous/next navigation UI
 
 ### Custom Views
 📄 **Read:** [references/custom-views.md](references/custom-views.md)
@@ -97,6 +122,7 @@ The AI AssistView component provides:
 - Attached files in prompts (`PromptModel.attachedFiles`)
 - Attachment events (beforeUpload, success, failure, removed)
 - File preview and click handling
+- Custom attachment templates (attachmentTemplate)
 
 ### Speech to Text
 📄 **Read:** [references/speech-to-text.md](references/speech-to-text.md)
@@ -106,6 +132,14 @@ The AI AssistView component provides:
 - Button and tooltip customization
 - Interim results and transcript handling
 - Microphone permissions and error handling
+
+### Text to Speech
+📄 **Read:** [references/text-to-speech.md](references/text-to-speech.md)
+- Enabling built-in Text-to-Speech via the `e-assist-audio` response toolbar item
+- Speech synthesis configuration (`textToSpeechSettings`)
+- Customizing `language`, `speechPitch`, `speechRate`, `volume`, `voice`, and `inputText`
+- Reading AI responses aloud using the browser's `SpeechSynthesisUtterance` interface
+- Browser compatibility and feature detection
 
 ### Appearance Customization
 📄 **Read:** [references/appearance.md](references/appearance.md)
@@ -267,7 +301,83 @@ const aiAssistView: AIAssistView = new AIAssistView({
 });
 ```
 
-### Pattern 4: File Attachments
+### Pattern 4: Chain of Thoughts (Streaming Reasoning)
+
+```typescript
+import { AIAssistView, AssistThinking, PromptRequestEventArgs } from '@syncfusion/ej2-interactive-chat';
+
+AIAssistView.Inject(AssistThinking);
+
+const aiAssistView: AIAssistView = new AIAssistView({
+    promptRequest: (args: PromptRequestEventArgs) => {
+        // Show an in-progress reasoning stage first
+        aiAssistView.addPromptResponse({
+            blocks: [{
+                blockType: 'thinking',
+                title: 'Understanding your request',
+                isActive: true,
+                collapsed: false,
+                stages: [
+                    { id: 'step1', status: 'inprogress', content: 'Analyzing the request…' }
+                ]
+            }]
+        }, false); // isFinalUpdate: false while streaming
+
+        // Later, mark the stage complete and append the final response
+        setTimeout(() => {
+            aiAssistView.addPromptResponse({
+                blocks: [{
+                    blockType: 'thinking',
+                    title: 'Understanding your request',
+                    isActive: false,
+                    collapsed: true,
+                    stages: [
+                        { id: 'step1', status: 'completed', content: 'Analyzed the request.' }
+                    ]
+                }],
+                response: 'Here is the final answer based on my reasoning.'
+            }, true); // isFinalUpdate: true
+        }, 1000);
+    }
+});
+```
+
+### Pattern 5: Generative UI (Interactive Tool Cards)
+
+```typescript
+import { AIAssistView } from '@syncfusion/ej2-interactive-chat';
+
+const aiAssistView: AIAssistView = new AIAssistView({
+    promptRequest: onPromptRequest
+});
+
+// Register a tool BEFORE it's referenced in any response; toolName must be unique
+aiAssistView.registerToolUI({
+    toolName: 'weather-card',
+    template: (props: any) => `
+        <div class="e-card">
+            <div class="e-card-header-title">${props.location}</div>
+            <div class="e-card-sub-title">${props.temperature}</div>
+        </div>
+    `
+});
+
+function onPromptRequest(args: any) {
+    setTimeout(() => {
+        // Mix text and tool blocks in a single response
+        aiAssistView.addPromptResponse({
+            blocks: [
+                { blockType: 'text', content: 'Here is the forecast:' },
+                { blockType: 'tool', toolName: 'weather-card', props: { location: 'New York', temperature: '1°C / -4°C' } }
+            ]
+        });
+    }, 1000);
+}
+
+aiAssistView.appendTo('#aiAssistView');
+```
+
+### Pattern 6: File Attachments
 
 ```typescript
 const aiAssistView: AIAssistView = new AIAssistView({
@@ -283,6 +393,71 @@ const aiAssistView: AIAssistView = new AIAssistView({
         console.log('Attached files:', args.attachedFiles);
         // Process prompt with attached files
         aiAssistView.addPromptResponse('Received your prompt with attachments');
+    }
+});
+```
+
+### Pattern 7: Regenerate Responses
+
+```typescript
+import { AIAssistView, PromptRequestEventArgs, PromptModel } from '@syncfusion/ej2-interactive-chat';
+
+let promptsData: PromptModel[] = [
+    { prompt: "What is AI?", response: "AI stands for Artificial Intelligence..." }
+];
+
+const regenerateResponses: string[] = [
+    "AI, or Artificial Intelligence, refers to the simulation of human intelligence in machines.",
+    "Artificial Intelligence is the development of computer systems that perform human-like tasks."
+];
+
+const aiAssistView: AIAssistView = new AIAssistView({
+    prompts: promptsData,
+    responseToolbarSettings: {
+        // e-assist-regenerate enables the built-in regenerate button
+        items: [
+            { type: 'Button', iconCss: 'e-icons e-assist-copy', tooltip: 'Copy' },
+            { type: 'Button', iconCss: 'e-icons e-assist-regenerate', tooltip: 'Regenerate' }
+        ]
+    },
+    promptRequest: (args: PromptRequestEventArgs) => {
+        // Regenerate re-fires promptRequest with the existing prompt text
+        setTimeout(() => {
+            const response = regenerateResponses[Math.floor(Math.random() * regenerateResponses.length)];
+            aiAssistView.addPromptResponse(response);
+        }, 1000);
+    }
+});
+```
+
+### Pattern 8: Text to Speech (Read Aloud)
+
+```typescript
+import { AIAssistView, PromptRequestEventArgs, PromptModel } from '@syncfusion/ej2-interactive-chat';
+
+const promptsData: PromptModel[] = [
+    { prompt: "What is AI?", response: "AI stands for Artificial Intelligence..." }
+];
+
+const aiAssistView: AIAssistView = new AIAssistView({
+    prompts: promptsData,
+    responseToolbarSettings: {
+        // e-assist-audio enables the built-in Read Aloud button
+        items: [
+            { type: 'Button', iconCss: 'e-icons e-assist-audio', tooltip: 'Read Aloud' },
+            { type: 'Button', iconCss: 'e-icons e-assist-like', tooltip: 'Like' }
+        ]
+    },
+    textToSpeechSettings: {
+        language: 'en-US',
+        speechPitch: 1,
+        speechRate: 1,
+        volume: 1
+    },
+    promptRequest: (args: PromptRequestEventArgs) => {
+        setTimeout(() => {
+            aiAssistView.addPromptResponse('This response can be read aloud via the toolbar.');
+        }, 1000);
     }
 });
 ```
@@ -307,3 +482,8 @@ const aiAssistView: AIAssistView = new AIAssistView({
 | `promptItemTemplate` | `string \| Function` | Custom prompt item template |
 | `responseItemTemplate` | `string \| Function` | Custom response item template |
 | `speechToTextSettings` | `SpeechToTextSettingsModel` | Speech-to-text configuration |
+| `textToSpeechSettings` | `TextToSpeechSettingsModel` | Text-to-speech configuration (`language`, `speechPitch`, `speechRate`, `volume`, `voice`, `inputText`) |
+| `blockTemplate` | `string \| Function` | Custom template for rendering thinking blocks |
+| `itemTemplate` | `string \| Function` | Custom template for individual thinking stage items |
+| `editableContextClicked` | `Event` | Triggered when a clickable inline context badge is clicked |
+| `registerToolUI` | `Method` | Registers a generative UI tool (`toolName`, `template`, optional `handler`) so it can be rendered via a `tool` block |
