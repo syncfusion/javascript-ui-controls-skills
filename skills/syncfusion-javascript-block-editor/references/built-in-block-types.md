@@ -32,7 +32,6 @@ Standard text block for body content.
     properties: { placeholder: 'Start typing...' },
     content: [
         {
-            id: 'text-1',
             contentType: ContentType.Text,
             content: 'This is a paragraph with regular text.'
         }

@@ -40,7 +40,6 @@ const paragraphBlock: BlockModel = {
     blockType: BlockType.Paragraph,
     content: [
         {
-            id: 'text-1',
             contentType: ContentType.Text,
             content: 'This is a paragraph block.'
         }
@@ -98,7 +97,6 @@ The `ContentModel` interface defines the structure of content within a block.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| **id** | `string` | Unique identifier for the content. For Label/Mention types, use the item ID from datasource. |
 | **contentType** | `ContentType \| string` | Type of content (Text, Link, Mention, Label). |
 | **content** | `string` | The actual text/data content. |
 | **properties** | `ContentProperties` (optional) | Type-specific properties (e.g., link URL, styling). |
@@ -107,7 +105,6 @@ The `ContentModel` interface defines the structure of content within a block.
 
 ```typescript
 const textContent: ContentModel = {
-    id: 'content-1',
     contentType: ContentType.Text,
     content: 'Hello World',
     properties: {
@@ -396,7 +393,6 @@ interface MentionContentProps {
 ```typescript
 {
     contentType: ContentType.Mention,
-    id: 'user-123',  // Must match a user ID from the users array
     content: '@john',
     properties: {
         userId: 'user-123'
@@ -418,7 +414,6 @@ interface LabelContentProps {
 ```typescript
 {
     contentType: ContentType.Label,
-    id: 'bug-label',  // Must match a label ID from labelSettings.items
     content: '$bug',
     properties: {
         labelId: 'bug-label'
@@ -616,12 +611,10 @@ const richParagraph: BlockModel = {
     blockType: BlockType.Paragraph,
     content: [
         {
-            id: 'text-1',
             contentType: ContentType.Text,
             content: 'This is '
         },
         {
-            id: 'bold-text',
             contentType: ContentType.Text,
             content: 'bold',
             properties: {
@@ -629,12 +622,10 @@ const richParagraph: BlockModel = {
             }
         },
         {
-            id: 'text-2',
             contentType: ContentType.Text,
             content: ' and '
         },
         {
-            id: 'link',
             contentType: ContentType.Link,
             content: 'this is a link',
             properties: {
@@ -643,12 +634,10 @@ const richParagraph: BlockModel = {
             }
         },
         {
-            id: 'text-3',
             contentType: ContentType.Text,
             content: '. Mentioning '
         },
         {
-            id: 'mention',
             contentType: ContentType.Mention,
             content: '@john',
             properties: {
@@ -656,12 +645,10 @@ const richParagraph: BlockModel = {
             }
         },
         {
-            id: 'text-4',
             contentType: ContentType.Text,
             content: ' with label '
         },
         {
-            id: 'label',
             contentType: ContentType.Label,
             content: '$urgent',
             properties: {

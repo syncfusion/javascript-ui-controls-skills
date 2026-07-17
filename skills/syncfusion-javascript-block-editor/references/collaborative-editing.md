@@ -99,10 +99,10 @@ Create an adapter that provides the Yjs runtime and the shared fragment to the B
 import * as Y from 'yjs';
 import { YjsAdapter } from '@syncfusion/ej2-blockeditor';
 
-const adapter = new YjsAdapter({
+const adapter: YjsAdapter = {
     yRuntime: Y,
     yXmlFragment: yFragment
-});
+};
 ```
 
 ### Step 3: Configure a Provider
@@ -400,10 +400,10 @@ const yDoc = new Y.Doc();
 const yFragment = yDoc.getXmlFragment('blockeditor');
 
 // 2. Create the Yjs adapter
-const adapter = new YjsAdapter({
+const adapter: YjsAdapter = {
     yRuntime: Y,
     yXmlFragment: yFragment
-});
+};
 
 // 3. Configure the provider
 const provider = new WebsocketProvider(

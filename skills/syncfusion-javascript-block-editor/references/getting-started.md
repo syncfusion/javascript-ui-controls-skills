@@ -14,33 +14,21 @@ Install the BlockEditor package from npm:
 npm install @syncfusion/ej2-blockeditor --save
 ```
 
-## Import CSS Styles
+## CSS Imports
 
-Import the BlockEditor and its dependent control styles in your `styles.css` file. Multiple themes are available:
+Install the theme package that matches your application. This example uses `Tailwind 3`:
 
-### Tailwind3 Theme
-
-```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-blockeditor/styles/tailwind3.css";
+```bash
+npm install @syncfusion/ej2-tailwind3-theme
 ```
 
-### Other Available Themes
+Add the following stylesheet in `src/styles.css`
 
-Replace `tailwind3` with any of these theme names:
-- `material` - Material Design theme
-- `material3` - Material Design 3 theme
-- `bootstrap5` - Bootstrap 5 theme
-- `bootstrap4` - Bootstrap 4 theme
-- `fabric` - Office Fabric theme
-- `fluent` - Microsoft Fluent theme
-- `highcontrast` - High contrast theme
+```css
+@import '../node_modules/@syncfusion/ej2-tailwind3-theme/styles/blockeditor/index.css';
+```
+
+> Replace `tailwind3` with your preferred theme name (`material3`, `bootstrap5`, `fabric`, `fluent2`, etc) install the corresponding package, and use the same theme name in the CSS import path.
 
 ## Basic Implementation
 
@@ -104,7 +92,6 @@ const blockEditor: BlockEditor = new BlockEditor({
             properties: { level: 1 },
             content: [
                 {
-                    id: 'h1-content',
                     contentType: ContentType.Text,
                     content: 'BlockEditor Demo'
                 }
@@ -115,7 +102,6 @@ const blockEditor: BlockEditor = new BlockEditor({
             blockType: BlockType.Paragraph,
             content: [
                 {
-                    id: 'intro-text',
                     contentType: ContentType.Text,
                     content: 'The Block Editor enables users to create, format, and organize content using various block types.'
                 }

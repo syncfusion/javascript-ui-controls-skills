@@ -159,7 +159,6 @@ const editor = new BlockEditor({
             properties: { level: 1 },
             content: [
                 {
-                    id: 'h1-content',
                     contentType: ContentType.Text,
                     content: 'Welcome to BlockEditor'
                 }
@@ -170,7 +169,6 @@ const editor = new BlockEditor({
             blockType: BlockType.Paragraph,
             content: [
                 {
-                    id: 'intro-text',
                     contentType: ContentType.Text,
                     content: 'Start typing or press "/" to open the command menu.'
                 }
@@ -181,7 +179,6 @@ const editor = new BlockEditor({
             blockType: BlockType.BulletList,
             content: [
                 {
-                    id: 'list-item-1',
                     contentType: ContentType.Text,
                     content: 'Drag blocks to reorder'
                 }
@@ -219,7 +216,6 @@ const newBlock = {
     blockType: BlockType.Paragraph,
     content: [
         {
-            id: 'new-content',
             contentType: ContentType.Text,
             content: 'This is a new paragraph.'
         }
@@ -298,7 +294,7 @@ BlockEditor.Inject(Collaboration);
 
 const yDoc = new Y.Doc();
 const yFragment = yDoc.getXmlFragment('blockeditor');
-const adapter = new YjsAdapter({ yRuntime: Y, yXmlFragment: yFragment });
+const adapter: YjsAdapter = { yRuntime: Y, yXmlFragment: yFragment };
 const provider = new WebsocketProvider('wss://your-server-url', 'document-room-id', yDoc);
 
 const editor = new BlockEditor({
@@ -308,7 +304,6 @@ const editor = new BlockEditor({
         provider: provider,
         adapter: adapter,
         enableAwareness: true,
-        versionHistory: true
     }
 });
 

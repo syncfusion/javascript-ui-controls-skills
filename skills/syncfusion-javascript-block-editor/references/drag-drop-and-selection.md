@@ -676,7 +676,6 @@ const blockData: BlockModel[] = [
         properties: { level: 1},
         content: [
             {
-                id: 'heading-content',
                 contentType: ContentType.Text,
                 content: 'Selection Management Demo'
             }
@@ -687,7 +686,6 @@ const blockData: BlockModel[] = [
         blockType: 'Paragraph',
         content: [
             {
-                id: 'para1-content',
                 contentType: ContentType.Text,
                 content: 'This is the first paragraph. You can select text or entire blocks.'
             }
@@ -698,7 +696,6 @@ const blockData: BlockModel[] = [
         blockType: 'Paragraph',
         content: [
             {
-                id: 'para2-content',
                 contentType: ContentType.Text,
                 content: 'This is the second paragraph for demonstrating multiple block selection.'
             }

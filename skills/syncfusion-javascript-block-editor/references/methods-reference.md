@@ -852,7 +852,6 @@ const blockData = [
         blockType: 'Paragraph',
         content: [
             {
-                id: 'paragraph1-content',
                 contentType: ContentType.Text,
                 content: 'This is the first paragraph with some sample text.'
             }
