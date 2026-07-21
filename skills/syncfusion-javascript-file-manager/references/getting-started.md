@@ -81,33 +81,26 @@ npm install @syncfusion/ej2-layouts
 
 ## Import CSS Styles
 
-The FileManager requires CSS stylesheets from multiple Syncfusion components. Import these in your main styles file (`src/styles/styles.css`):
+Install the Fluent 2 theme package to get all the required dependency styles for the File Manager:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
+The `index.css` file for File Manager in this package automatically loads all the required dependency styles. Import the following in your `index.css` file:
 
 ```css
-/* Base and icon styles */
-@import '../../node_modules/@syncfusion/ej2-base/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-icons/styles/fluent2.css';
-
-/* Component-specific styles */
-@import '../../node_modules/@syncfusion/ej2-inputs/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-splitbuttons/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-layouts/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-grids/styles/fluent2.css';
-
-/* FileManager specific styles */
-@import '../../node_modules/@syncfusion/ej2-filemanager/styles/fluent2.css';
+/* Fluent 2 theme (default) - auto-loads all File Manager dependency styles */
+@import '../node_modules/@syncfusion/ej2-fluent2-theme/styles/file-manager/index.css';
 ```
 
 **Theme Options:**
-Replace `fluent2.css` with your preferred theme:
-- `fluent.css` - Fluent design
-- `bootstrap.css` - Bootstrap theme
-- `bootstrap4.css` - Bootstrap 4 theme
-- `material.css` - Material design
-- `tailwind.css` - Tailwind CSS theme
+Replace `fluent2-theme` with your preferred theme package:
+- `ej2-fluent2-theme` - Fluent 2 design (default)
+- `ej2-fluent-theme` - Fluent design
+- `ej2-tailwind3-theme` - Tailwind CSS 3 theme
+- `ej2-bootstrap5-theme` - Bootstrap 5 theme
+- `ej2-material3-theme` - Material 3 design
 
 ## Initialize FileManager
 
@@ -124,9 +117,6 @@ Add a `div` element with a unique ID in your `index.html`:
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Syncfusion TypeScript FileManager" />
     <link href="index.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-base/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-icons/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-filemanager/styles/fluent2.css" rel="stylesheet" />
 </head>
 <body>
     <!-- Container for FileManager -->
@@ -272,15 +262,18 @@ Here's a complete, working example combining all elements:
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="index.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-base/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-icons/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-filemanager/styles/fluent2.css" rel="stylesheet" />
 </head>
 <body>
     <div id='loader'>Loading....</div>
     <div id="filemanager"></div>
 </body>
 </html>
+```
+
+**index.css:**
+```css
+/* Fluent 2 theme (default) - auto-loads all File Manager dependency styles */
+@import '../node_modules/@syncfusion/ej2-fluent2-theme/styles/file-manager/index.css';
 ```
 
 **index.ts:**

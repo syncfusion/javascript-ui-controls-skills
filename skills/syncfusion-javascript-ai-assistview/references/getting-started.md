@@ -16,15 +16,16 @@ npm install @syncfusion/ej2-interactive-chat --save
 
 ### NPM CSS Imports
 
+To install the fluent2 theme package, use the following command:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
 In your html or css file:
 
 ```css
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-interactive-chat/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/ai-assistview/index.css";
 ```
 
 **Available Themes:** material, bootstrap5, bootstrap4, bootstrap, tailwind, fabric, fluent, highcontrast
@@ -42,7 +43,7 @@ Create a container element in your `index.html`:
     <title>AI AssistView</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/fluent2.css" rel="stylesheet" />
 </head>
 <body>
     <div id='container' style="height: 350px; width: 650px;">

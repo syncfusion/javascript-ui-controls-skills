@@ -100,7 +100,20 @@ The FileManager component uses specific CSS classes for styling different elemen
 
 ### Import Default Styles
 
-Add Syncfusion stylesheets to your application:
+Install the Fluent 2 theme package to get all required dependency styles for the File Manager:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
+The `index.css` file for File Manager in this package automatically loads all the required dependency styles. Add the following import to your `index.css` file:
+
+```css
+/* Fluent 2 theme (default) - auto-loads all File Manager dependency styles */
+@import '../node_modules/@syncfusion/ej2-fluent2-theme/styles/file-manager/index.css';
+```
+
+Then create a basic HTML container:
 
 ```html
 <!DOCTYPE html>
@@ -109,21 +122,7 @@ Add Syncfusion stylesheets to your application:
     <title>Syncfusion FileManager</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Syncfusion CSS files -->
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-base/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-icons/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-inputs/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-popups/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-buttons/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-splitbuttons/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-navigations/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-layouts/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-grids/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-filemanager/styles/fluent2.css" rel="stylesheet" />
-    
-    <!-- Custom application styles -->
-    <link href="styles.css" rel="stylesheet" />
+    <link href="index.css" rel="stylesheet" />
 </head>
 <body>
     <div id="filemanager"></div>
@@ -133,26 +132,34 @@ Add Syncfusion stylesheets to your application:
 
 ### Available Theme Options
 
-Switch themes by changing the CSS import:
+Switch themes by installing the corresponding theme package and importing its `index.css`:
+
+```bash
+# Install the desired theme package
+npm install @syncfusion/ej2-fluent2-theme --save      # Fluent 2 theme (default)
+npm install @syncfusion/ej2-fluent-theme --save        # Fluent theme
+npm install @syncfusion/ej2-tailwind3-theme --save     # Tailwind CSS 3 theme
+npm install @syncfusion/ej2-bootstrap5-theme --save    # Bootstrap 5 theme
+npm install @syncfusion/ej2-material3-theme --save     # Material 3 design
+```
+
+Then import the theme's File Manager index file in your stylesheet:
 
 ```css
 /* Fluent 2 theme (default) */
-@import '../../node_modules/@syncfusion/ej2-filemanager/styles/fluent2.css';
+@import '../node_modules/@syncfusion/ej2-fluent2-theme/styles/file-manager/index.css';
 
 /* Fluent theme */
-@import '../../node_modules/@syncfusion/ej2-filemanager/styles/fluent.css';
+@import '../node_modules/@syncfusion/ej2-fluent-theme/styles/file-manager/index.css';
 
-/* Bootstrap theme */
-@import '../../node_modules/@syncfusion/ej2-filemanager/styles/bootstrap.css';
+/* Tailwind CSS 3 theme */
+@import '../node_modules/@syncfusion/ej2-tailwind3-theme/styles/file-manager/index.css';
 
-/* Bootstrap 4 theme */
-@import '../../node_modules/@syncfusion/ej2-filemanager/styles/bootstrap4.css';
+/* Bootstrap 5 theme */
+@import '../node_modules/@syncfusion/ej2-bootstrap5-theme/styles/file-manager/index.css';
 
-/* Material theme */
-@import '../../node_modules/@syncfusion/ej2-filemanager/styles/material.css';
-
-/* Tailwind CSS theme */
-@import '../../node_modules/@syncfusion/ej2-filemanager/styles/tailwind.css';
+/* Material 3 theme */
+@import '../node_modules/@syncfusion/ej2-material3-theme/styles/file-manager/index.css';
 ```
 
 ## Component Structure Customization

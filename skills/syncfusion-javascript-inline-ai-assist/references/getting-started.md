@@ -12,13 +12,14 @@ npm install @syncfusion/ej2-interactive-chat --save
 
 ## CSS Imports and Theme Configuration
 
+To install the fluent2 theme package, use the following command:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
 ```css
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-interactive-chat/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/inline-ai-assist/index.css";
 ```
 
 ### Available Themes
@@ -120,11 +121,11 @@ document.getElementById('summarizeBtn').addEventListener('click', function() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Syncfusion CSS -->
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-buttons/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-navigations/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/fluent2.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-interactive-chat/styles/fluent2.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-inputs/styles/fluent2.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-buttons/styles/fluent2.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-navigations/styles/fluent2.css" rel="stylesheet" />
     
     <style>
         #editableText {
@@ -360,10 +361,7 @@ inlineAssist.showPopup();
 **Solution:** Ensure all required CSS files are imported in the correct order.
 
 ```typescript
-import '@syncfusion/ej2-base/styles/tailwind3.css';
-import '@syncfusion/ej2-interactive-chat/styles/tailwind3.css';
-import '@syncfusion/ej2-inputs/styles/tailwind3.css';
-import '@syncfusion/ej2-buttons/styles/tailwind3.css';
+import "@syncfusion/ej2-fluent2-theme/styles/inline-ai-assist/index.css";
 ```
 
 ### PromptRequest Not Firing

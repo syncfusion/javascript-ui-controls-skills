@@ -76,6 +76,20 @@ filemanager.appendTo('#filemanager');
 
 ### HTML Template
 
+First, install the Fluent 2 theme package:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
+Then reference the theme CSS in your `index.css` file (the `index.css` for FileManager auto-loads all required dependency styles):
+
+```css
+@import "../node_modules/@syncfusion/ej2-fluent2-theme/styles/file-manager/index.css";
+```
+
+Then create a basic HTML container:
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -83,21 +97,7 @@ filemanager.appendTo('#filemanager');
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Syncfusion FileManager</title>
-    
-    <!-- CSS Themes (choose one: fluent2, bootstrap5, material, tailwind, highcontrast, etc.) -->
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-base/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-buttons/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-popups/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-grids/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-filemanager/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-icons/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-inputs/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-navigations/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-layouts/styles/fluent2.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/latest/ej2-splitbuttons/styles/fluent2.css" rel="stylesheet" />
-    
-    <!-- Alternative Themes: bootstrap5.css, bootstrap4.css, bootstrap.css, 
-         material.css, material-dark.css, tailwind.css, highcontrast.css, fluent.css -->
+    <link href="index.css" rel="stylesheet" />
 </head>
 <body>
     <div id="filemanager"></div>

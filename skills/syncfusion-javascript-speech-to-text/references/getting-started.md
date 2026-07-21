@@ -14,13 +14,16 @@ All dependencies are automatically installed when you install `@syncfusion/ej2-i
 
 ## Importing CSS Styles
 
-The SpeechToText component requires CSS styles from its own package and dependencies. Import the following styles in your `~/src/styles/styles.css` file:
+To install the fluent2 theme package, use the following command:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
+Import the following styles in your `~/src/styles/styles.css` file:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css";
-@import "../../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/speech-to-text/index.css";
 ```
 
 **Available themes:**
@@ -137,10 +140,10 @@ textareaObj.appendTo('#textareaInst');
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <meta name="description" content="Essential JS 2" />
     <meta name="author" content="Syncfusion" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-buttons/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-popups/styles/tailwind3.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-base/styles/fluent2.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-buttons/styles/fluent2.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-popups/styles/fluent2.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-inputs/styles/fluent2.css" rel="stylesheet" />
 </head>
 <body>
     <div id='loader'>LOADING....</div>

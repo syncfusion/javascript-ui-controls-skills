@@ -200,7 +200,7 @@ aiAssistView.appendTo('#aiAssistView');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Syncfusion CSS -->
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/fluent2.css" rel="stylesheet" />
 </head>
 <body>
     <div id='container' style="height: 400px; width: 700px;">
@@ -213,12 +213,7 @@ aiAssistView.appendTo('#aiAssistView');
 ### CSS Imports
 
 ```css
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-interactive-chat/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/ai-assistview/index.css";
 ```
 
 ---

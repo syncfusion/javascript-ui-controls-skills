@@ -13,18 +13,18 @@ npm install @syncfusion/ej2-interactive-chat --save
 
 ## CSS Imports
 
+To install the fluent2 theme package, use the following command:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
 Import the required CSS files to apply the theme to the Chat UI control.
 
 Add these imports to your `styles.css` file:
 
 ```css
-@import '../../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '../../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css';
-@import '../../node_modules/@syncfusion/ej2-interactive-chat/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/chat-ui/index.css";
 ```
 ---
 
@@ -49,7 +49,7 @@ chatUI.appendTo('#chatUI');
     <title>Chat UI Example</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/fluent2.css" rel="stylesheet" />
 </head>
 <body>
     <div class="chatui-container" style="height: 400px; width: 450px;">
@@ -296,7 +296,7 @@ chatUI.appendTo('#chatUI');
     <title>Chat UI - Getting Started</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/tailwind3.css" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/ej2/32.1.19/fluent2.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container" style="padding: 20px;">

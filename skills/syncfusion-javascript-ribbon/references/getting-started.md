@@ -64,19 +64,17 @@ Ribbon.Inject(RibbonColorPicker, RibbonGallery, RibbonFileMenu, RibbonBackstage,
 
 ## CSS References
 
+To install the fluent2 theme package, use the following command:
+
+```bash
+npm install @syncfusion/ej2-fluent2-theme --save
+```
+
 Import the required CSS files for the Ribbon control and its dependencies:
 
 ```css
 
-@import "../node_modules/@syncfusion/ej2-base/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-lists/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-ribbon/styles/tailwind3.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/ribbon/index.css";
 ```
 
 **Available themes:**
