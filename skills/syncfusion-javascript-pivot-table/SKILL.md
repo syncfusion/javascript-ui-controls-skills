@@ -60,7 +60,7 @@ The Syncfusion Pivot View component provides:
 - **Flexible Data Binding** - JSON, CSV, remote data sources, SQL databases, MongoDB, OLAP cubes
 - **Interactive Field Management** - Drag-and-drop field list and grouping bar for runtime configuration
 - **Multiple Aggregation Types** - Sum, Count, Average, Min, Max, Product, DistinctCount, and more
-- **Advanced Filtering** - Member filtering (include/exclude), label filtering, value filtering
+- **Advanced Filtering** - Member filtering (include/exclude), label filtering, value filtering with Top/Bottom operators, sort members, append selection to existing filters, and OLAP load-on-demand
 - **Sorting & Grouping** - Sort by rows/columns, group by date intervals (quarters, months, years)
 - **Calculated Fields** - Create custom fields using formulas and expressions
 - **Drill Operations** - Drill down to expand hierarchies, drill through to view raw data
@@ -77,9 +77,9 @@ The Syncfusion Pivot View component provides:
 
 📄 **Read:** [references/getting-started.md](references/getting-started.md)
 - Prerequisites and dependencies
-- Installation methods (npm, CDN)
+- Installation methods (npm, quickstart template)
 - Setting up development environment
-- Importing Syncfusion styles and themes
+- Importing Syncfusion CSS styles and themes
 - Browser compatibility and polyfills
 - Initializing Pivot View component
 - Assigning sample data for first render
@@ -109,38 +109,64 @@ The Syncfusion Pivot View component provides:
 
 📄 **Read:** [references/field-list.md](references/field-list.md)
 - Enabling field list UI (popup and fixed)
-- Customizing field list appearance and hierarchies
+- Stand-alone field list configuration
+- Customizing field list appearance
 - Adaptive field list for mobile devices
-- Field selection and management at runtime
+- Field selection and management
+- Field hierarchies
+- Dynamic field management at runtime
 
 📄 **Read:** [references/grouping-bar.md](references/grouping-bar.md)
 - Enabling grouping bar for drag-and-drop
+- Grouping bar UI customization
 - Adding/removing fields via grouping bar
-- UI customization and responsive behavior
+- Context menu operations
+- Field icon customization
+- Responsive grouping bar behavior
 
 ### Data Manipulation
 
 📄 **Read:** [references/filtering.md](references/filtering.md)
-- Member, label, and value filtering with operators
-- Programmatic filter configuration and events
-- Selective filter control and UI customization
+- Member filtering (include/exclude specific items)
+- Label filtering with operators (Equals, Contains, Between, etc.)
+- Value filtering based on aggregated values including Top and Bottom operators
+- Sort members in the member filter dialog
+- Append current selection to existing filters
+- Loading members on-demand (OLAP) and by level number
+- Programmatic filter configuration with `levelCount` and `selectedField`
+- Filter events (memberFiltering, memberEditorOpen, actionBegin, actionComplete, actionFailure)
+- Disabling filters selectively
+- Filter UI customization
 
 📄 **Read:** [references/sorting.md](references/sorting.md)
-- Row and column sorting with custom logic
-- Ascending/descending configuration
-- Programmatic sorting operations and aggregates
+- Row and column sorting
+- Ascending/descending order configuration
+- Custom sorting logic
+- Programmatic sorting operations
+- Sort order for multiple fields
+- Sort settings API
+- Sorting with aggregates
 
 📄 **Read:** [references/grouping.md](references/grouping.md)
-- Number and date grouping by intervals (Year, Quarter, Month, Week, Day)
-- Custom grouping logic and programmatic configuration
-- Grouping events and ungroup operations
+- Enabling grouping feature
+- Number grouping with custom ranges
+- Date grouping by intervals (Year, Quarter, Month, Week, Day)
+- Custom grouping logic
+- Programmatic grouping configuration
+- Grouping events and customization
+- Group settings API
+- Ungroup operations
 
 ### Calculations & Analytics
 
 📄 **Read:** [references/aggregation.md](references/aggregation.md)
-- Built-in aggregation types (Sum, Count, Average, Min, Max, Product, DistinctCount, etc.)
-- Custom aggregation functions and multiple aggregations
-- Summary and dynamic aggregation configuration
+- Built-in aggregation types (Sum, Count, Average, Min, Max, Product, DistinctCount, Median, etc.)
+- Setting aggregation type for value fields
+- Creating custom aggregation functions
+- Applying multiple aggregations to the same field
+- Summary customization options
+- Aggregation settings API
+- Dynamic aggregation changes
 
 📄 **Read:** [references/calculated-field.md](references/calculated-field.md)
 - Creating calculated fields with formulas
@@ -369,13 +395,32 @@ pivotTableObj.appendTo('#PivotTable');
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/styles/styles.css" />
 </head>
 <body>
     <div id="PivotTable"></div>
 </body>
 </html>
 ```
+
+For the new theme import pattern, install the `Tailwind 3` theme package and import the component-specific styles:
+
+```bash
+npm install @syncfusion/ej2-tailwind3-theme --save
+```
+
+```css
+/* In src/styles/styles.css */
+@import '../../node_modules/@syncfusion/ej2-tailwind3-theme/styles/pivotview/index.css';
+```
+
+**Available theme packages:**
+- `@syncfusion/ej2-tailwind3-theme` (Tailwind 3 - default)
+- `@syncfusion/ej2-material-theme` (Material)
+- `@syncfusion/ej2-bootstrap5-theme` (Bootstrap 5)
+- `@syncfusion/ej2-fluent-theme` (Fluent)
+- `@syncfusion/ej2-fabric-theme` (Fabric)
+- `@syncfusion/ej2-high-contrast-theme` (High Contrast)
 
 ## Common Patterns
 

@@ -199,7 +199,18 @@ Use this skill when the user needs to:
 
 ## Quick Start
 
+```bash
+npm install @syncfusion/ej2-angular-richtexteditor
+```
+```bash
+npm install @syncfusion/ej2-tailwind3-theme
+```
 ### HTML Editor (WYSIWYG)
+
+```css
+/* styles.css */
+@import '../node_modules/@syncfusion/ej2-tailwind3-theme/styles/rich-text-editor/index.css';
+```
 
 ```typescript
 import { RichTextEditor, Toolbar, Link, Image, HtmlEditor, QuickToolbar } from '@syncfusion/ej2-richtexteditor';
@@ -219,18 +230,6 @@ editor.appendTo('#editor');
 ```html
 <!-- index.html -->
 <div id="editor"></div>
-```
-
-```css
-/* styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-lists/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-richtexteditor/styles/tailwind3.css';
 ```
 
 ### Markdown Editor

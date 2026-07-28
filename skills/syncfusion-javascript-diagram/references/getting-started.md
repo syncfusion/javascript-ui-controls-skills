@@ -47,22 +47,23 @@ npm install @syncfusion/ej2-diagrams --save
 
 ### Step 4: Import CSS Styles
 
+The Diagram component needs Syncfusion® theme styles to display correctly. Syncfusion® theme packages include ready-to-use styles for supported control.
+
+To add the styles, install the Tailwind 3 theme package using the following command:
+
+```bash
+npm install @syncfusion/ej2-tailwind3-theme
+```
+
 Edit `src/styles/styles.css` and add Diagram styles:
 
 ```css
-/* Import Diagram and dependency styles in order */
-@import '../../node_modules/@syncfusion/ej2-diagrams/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+  @import "../node_modules/@syncfusion/ej2-tailwind3-theme/styles/diagram/index.css";
 ```
 
-**Available Themes:**
-- `material.css` - Material Design
-- `bootstrap.css` - Bootstrap theme
-- `fabric.css` - Fluent/Office Design
-- `bootstrap4.css` - Bootstrap 4 theme
+For the list of available themes, refer to the [Themes](https://ej2.syncfusion.com/documentation/appearance/theme) documentation.
+
+N> Syncfusion® provides multiple built-in themes. If the application uses a different theme, replace **@syncfusion/ej2-tailwind3-theme/styles/diagram/index.css** with the corresponding stylesheet from the desired theme package. For example, to use the Material 3 theme, import **@syncfusion/ej2-material3-theme/styles/diagram/index.css**.
 
 ### Step 5: Create HTML Container
 

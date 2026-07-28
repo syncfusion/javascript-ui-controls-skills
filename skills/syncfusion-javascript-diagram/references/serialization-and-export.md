@@ -10,6 +10,8 @@ Serialization saves and loads diagram data as JSON. Export converts diagrams to 
 - **Print** - Print diagram on paper
 - **Visio** - Import/export Visio files
 - **Data Binding** - Populate from external sources
+- **Mermaid Syntax** - Import/export diagrams using Mermaid format
+- **Unsaved Changes Detection** - Use `isModified` to track unsaved changes.
 
 ## Serializing Diagrams
 
@@ -37,8 +39,24 @@ let savedData: string = diagram.saveDiagram();
 ```ts
 // Load Diagram from stored JSON string
 diagram.loadDiagram(savedData);
-
 ```
+
+### Detect Unsaved Changes
+
+The `isModified` property returns `true` whenever the diagram has unsaved changes — node/connector edits, property updates, or undo/redo actions. Use it to show save indicators or warn before discarding changes.
+
+```ts
+// Check whether the diagram has unsaved changes.
+if (diagram.isModified) {
+    const confirmed = confirm('There are unsaved changes. Discard them?');
+    if (!confirmed) {
+        // User wants to keep the diagram
+        return;
+    }
+}
+```
+
+> **Note:** Transient interactions such as zooming, panning, or selecting elements do not affect the `isModified` state.
 
 ### Save/Load diagram from local storage
 
@@ -271,6 +289,90 @@ diagram.appendTo('#diagram');
 document.getElementById('exportVSDX').onclick = () => {
   diagram.exportToVisio();
 };
+```
+
+## Importing and Exporting with Mermaid Syntax
+
+The Diagram control supports saving and loading diagrams using Mermaid syntax format. Mermaid is a Markdown-inspired syntax that automatically generates diagrams. With this functionality, you can easily create mind maps, flowcharts, and UML sequence diagrams from Mermaid syntax data, simplifying the visualization of complex ideas and processes.
+
+### Save Diagram as Mermaid Syntax
+
+You can export your diagram to Mermaid syntax format using the `saveDiagramAsMermaid()` method:
+
+```ts
+import { Diagram, FlowchartLayout, DataBinding } from '@syncfusion/ej2-diagrams';
+import { DataManager } from '@syncfusion/ej2-data'
+Diagram.Inject(FlowchartLayout, DataBinding);
+
+let flowchartData = [
+    { id: 'start', label: 'Start', parentId: '' },
+    { id: 'input', label: 'Input', parentId: 'start' },
+    { id: 'end', label: 'End', parentId: 'input' }
+  ];
+
+let diagram: Diagram = new Diagram({
+  width: '100%',
+  height: '600px',
+  layout:{ type: 'Flowchart' },
+  dataSourceSettings: {
+    dataManager: new DataManager(flowchartData),
+    id: 'id', parentId: 'parentId'
+  }
+});
+
+diagram.appendTo('#element');
+
+// Returns the serialized Mermaid string of the Diagram
+let mermaidData = diagram.saveDiagramAsMermaid();
+console.log(mermaidData);
+```
+
+### Load Flowchart from Mermaid
+
+```ts
+import { Diagram, FlowchartLayout, DataBinding } from '@syncfusion/ej2-diagrams';
+Diagram.Inject(FlowchartLayout, DataBinding);
+
+let diagram: Diagram = new Diagram({
+  width: '100%',
+  height: '600px',
+  layout:{ type: 'Flowchart' }
+});
+
+diagram.appendTo('#element');
+
+let mermaidFlowchartData: string = `flowchart TD
+    A[Start] --> B(Process)
+    B --> C{Decision}
+    C -->|Yes| D[Action]
+    C -->|No| E[End]`;
+
+diagram.loadDiagramFromMermaid(mermaidFlowchartData);
+```
+
+### Load MindMap from Mermaid
+
+```ts
+import { Diagram, MindMap, DataBinding } from '@syncfusion/ej2-diagrams';
+Diagram.Inject(MindMap, DataBinding);
+
+let diagram: Diagram = new Diagram({
+  width: '100%',
+  height: '600px',
+  layout:{ type: 'MindMap' }
+});
+
+diagram.appendTo('#element');
+
+let mermaidMindmapData: string = `mindmap
+  root((Central Idea))
+    Branch 1
+      Sub-branch 1.1
+      Sub-branch 1.2
+    Branch 2
+      Sub-branch 2.1`;
+
+diagram.loadDiagramFromMermaid(mermaidMindmapData);
 ```
 
 ## Undo/Redo History

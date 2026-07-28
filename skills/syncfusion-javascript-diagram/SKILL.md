@@ -44,14 +44,17 @@ Before generating code for these features, **always include** the corresponding 
 
 | Feature | Required Injection |
 |---|---|
+| Entity Relationship Diagrams | `Diagram.Inject(ErDiagrams)` |
 | BPMN diagrams | `Diagram.Inject(BpmnDiagrams)` |
 | Export / Print | `Diagram.Inject(PrintAndExport)` |
 | Mind Map layout | `Diagram.Inject(MindMap)` |
 | Complex Hierarchical layout | `Diagram.Inject(ComplexHierarchicalTree)` |
 | Hierarchical or Organizational layout | `Diagram.Inject(HierarchicalTree)` |
+| UML Sequence Diagrams | No additional injection required |
 | Undo/Redo | `Diagram.Inject(UndoRedo)` |
 | Line Distribution | `Diagram.Inject(LineDistribution)` |
 | Line Routing | `Diagram.Inject(LineRouting)` |
+| Mermaid Syntax | `Diagram.Inject(FlowchartLayout, DataBinding)` or `Diagram.Inject(MindMap, DataBinding)` |
 
 Do **NOT** assume any other injections exist unless confirmed in reference files.
 
@@ -95,14 +98,15 @@ The Diagram control is a feature-rich component for creating interactive, editab
 | 📄 [shapes-and-styles.md](references/shapes-and-styles.md) | Flow/Basic/Path/Image/HTML/Native shapes, fill, stroke, gradient, opacity |
 | 📄 [data-binding-and-loading.md](references/data-binding-and-loading.md) | DataSourceSettings, JSON loading, parent-child mapping, dynamic updates |
 | 📄 [layout-and-automation.md](references/layout-and-automation.md) | Hierarchical, org chart, mind map, radial, symmetric layouts, orientation |
-| 📄 [bpmn-diagrams.md](references/bpmn-diagrams.md) | BPMN module injection, events, gateways, activities, data objects |
-| 📄 [uml-diagrams.md](references/uml-diagrams.md) | UML class/sequence/activity diagrams, classifiers, relationships |
+| 📄 [bpmn-diagrams.md](references/bpmn-diagrams.md) | BPMN module injection, events, gateways, activities, data objects, annotations |
+| 📄 [uml-diagrams.md](references/uml-diagrams.md) | UML class diagrams, UML sequence diagrams, classifiers, relationships, participants, messages, fragments |
+| 📄 [entity-relationship-diagrams.md](references/entity-relationship-diagrams.md) | ER entities, entity fields, data types, primary/foreign keys, relationships, Crow's Foot multiplicity, ERD styling |
 | 📄 [swimlanes.md](references/swimlanes.md) | Swimlane structure, lanes, phases, header config, interaction |
 | 📄 [groups-and-containers.md](references/groups-and-containers.md) | Grouping nodes, Canvas/Stack/Grid containers, nesting, boundaries |
 | 📄 [symbol-palette.md](references/symbol-palette.md) | SymbolPaletteComponent, drag-drop, categories, custom symbols, search |
 | 📄 [interaction-and-tools.md](references/interaction-and-tools.md) | Drawing tools, selection, constraints, pan/zoom, events, undo/redo |
 | 📄 [styling-and-appearance.md](references/styling-and-appearance.md) | CSS theming, colors, fonts, accessibility, responsive design |
-| 📄 [serialization-and-export.md](references/serialization-and-export.md) | Save/load diagrams as JSON, export to image/PDF, print, Visio support |
+| 📄 [serialization-and-export.md](references/serialization-and-export.md) | Save/load diagrams as JSON, prevent defaults, detect unsaved changes, export to image/PDF/Visio, Mermaid syntax, uploader support |
 | 📄 [diagram-settings.md](references/diagram-settings.md) | Layers, virtualization, grid, ruler, scroll, page settings, tooltip, localization |
 | 📄 [advanced-features.md](references/advanced-features.md) | Undo/redo, custom commands, toolbars, performance optimization |
 

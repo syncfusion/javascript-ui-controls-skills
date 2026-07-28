@@ -36,41 +36,21 @@ npm install @syncfusion/ej2-richtexteditor
 npm run dev
 ```
 
-**Package dependency tree:**
-
-```
-@syncfusion/ej2-richtexteditor
-  ├── @syncfusion/ej2-base
-  ├── @syncfusion/ej2-buttons
-  ├── @syncfusion/ej2-data
-  ├── @syncfusion/ej2-inputs
-  ├── @syncfusion/ej2-lists
-  ├── @syncfusion/ej2-navigations
-  ├── @syncfusion/ej2-popups
-  ├── @syncfusion/ej2-splitbuttons
-  └── @syncfusion/ej2-filemanager
-```
-
-All dependencies are pulled in automatically when you install `@syncfusion/ej2-richtexteditor`.
-
----
-
 ## CSS Imports
 
-Add these to `src/style.css` (tailwind3 theme):
+Install the theme package that matches your application. This example uses `Tailwind 3`:
 
-```css
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-lists/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-richtexteditor/styles/tailwind3.css';
+```bash
+npm install @syncfusion/ej2-tailwind3-theme
 ```
 
-> Replace `tailwind3` with your theme: `material`, `bootstrap5`, `fabric`, `fluent2`, `tailwind3-dark`, etc. Use the same theme name across all imports.
+Add the following stylesheet in `src/styles.css`
+
+```css
+@import '../node_modules/@syncfusion/ej2-tailwind3-theme/styles/rich-text-editor/index.css';
+```
+
+> Replace `tailwind3` with your preferred theme name (`material3`, `bootstrap5`, `fabric`, `fluent2`, etc) install the corresponding package, and use the same theme name in the CSS import path.
 
 ---
 

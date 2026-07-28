@@ -14,7 +14,7 @@
 Aggregation in the Pivot View allows end users to perform calculations on groups of values, specifically for value fields placed in the value axis. By default, values are combined by summing them, but the component supports a wide range of aggregation types for different analytical needs.
 
 **Key Capabilities:**
-- 21 built-in aggregation types
+- 24 built-in aggregation types
 - Runtime aggregation changes via UI
 - Field-specific aggregation configuration
 - Support for both numeric and non-numeric fields
@@ -52,6 +52,7 @@ Aggregation in the Pivot View allows end users to perform calculations on groups
 |------|-------------|----------|
 | Index | Index value for selected data | Comparative indexing |
 | RunningTotals | Cumulative totals | Year-to-date, running balances |
+| PercentageOfRunningTotals | Cumulative percentage of running totals (client-side engine only) | Running total percentages |
 | DifferenceFrom | Difference from base item | Variance analysis |
 | PercentageOfDifferenceFrom | Percentage difference from base | Growth rates, % change |
 | PercentageOfGrandTotal | Percentage of overall total | Market share analysis |
@@ -140,6 +141,34 @@ values: [
     }
 ]
 ```
+
+### Percentage of Running Totals Configuration
+
+The `PercentageOfRunningTotals` aggregation type displays cumulative percentage of running totals. This is useful for tracking the percentage progression of cumulative values over a dimension. **Note: This aggregation type is client-side engine only.**
+
+```typescript
+let pivotTableObj: PivotView = new PivotView({
+    dataSourceSettings: {
+        dataSource: pivotData as IDataSet[],
+        columns: [{ name: 'Year' }],
+        values: [
+            {
+                name: 'Amount',
+                caption: 'Running Total %',
+                type: 'PercentageOfRunningTotals'
+            }
+        ],
+        rows: [{ name: 'Country' }]
+    },
+    height: 350
+});
+pivotTableObj.appendTo('#PivotTable');
+```
+
+This aggregation is particularly useful for:
+- Tracking cumulative sales percentage across regions
+- Monitoring revenue accumulation percentage over quarters
+- Analyzing progressive percentage contribution by categories
 
 ## Runtime Aggregation Changes
 

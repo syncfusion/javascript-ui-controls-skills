@@ -6,7 +6,7 @@
 - [Dependencies and Packages](#dependencies-and-packages)
 - [Installation Methods](#installation-methods)
 - [Setup Development Environment](#setup-development-environment)
-- [Import Syncfusion Styles and Themes](#import-syncfusion-styles-and-themes)
+- [Import Syncfusion CSS Styles](#import-syncfusion-css-styles)
 - [Browser Compatibility](#browser-compatibility)
 - [Initialize Pivot View Component](#initialize-pivot-view-component)
 - [Assign Sample Data](#assign-sample-data)
@@ -115,28 +115,31 @@ project-root/
 └── webpack.config.js
 ```
 
-## Import Syncfusion Styles and Themes
+## Import Syncfusion CSS Styles
 
-Syncfusion provides several built-in themes. Import the theme CSS in your `styles.css` file:
+Themes for Syncfusion JavaScript controls can be applied using CSS or SASS files from the [npm theme packages](https://ej2.syncfusion.com/documentation/appearance/theme#theme-packages), CDN, CRG, or [Theme Studio](https://ej2.syncfusion.com/documentation/appearance/theme-studio). For more information, refer to the [themes documentation](https://ej2.syncfusion.com/documentation/appearance/theme).
 
-```css
-/* Import Tailwind3 theme (default) */
-@import "../../node_modules/@syncfusion/ej2/tailwind3.css";
+The following example demonstrates the installation of the `Tailwind 3` theme package from npm. Each component in this theme package includes an `index.css` file that automatically loads all required dependency styles.
 
-/* Or choose another theme: */
-/* @import "../../node_modules/@syncfusion/ej2/material.css"; */
-/* @import "../../node_modules/@syncfusion/ej2/bootstrap5.css"; */
-/* @import "../../node_modules/@syncfusion/ej2/fluent.css"; */
-/* @import "../../node_modules/@syncfusion/ej2/fabric.css"; */
+To install the [Tailwind 3](https://www.npmjs.com/package/@syncfusion/ej2-tailwind3-theme) theme package, use the following command:
+
+```bash
+npm install @syncfusion/ej2-tailwind3-theme --save
 ```
 
-**Available themes:**
-- Material
-- Bootstrap 5
-- Tailwind 3
-- Fluent
-- Fabric
-- High Contrast
+Import the required theme styles in the `~/src/styles/styles.css` file:
+
+```css
+@import '../../node_modules/@syncfusion/ej2-tailwind3-theme/styles/pivotview/index.css';
+```
+
+**Available theme packages:**
+- `@syncfusion/ej2-tailwind3-theme` (Tailwind 3 - default)
+- `@syncfusion/ej2-material-theme` (Material)
+- `@syncfusion/ej2-bootstrap5-theme` (Bootstrap 5)
+- `@syncfusion/ej2-fluent-theme` (Fluent)
+- `@syncfusion/ej2-fabric-theme` (Fabric)
+- `@syncfusion/ej2-high-contrast-theme` (High Contrast)
 
 ## Browser Compatibility
 
