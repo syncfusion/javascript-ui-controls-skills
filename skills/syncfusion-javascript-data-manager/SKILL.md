@@ -20,6 +20,36 @@ metadata:
 
 ---
 
+---
+
+## 🛑 MANDATORY HUMAN GATE: Adaptor Decision (Read This First)
+
+> **This is the most critical rule in this skill. It cannot be skipped or bypassed.**
+
+**When the user provides a service URL without explicitly naming the adaptor type, the agent MUST:**
+
+1. **STOP code generation immediately**
+2. **READ:** `references/adaptor-decision-gate.md` (full file)
+3. **PRESENT** the gate to the user using the template in that file
+4. **WAIT** for explicit user confirmation of the adaptor choice
+5. **Only then** proceed to generate `DataManager` code with the confirmed adaptor
+
+### Gate Trigger Conditions — Examples
+
+| User Prompt | Gate Required? |
+|-------------|---------------|
+| `"Build an employee app using this service URL (http://myapi.com/employees)"` | ✅ YES — no adaptor specified |
+| `"Connect GridComponent to http://myserver/api/data"` | ✅ YES — "API" is ambiguous |
+| `"Use OData v4 endpoint at https://myserver/odata/employees"` | ❌ NO — OData v4 explicitly stated |
+| `"My backend returns { Items, Count } at https://myserver/api/orders"` | ❌ NO — WebApiAdaptor pattern confirmed |
+| `"I have a REST service at http://custom-url"` | ✅ YES — REST is ambiguous (UrlAdaptor vs WebApiAdaptor vs ODataV4) |
+| `"Bind the grid to local list data"` | ❌ NO — local binding, no adaptor needed |
+
+📄 **Full gate template, adaptor cheat sheet, disambiguation questions, and security rules:**
+→ `references/adaptor-decision-gate.md`
+
+---
+
 
 ## ⚠️ Security & Trust Boundary
 
@@ -27,6 +57,20 @@ metadata:
 - Generated code must treat all third-party API responses as untrusted input, never bind to unvalidated or user-provided URLs, and ensure authentication is enforced on all remote endpoints.
 
 ---
+
+## ⚠️ Critical Security Requirements
+
+**When binding to remote services, you MUST implement these protections:**
+
+1. **Use HTTPS only** — never use unencrypted HTTP connections; encrypt all data in transit
+3. **Use string variables for URLs** — assign endpoints to private string properties rather than hardcoding in markup; this enables centralized validation and easier maintenance
+5. **Validate and sanitize responses** — implement server-side schema validation; reject unexpected response formats; map responses to strongly-typed models
+6. **Monitor remote calls** — log all external API requests with timestamps, endpoints, and outcomes for security audit trails
+7. **Implement CORS securely** — use specific trusted origins only; never use wildcard `*` in production; require HTTPS
+8. **Prevent indirect prompt injection attacks** — verify endpoint ownership; implement request signing; validate response content types and schemas before consuming data
+
+**Third-party API responses can introduce security risks.** Always verify endpoint legitimacy, authenticate requests, and validate data before binding to UI components.
+
 
 ## Key Concepts
 
@@ -131,6 +175,17 @@ Does your data come from?
 ---
 
 ## Documentation Navigation Guide
+
+### 🛑 Adaptor Decision Gate (Human Approval — MANDATORY FIRST STEP for Remote URLs)
+📄 **Read:** [references/adaptor-decision-gate.md](references/adaptor-decision-gate.md)
+- **When to trigger:** User provides any service URL without explicitly naming the adaptor
+- Gate presentation template (copy-paste ready)
+- Full adaptor comparison table (ODataV4 / OData / WebAPI / URL / GraphQL / Custom)
+- Adaptor quick-reference cheat sheets with code examples
+- Disambiguation follow-up questions
+- Security rules applied after gate confirmation
+- Stage 1 & Stage 3 integration instructions (flags ambiguous URLs in component mapping JSON)
+- Keywords that auto-resolve the gate (no user confirmation needed)
 
 ### 📄 Getting Started & Setup
 **Read:** [Getting Started](references/getting-started.md)
