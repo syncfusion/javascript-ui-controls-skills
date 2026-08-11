@@ -130,14 +130,7 @@ loginButton.appendTo('#loginBtn');
 Add to `src/styles/styles.css`:
 
 ```css
-/* Fluent2 theme for base components */
-@import "../../node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-
-/* Fluent2 theme for navigation components (AppBar, Menu, etc.) */
-@import "../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css";
-
-/* Optional: Button styles for integration */
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/appbar/index.css";
 ```
 
 ### Available Themes

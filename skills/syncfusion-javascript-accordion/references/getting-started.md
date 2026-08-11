@@ -32,8 +32,7 @@ npm install @syncfusion/ej2-navigations @syncfusion/ej2-base
 Add the required CSS files to your application. Choose your preferred theme (fluent2, material, bootstrap, etc.):
 
 ```css
-@import '@syncfusion/ej2-base/styles/fluent2.css';
-@import '@syncfusion/ej2-navigations/styles/fluent2.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/accordion/index.css";
 ```
 
 Or in HTML:

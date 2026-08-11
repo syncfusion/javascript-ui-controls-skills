@@ -53,8 +53,7 @@ Import the required stylesheets in your global stylesheet. The `ej2-base` styles
 
 ```css
 /* src/styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/message/index.css";
 ```
 
 Then import the stylesheet in your entry file:

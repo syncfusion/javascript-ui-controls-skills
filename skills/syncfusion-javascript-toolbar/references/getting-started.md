@@ -71,10 +71,7 @@ The QuickStart project comes preconfigured with:
 Add the following CSS imports to `src/styles/styles.css`:
 
 ```css
-@import '../../node_modules/@syncfusion/ej2-base/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/toolbar/index.css";
 ```
 
 **Theme Options:**

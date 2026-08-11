@@ -56,10 +56,7 @@ Add all required CSS files in your global stylesheet:
 
 ```css
 /* src/styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/toast/index.css";
 ```
 
 Other available themes: `material.css`, `bootstrap5.css`, `fluent.css`, `fabric.css`

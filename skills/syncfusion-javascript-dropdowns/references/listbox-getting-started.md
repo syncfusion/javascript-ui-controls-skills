@@ -34,17 +34,13 @@ Syncfusion provides multiple theme options. Link the CSS in your HTML file or im
 
 ```html
 <!-- index.html -->
-<link href="node_modules/@syncfusion/ej2-base/styles/tailwind3.css" rel="stylesheet" />
-<link href="node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
-<link href="node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css" rel="stylesheet" />
+<link href="../../node_modules/@syncfusion/ej2-fluent2-theme/styles/list-box/index.css" rel="stylesheet" />
 ```
 
 ### Via ES Module import (Webpack / Vite)
 
 ```ts
-import '@syncfusion/ej2-base/styles/tailwind3.css';
-import '@syncfusion/ej2-inputs/styles/tailwind3.css';
-import '@syncfusion/ej2-dropdowns/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/list-box/index.css";
 ```
 
 ### Available Themes
@@ -68,9 +64,7 @@ The ListBox renders into a `<div>` element. Provide a container element with an 
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="node_modules/@syncfusion/ej2-base/styles/tailwind3.css" rel="stylesheet" />
-  <link href="node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css" rel="stylesheet" />
-  <link href="node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css" rel="stylesheet" />
+  <link href="../../node_modules/@syncfusion/ej2-fluent2-theme/styles/list-box/index.css" rel="stylesheet" />
 </head>
 <body>
   <div id="listbox"></div>

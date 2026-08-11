@@ -129,10 +129,7 @@ npm install
 **Step 2:** Import CSS in `~/src/styles/styles.css`:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-popups/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/progress-button/index.css";
 ```
 
 **Step 3:** Add the button element in `src/index.html`:

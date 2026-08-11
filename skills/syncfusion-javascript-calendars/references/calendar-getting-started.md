@@ -37,8 +37,7 @@ Or in TypeScript/CSS:
 
 ```css
 /* styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/material3.css';
-@import '../node_modules/@syncfusion/ej2-calendars/styles/material3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/calendar/index.css";
 ```
 
 ## Quick App Example

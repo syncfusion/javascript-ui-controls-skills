@@ -58,8 +58,7 @@ This installs all required dependencies including the `@syncfusion/ej2` package.
 Add Sidebar and base styles to your `src/styles/styles.css`:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/sidebar/index.css";
 ```
 
 > **Tip**: Use the [Custom Resource Generator (CRG)](url) to generate optimized combined styles.

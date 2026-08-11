@@ -36,9 +36,7 @@ npm install
 Import the Syncfusion styles for Carousel and its dependencies. Add to `src/styles/styles.css`:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/carousel/index.css";
 ```
 
 Syncfusion supports multiple themes. Replace `fluent2` with your preferred theme:

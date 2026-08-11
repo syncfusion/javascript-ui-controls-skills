@@ -51,10 +51,7 @@ Import all required theme CSS files (example uses Material theme):
 
 ```css
 /* In your styles.css or index.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/slider/index.css";
 ```
 
 > Popups CSS is required for tooltip rendering. Buttons CSS is required for increment/decrement buttons.

@@ -49,9 +49,7 @@ npm install
 Add the required CSS imports to your `styles.css` file:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-popups/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/stepper/index.css";
 ```
 
 Themes available: `fluent2`, `bootstrap`, `bootstrap4`, `fabric`, `highcontrast`, `material`, `office365`, `tailwind`

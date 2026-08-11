@@ -35,11 +35,7 @@ Import the theme CSS in your styles file:
 
 ```css
 /* styles.css */
-@import '~@syncfusion/ej2-base/styles/material.css';
-@import '~@syncfusion/ej2-inputs/styles/material.css';
-@import '~@syncfusion/ej2-lists/styles/material.css';
-@import '~@syncfusion/ej2-popups/styles/material.css';
-@import '~@syncfusion/ej2-dropdowns/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/drop-down-list/index.css";
 ```
 
 ## Basic Initialization

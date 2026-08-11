@@ -140,7 +140,7 @@ In your TypeScript main file or CSS import:
 
 ```typescript
 // Import Syncfusion theme
-import '@syncfusion/ej2-inputs/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/uploader/index.css";
 
 // Or other themes:
 // import '@syncfusion/ej2-inputs/styles/bootstrap.css';

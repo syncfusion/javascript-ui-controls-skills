@@ -32,10 +32,7 @@ npm install @syncfusion/ej2-splitbuttons --save
 Add the required CSS files to your HTML file or CSS imports:
 
 ```css
-@import "../node_modules/@syncfusion/ej2-base/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css";
-@import "../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind3.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/drop-down-button/index.css";
 ```
 
 Or include via CDN in HTML:

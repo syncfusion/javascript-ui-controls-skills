@@ -57,8 +57,7 @@ npm install @syncfusion/ej2-inputs
 Import a built-in theme in `src/styles/styles.css`. The **Material** theme is recommended as a starting point:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/signature/index.css";
 ```
 
 Other available themes: `fabric`, `bootstrap`, `bootstrap4`, `highcontrast`, `tailwind`.

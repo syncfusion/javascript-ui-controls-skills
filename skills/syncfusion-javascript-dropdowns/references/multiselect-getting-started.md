@@ -58,23 +58,13 @@ Syncfusion provides multiple built-in themes. Import the necessary CSS files for
 #### Material Theme
 
 ```css
-@import '@syncfusion/ej2-base/styles/material.css';
-@import '@syncfusion/ej2-buttons/styles/material.css';
-@import '@syncfusion/ej2-inputs/styles/material.css';
-@import '@syncfusion/ej2-popups/styles/material.css';
-@import '@syncfusion/ej2-lists/styles/material.css';
-@import '@syncfusion/ej2-dropdowns/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/multi-select/index.css";
 ```
 
 #### Bootstrap Theme
 
 ```css
-@import '@syncfusion/ej2-base/styles/bootstrap.css';
-@import '@syncfusion/ej2-buttons/styles/bootstrap.css';
-@import '@syncfusion/ej2-inputs/styles/bootstrap.css';
-@import '@syncfusion/ej2-popups/styles/bootstrap.css';
-@import '@syncfusion/ej2-lists/styles/bootstrap.css';
-@import '@syncfusion/ej2-dropdowns/styles/bootstrap.css';
+@import "../../node_modules/@syncfusion/ej2-bootstrap-theme/styles/multi-select/index.css";
 ```
 
 ### Available Themes
@@ -303,8 +293,7 @@ const multiSelect = new MultiSelect({
 
 ```typescript
 // In your main file or CSS file:
-import '@syncfusion/ej2-base/styles/material.css';
-import '@syncfusion/ej2-dropdowns/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/multi-select/index.css";
 
 // Then initialize component
 const multiSelect = new MultiSelect({ ... });

@@ -30,8 +30,7 @@ Import the required CSS styles. Use the Material theme or any other built-in Syn
 
 ```css
 /* styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/otp-input/index.css";
 ```
 
 ---

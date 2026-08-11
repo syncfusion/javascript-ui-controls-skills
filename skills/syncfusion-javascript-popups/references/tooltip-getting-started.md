@@ -31,8 +31,7 @@ Add Syncfusion theme CSS in your global stylesheet:
 
 ```css
 /* src/styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/tooltip/index.css";
 ```
 
 Then import the stylesheet in your entry file:

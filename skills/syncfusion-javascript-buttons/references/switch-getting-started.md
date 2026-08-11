@@ -59,11 +59,7 @@ Choose one of the available themes and add it to your HTML or import it in your 
 **Or in your CSS/TypeScript:**
 
 ```typescript
-import '@syncfusion/ej2-buttons/styles/material3.css';
-// or
-import '@syncfusion/ej2-buttons/styles/bootstrap5.css';
-import '@syncfusion/ej2-buttons/styles/fluent2.css';
-import '@syncfusion/ej2-buttons/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/switch/index.css";
 ```
 
 ### Available Themes

@@ -62,9 +62,7 @@ npm install @syncfusion/ej2-navigations
 Add Syncfusion CSS styles to your `~/src/styles/styles.css` file:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/context-menu/index.css";
 ```
 
 Available themes: `bootstrap5.css`, `fabric.css`, `fluent.css`, `fluent2.css`, `highcontrast.css`, `material.css`, `material3.css`, `tailwind.css`

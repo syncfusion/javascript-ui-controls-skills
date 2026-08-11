@@ -26,12 +26,7 @@ npm install @syncfusion/ej2-navigations
 Add the following CSS imports to `src/styles/styles.css`:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-popups/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-lists/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-inputs/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/menu/index.css";
 ```
 
 Alternatively, use CDN links in your HTML `<head>`:

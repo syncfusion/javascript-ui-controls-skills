@@ -55,8 +55,7 @@ This will install all Syncfusion controls and dependencies including the Timelin
 To render the Timeline control with proper styling, import the required CSS styles in your `~/src/styles/styles.css` file:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/fluent2.css";
-@import "../../node_modules/@syncfusion/ej2-layouts/styles/fluent2.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/timeline/index.css";
 ```
 
 These imports provide:

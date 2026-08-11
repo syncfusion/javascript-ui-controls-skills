@@ -58,8 +58,7 @@ Add an `<input>` element as the mount point in `src/index.html`:
 Import the CSS theme in `src/styles/styles.css`. The Material theme is the recommended default:
 
 ```css
-@import '../../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/textbox/index.css";
 ```
 
 Other available themes: `bootstrap4`, `bootstrap5`, `fluent`, `tailwind`, `highcontrast`.

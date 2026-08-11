@@ -36,7 +36,7 @@ Import a built-in theme in your stylesheet or entry file. The `material.css` bun
 
 ```css
 /* Option 1: Full bundle — import once in your main CSS or index.ts */
-@import '../node_modules/@syncfusion/ej2/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/mention/index.css";
 ```
 
 For a smaller build, import only the required component styles:

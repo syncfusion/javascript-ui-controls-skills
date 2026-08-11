@@ -174,8 +174,7 @@ Complete example with HTML, CSS, and TypeScript:
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="node_modules/@syncfusion/ej2-base/styles/material.css">
-  <link rel="stylesheet" href="node_modules/@syncfusion/ej2-navigations/styles/material.css">
+  <link rel="stylesheet" href="node_modules/@syncfusion/ej2-fluent2-theme/styles/breadcrumb/index.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -233,17 +232,7 @@ Complete example with HTML, CSS, and TypeScript:
 Import the appropriate theme stylesheet before using the breadcrumb:
 
 ```typescript
-// Material theme
-import '@syncfusion/ej2-navigations/styles/material.css';
-
-// Bootstrap theme
-import '@syncfusion/ej2-navigations/styles/bootstrap.css';
-
-// Tailwind theme
-import '@syncfusion/ej2-navigations/styles/tailwind.css';
-
-// High contrast theme
-import '@syncfusion/ej2-navigations/styles/highcontrast.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/breadcrumb/index.css";
 ```
 
 ### Base CSS
@@ -251,8 +240,7 @@ import '@syncfusion/ej2-navigations/styles/highcontrast.css';
 Always include the base CSS:
 
 ```html
-<link rel="stylesheet" href="node_modules/@syncfusion/ej2-base/styles/material.css">
-<link rel="stylesheet" href="node_modules/@syncfusion/ej2-navigations/styles/material.css">
+<link rel="stylesheet" href="node_modules/@syncfusion/ej2-fluent2-theme/styles/breadcrumb/index.css">
 ```
 
 ### Custom Styling

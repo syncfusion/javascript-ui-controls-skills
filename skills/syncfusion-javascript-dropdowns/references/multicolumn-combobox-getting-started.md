@@ -42,11 +42,7 @@ Add the following theme CSS imports to your `styles.css` (or main entry). The Mu
 
 ```css
 /* styles.css */
-@import '~@syncfusion/ej2-base/styles/tailwind3.css';
-@import '~@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '~@syncfusion/ej2-grids/styles/tailwind3.css';
-@import '~@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '~@syncfusion/ej2-multicolumn-combobox/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/multicolumn-combobox/index.css";
 ```
 
 > Other themes available: `material.css`, `bootstrap5.css`, `fluent.css`, `fabric.css`. Replace `tailwind3` with the desired theme name across all imports.

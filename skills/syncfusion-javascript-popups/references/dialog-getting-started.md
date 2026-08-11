@@ -56,10 +56,7 @@ npm start
 Import the required CSS files in `src/styles/styles.css`:
 
 ```css
-@import '../../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-icons/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/dialog/index.css";
 ```
 
 Replace `material` with your preferred theme: `bootstrap5`, `bootstrap4`, `fabric`, `tailwind`, `fluent`.

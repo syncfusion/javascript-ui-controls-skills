@@ -29,9 +29,7 @@ npm install @syncfusion/ej2-inputs @syncfusion/ej2-base @syncfusion/ej2-popups
 Add the following CSS imports (Material theme shown):
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/rating/index.css";
 ```
 
 > The `ej2-popups` CSS is required because the Rating component uses a Tooltip internally.

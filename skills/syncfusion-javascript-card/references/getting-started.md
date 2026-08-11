@@ -48,8 +48,7 @@ The Card component has no external JavaScript dependencies—it's a pure CSS com
 Add the Syncfusion CSS theme to your `styles.css` file:
 
 ```css
-@import '../../node_modules/@syncfusion/ej2-base/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-layouts/styles/fluent2.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/card/index.css";
 ```
 
 ### Available Themes

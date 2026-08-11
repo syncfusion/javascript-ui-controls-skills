@@ -30,8 +30,7 @@ Import the required CSS styles for the TextArea. Use the Material theme or any o
 
 ```css
 /* styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/textarea/index.css";
 ```
 
 For CDN-based setup in `index.html`:

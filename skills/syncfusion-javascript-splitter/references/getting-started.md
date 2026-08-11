@@ -42,8 +42,7 @@ The `package.json` in the quickstart is pre-configured with the `@syncfusion/ej2
 The Splitter CSS files are available in the `@syncfusion/ej2-layouts` package. Import the theme CSS in your `src/styles/styles.css`:
 
 ```css
-@import '../../node_modules/@syncfusion/ej2-base/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-layouts/styles/fluent2.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/splitter/index.css";
 ```
 
 **Available Themes:**

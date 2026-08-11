@@ -21,10 +21,7 @@ The package includes the ComboBox along with DropDownList and AutoComplete.
 Import the required CSS files for the ComboBox and its dependencies:
 
 ```typescript
-import '@syncfusion/ej2-base/styles/material.css';
-import '@syncfusion/ej2-inputs/styles/material.css';
-import '@syncfusion/ej2-popups/styles/material.css';
-import '@syncfusion/ej2-dropdowns/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/combo-box/index.css";
 ```
 
 Replace `material` with your chosen theme: `bootstrap5`, `fabric`, `highcontrast`, `tailwind`, etc.

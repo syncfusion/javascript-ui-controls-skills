@@ -25,15 +25,7 @@ This automatically installs all required peer dependencies:
 Add CSS imports to your main style file (e.g., `styles.css`):
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-popups/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-lists/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-calendars/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-querybuilder/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/query-builder/index.css";
 ```
 
 **Available Themes:**

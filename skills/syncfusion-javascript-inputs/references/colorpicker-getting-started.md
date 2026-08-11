@@ -31,11 +31,7 @@ Import CSS in the correct order. Missing or misordered imports cause broken layo
 
 ```typescript
 // In your main TypeScript/index file or global stylesheet:
-import '@syncfusion/ej2-base/styles/material.css';
-import '@syncfusion/ej2-buttons/styles/material.css';
-import '@syncfusion/ej2-popups/styles/material.css';
-import '@syncfusion/ej2-splitbuttons/styles/material.css';
-import '@syncfusion/ej2-inputs/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/color-picker/index.css";
 ```
 
 Replace `material` with your chosen theme: `bootstrap5`, `tailwind`, `fluent`, `highcontrast`, etc.

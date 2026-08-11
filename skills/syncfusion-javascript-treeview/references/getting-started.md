@@ -45,11 +45,7 @@ npm install @syncfusion/ej2
 Include the TreeView CSS in your main stylesheet. Choose your preferred theme:
 
 ```css
-/* Fluent2 Theme (recommended) */
-@import '@syncfusion/ej2-base/styles/fluent2.css';
-@import '@syncfusion/ej2-navigations/styles/fluent2.css';
-@import '@syncfusion/ej2-inputs/styles/fluent2.css';
-@import '@syncfusion/ej2-buttons/styles/fluent2.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/treeview/index.css";
 ```
 
 **Alternative themes:**

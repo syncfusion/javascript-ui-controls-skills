@@ -37,7 +37,7 @@ Import a built-in theme in your stylesheet or TypeScript entry file:
 
 ```css
 /* Option 1: Full bundle — import once in your main CSS */
-@import '../node_modules/@syncfusion/ej2/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/auto-complete/index.css";
 ```
 
 For a smaller build, import only the required component styles:
@@ -133,7 +133,7 @@ A complete self-contained example:
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="node_modules/@syncfusion/ej2/material.css" />
+  <link rel="stylesheet" href="node_modules/@syncfusion/ej2-fluent2-theme/styles/auto-complete/index.css" />
 </head>
 <body>
   <h3>AutoComplete Demo</h3>

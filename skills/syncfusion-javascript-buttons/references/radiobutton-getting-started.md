@@ -62,8 +62,7 @@ npm install @syncfusion/ej2-buttons @syncfusion/ej2-base
 In `~/src/styles/styles.css`, import the Material theme for both the base and buttons packages:
 
 ```css
-@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
-@import "../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/radio-button/index.css";
 ```
 
 Other available themes: `bootstrap5.css`, `fabric.css`, `highcontrast.css`, `tailwind.css`.

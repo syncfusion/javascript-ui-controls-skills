@@ -67,13 +67,7 @@ The Dropdown Tree requires CSS files for styling. Import them in your `src/style
 
 ```css
 /* Core theme - you can use fluent2, bootstrap5, material, fabric, or tailwind */
-@import '../../node_modules/@syncfusion/ej2-base/styles/fluent2.css';
-
-/* Required component styles */
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-inputs/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-dropdowns/styles/fluent2.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/drop-down-tree/index.css";
 ```
 
 ### Available Themes

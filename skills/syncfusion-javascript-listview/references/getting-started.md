@@ -44,8 +44,7 @@ For TypeScript/JavaScript projects, import the theme CSS:
 
 ```typescript
 // Material theme (default)
-import '@syncfusion/ej2-base/styles/material.css';
-import '@syncfusion/ej2-lists/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/list-view/index.css";
 
 // Or use other themes:
 // import '@syncfusion/ej2-base/styles/fluent2.css';

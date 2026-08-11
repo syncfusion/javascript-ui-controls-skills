@@ -31,9 +31,7 @@ Add the following CSS imports in your global stylesheet:
 
 ```css
 /* src/styles.css */
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/fluent2.css";
 ```
 
 Then import the stylesheet in your entry file:

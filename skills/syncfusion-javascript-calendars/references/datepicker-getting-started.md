@@ -33,8 +33,7 @@ import { DatePicker } from '@syncfusion/ej2-calendars';
 
 ```html
 <!-- Material Theme -->
-<link rel="stylesheet" href="node_modules/@syncfusion/ej2-base/styles/material.css" />
-<link rel="stylesheet" href="node_modules/@syncfusion/ej2-calendars/styles/material.css" />
+<link rel="stylesheet" href="node_modules/@syncfusion/ej2-fluent2-theme/styles/datepicker/index.css" />
 ```
 
 ---

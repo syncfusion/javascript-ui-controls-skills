@@ -67,10 +67,7 @@ npm install @syncfusion/ej2-navigations @syncfusion/ej2-base @syncfusion/ej2-but
 Add CSS imports to your `src/styles/styles.css`:
 
 ```css
-@import '../../node_modules/@syncfusion/ej2-base/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/fluent2.css';
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/fluent2.css';
+@import "../../node_modules/@syncfusion/ej2-fluent2-theme/styles/tab/index.css";
 ```
 
 ### Available Themes
