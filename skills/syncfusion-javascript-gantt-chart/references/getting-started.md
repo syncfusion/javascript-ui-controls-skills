@@ -47,11 +47,18 @@ npm install --save-dev typescript webpack webpack-cli ts-loader
 
 ### Import CSS theme
 
-In `~/src/styles/styles.css`:
-```css
-@import '../../node_modules/@syncfusion/ej2/tailwind3.css';
-/* Other available themes: material3.css, bootstrap5.css, fabric.css, highcontrast.css */
+Install the **Tailwind 3** theme package using the following command:
+
+```bash
+npm install @syncfusion/ej2-tailwind3-theme --save
 ```
+
+Then add the following CSS reference to the `~/src/styles/styles.css`:
+
+```css
+@import "./node_modules/@syncfusion/ej2-tailwind3-theme/styles/gantt/index.css";
+```
+For other themes, replace `ej2-tailwind3-theme` with your chosen theme package: `ej2-material3-theme`, `ej2-bootstrap5-theme`, `ej2-fluent-theme`.
 
 ---
 

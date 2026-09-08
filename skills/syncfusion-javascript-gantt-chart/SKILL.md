@@ -122,6 +122,9 @@ gantt.appendTo('#Gantt');
 - renderBaseline, baselineColor
 - baselineStartDate, baselineEndDate, baselineDuration
 - Baseline milestones, CSS customization
+- Customizing via `queryTaskbarInfo` event (e.g., gradient styling)
+- `baselineTemplate` for custom HTML structure, including multiple baseline rendering
+- Return empty string from template for parent rows (`hasChildRecords`)
 
 ### Resources
 📄 **Read:** [references/resources.md](references/resources.md)
@@ -168,6 +171,7 @@ gantt.appendTo('#Gantt');
 - topTier / bottomTier units and format
 - timelineSettings configuration
 - Custom timeline formatting, timeline tooltip
+- Infinite timeline scrolling with enableInfiniteTimelineScroll
 
 ### Zooming
 📄 **Read:** [references/timeline.md](references/timeline.md)
@@ -384,14 +388,17 @@ gantt.appendTo('#Gantt');
 📄 **Read:** [references/gantt-methods.md](references/gantt-methods.md)
 - **Column**: `autoFitColumns(field?)`, `getGanttColumns()`, `getGridColumns()`, `refreshColumns()`, `reorderColumns(from, to)`, `removeSortColumn(field)`
 - **Row/Record lookup**: `getRecordByID(id)`, `getTaskByUniqueID(uid)`, `getRowByID(id)`, `getRowByIndex(index)`, `getTaskInfo(taskId)`, `getCurrentViewData()`, `getExpandedRecords(records)`
-- **Expand/Collapse**: `expandByIndex(index | index[])`, `collapseByIndex(index)`
-- **Edit/CRUD**: `cancelEdit()`, `deleteRecord(taskDetail)`, `updateRecordByIndex(index, data)`, `updateTaskId(currentId, newId)`, `changeTaskMode(data)`, `convertToMilestone(id)`
+- **Row reorder**: `reorderRows(fromIndexes, toIndex, position)` — programmatic row move with `position`: `'above'` | `'below'` | `'middleSegment'`; requires `allowRowDragAndDrop` + `RowDD`
+- **Expand/Collapse**: `expandByIndex(index | index[])`, `expandByID(id)`, `collapseByIndex(index)`, `collapseByID(id)`
+- **Edit/CRUD**: `cancelEdit()`, `deleteRecord(taskDetail)`, `updateRecordByIndex(index, data)`, `updateRecordByID({TaskID, ...})`, `updateTaskId(currentId, newId)`, `changeTaskMode(data)`, `convertToMilestone(id)`, `openAddDialog(data?, position?)`, `openEditDialog(id)`
 - **Dependency**: `removePredecessor(id)` — removes all dependencies from a task
 - **Split/Merge**: `splitTask(taskId, splitDate | splitDate[])`, `mergeTask(taskId, segmentIndexes)` — requires `allowTaskbarEditing`; parent/milestones cannot be split
 - **Selection**: `selectCells(rowCellIndexes)` — select cells by `{ rowIndex, cellIndexes[] }` pairs; requires `mode: 'Cell'`
 - **Scroll**: `scrollToTask(taskId)`, `setScrollTop(px)`, `updateChartScrollOffset(left, top)`
-- **Data**: `updateDataSource(dataSource, { projectStartDate, projectEndDate })`
+- **Data**: `updateDataSource(dataSource, { projectStartDate, projectEndDate })`, `updateProjectDates(projectStartDate, projectEndDate)` — refresh timeline range without swapping data
 - **Critical path**: `getCriticalTasks()` → `IGanttData[]`; requires `enableCriticalPath` + `CriticalPath` module
+- **Undo/Redo**: `getUndoActions()`, `getRedoActions()`, `clearUndoCollection()`, `clearRedoCollection()` — requires `enableUndoRedo` + `UndoRedo` module
+- **Toolbar**: `enableItems(itemIds, enable)` — enable/disable toolbar items at runtime; item IDs follow `{ganttElementId}_{itemText}` (e.g., `Gantt_add`); requires `Toolbar` module
 - **Formatting helpers**: `getDurationString(value, unit)`, `getWorkString(value, unit)`, `getTaskbarHeight()`
 - All methods use the Gantt instance directly: `gantt.methodName(args)` (TypeScript/JavaScript)
 

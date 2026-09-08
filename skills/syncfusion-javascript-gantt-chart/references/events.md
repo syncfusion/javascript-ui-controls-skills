@@ -351,5 +351,5 @@ pdfExportComplete: function(args: any) {
 | `'AfterZoomToProject'` | actionComplete | After zoom to fit |
 | `'save'` | actionComplete | After task saved |
 | `'delete'` | actionComplete | After task deleted |
-| `'validateDependency'` | actionBegin | Dependency validation |
+| `'validateLinkedTask'` | Before dependency link drawn / validated |
 | `'updateDependency'` | actionBegin | Dependency update |

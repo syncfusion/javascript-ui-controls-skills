@@ -6,6 +6,8 @@
 - [Enabling Baseline Display](#enabling-baseline-display)
 - [Baseline Milestones](#baseline-milestones)
 - [Customizing Baseline Appearance](#customizing-baseline-appearance)
+- [Customizing Baseline via Events](#customizing-baseline-via-events)
+- [Customizing Baseline Templates](#customizing-baseline-templates)
 
 ---
 
@@ -140,3 +142,155 @@ let gantt: Gantt = new Gantt({
 ```
 
 > The `baselineColor` property takes precedence as a quick configuration option. For advanced per-element control, use CSS overrides.
+
+---
+
+## Customizing Baseline via Events
+
+Use the `queryTaskbarInfo` event to dynamically customize the baseline bar (for example, applying a gradient):
+
+```typescript
+import { Gantt } from '@syncfusion/ej2-gantt';
+
+let gantt: Gantt = new Gantt({
+    dataSource: projectData,
+    height: '450px',
+    renderBaseline: true,
+    baselineColor: 'red',
+    queryTaskbarInfo: (args: any) => {
+        const element: HTMLElement | null = args.rowElement.querySelector('.e-baseline-bar');
+        if (element) {
+            element.style.background = 'linear-gradient(red, yellow)';
+        }
+    },
+    taskFields: {
+        id: 'TaskID', name: 'TaskName', startDate: 'StartDate',
+        duration: 'Duration', progress: 'Progress', parentID: 'ParentID',
+        baselineStartDate: 'BaselineStartDate',
+        baselineEndDate: 'BaselineEndDate',
+        baselineDuration: 'BaselineDuration'
+    }
+});
+gantt.appendTo('#Gantt');
+```
+
+---
+
+## Customizing Baseline Templates
+
+The `baselineTemplate` property allows customization of baseline rendering by replacing the default baseline UI with a custom HTML structure. This enables advanced scenarios such as rendering additional baseline elements, visual indicators, or multiple baselines using task-specific data.
+
+Set the `baselineTemplate` property with a template string or function. The template receives the task data object, which can be used to dynamically generate baseline elements.
+
+### Multiple Baseline Rendering Using Template
+
+By default, the Gantt component supports a single baseline per task. However, using `baselineTemplate`, you can extend this behavior to render multiple baselines by maintaining additional baseline data within custom fields in your data source.
+
+This enables rich visualization scenarios such as:
+- Comparing original vs revised schedules
+- Visualizing multiple planning phases
+- Highlighting deviations across timeline checkpoints
+
+```typescript
+import { Gantt, DayMarkers, Selection } from '@syncfusion/ej2-gantt';
+
+Gantt.Inject(DayMarkers, Selection);
+
+let gantt: Gantt = new Gantt({
+    dataSource: baselineTemplateData,
+    height: '450px',
+    renderBaseline: true,
+    baselineColor: 'red',
+    allowSelection: true,
+    highlightWeekends: true,
+    gridLines: 'Both',
+    rowHeight: 60,
+    taskbarHeight: 20,
+    splitterSettings: { columnIndex: 3 },
+    tooltipSettings: { showTooltip: false },
+    labelSettings: { taskLabel: 'TaskName' },
+    columns: [
+        { field: 'TaskID', headerText: 'ID', textAlign: 'Left' },
+        { field: 'TaskName', width: '270px', headerText: 'Name' },
+        { field: 'BaselineStartDate', headerText: 'Baseline Start Date', width: '180px' },
+        { field: 'BaselineDuration', headerText: 'Baseline Duration', width: '180px' },
+        { field: 'BaselineStartDate1', format: { skeleton: 'yMd', type: 'date' }, headerText: 'Baseline1 Start Date', width: '180px' },
+        { field: 'BaselineDuration1', headerText: 'Baseline1 Duration', width: '180px' },
+        { field: 'BaselineStartDate2', format: { skeleton: 'yMd', type: 'date' }, headerText: 'Baseline2 Start Date', width: '180px' },
+        { field: 'BaselineDuration2', headerText: 'Baseline2 Duration', width: '180px' }
+    ],
+    taskFields: {
+        id: 'TaskID', name: 'TaskName', startDate: 'StartDate',
+        endDate: 'EndDate', duration: 'Duration', progress: 'Progress',
+        parentID: 'ParentID',
+        baselineStartDate: 'BaselineStartDate',
+        baselineEndDate: 'BaselineEndDate'
+    },
+    baselineTemplate: baselineTemplate.bind(gantt)
+});
+gantt.appendTo('#Gantt');
+
+function baselineTemplate(props: any): string {
+    if (props.hasChildRecords || (props.data && props.data.hasChildRecords)) {
+        return '';
+    }
+    const taskRecord = props.taskData;
+    const ganttProperties = taskRecord.ganttProperties;
+    const chartRowsModule = gantt.chartRowsModule;
+    const baselineTop = chartRowsModule.baselineTop;
+    const baselineHeight = chartRowsModule.baselineHeight;
+    const taskBarHeight = chartRowsModule.taskBarHeight;
+    const milestoneHeight = chartRowsModule.milestoneHeight;
+    const milestoneMarginTop = chartRowsModule.milestoneMarginTop;
+    const rowHeight = gantt.rowHeight;
+    const renderBaseline = gantt.renderBaseline;
+    const enableRtl = gantt.enableRtl;
+    const taskSpacing = 9;
+    const baselineSpacing = 4;
+
+    function getLeft(date: Date): number {
+        return gantt.dataOperation.getTaskLeft(new Date(date), false, ganttProperties.calendarContext);
+    }
+    function getWidth(start: Date, duration: number): number {
+        if (!start || duration == null || duration === 0) return 0;
+        const end = new Date(start);
+        end.setDate(end.getDate() + duration);
+        const leftStart = gantt.dataOperation.getTaskLeft(new Date(start), false, ganttProperties.calendarContext);
+        const leftEnd = gantt.dataOperation.getTaskLeft(end, false, ganttProperties.calendarContext);
+        return leftEnd - leftStart;
+    }
+    function render(start: Date, duration: number, index: number): string {
+        if (!start) return '';
+        const leftPosition = getLeft(start);
+        const width = getWidth(start, duration);
+
+        // Milestone baseline (duration = 0)
+        if (duration === 0) {
+            const milestoneSize = renderBaseline ? taskBarHeight : (taskBarHeight - 10);
+            const baselineMilestoneHeight = renderBaseline ? 5 : 2;
+            const leftPositionMs = enableRtl
+                ? (leftPosition - (milestoneHeight / 2) + 3)
+                : (leftPosition - (milestoneHeight / 2) + 1);
+            const marginTop = (-Math.floor(rowHeight - milestoneMarginTop) + baselineMilestoneHeight) +
+                2 + (index * baselineSpacing);
+            return '<div class="e-baseline-gantt-milestone-container" style="position:absolute;' +
+                'width:' + milestoneSize + 'px;' +
+                'height:' + milestoneSize + 'px;' +
+                'transform:rotate(45deg);' +
+                (enableRtl ? 'right:' : 'left:') + leftPositionMs + 'px;' +
+                'margin-top:' + marginTop + 'px;"></div>';
+        }
+        // Normal baseline bar
+        return '<div class="e-baseline-bar" role="term" style="position:absolute;' +
+            (enableRtl ? 'right:' : 'left:') + leftPosition + 'px;' +
+            'margin-top:' + (baselineTop + (index * taskSpacing)) + 'px;' +
+            'width:' + width + 'px;' +
+            'height:' + baselineHeight + 'px;"></div>';
+    }
+    return ('<div class="custom-multi-baseline">' +
+        render(taskRecord.taskData.BaselineStartDate, taskRecord.taskData.BaselineDuration, 0) +
+        render(taskRecord.taskData.BaselineStartDate1, taskRecord.taskData.BaselineDuration1, 1) +
+        render(taskRecord.taskData.BaselineStartDate2, taskRecord.taskData.BaselineDuration2, 2) +
+        '</div>');
+}
+```

@@ -11,6 +11,7 @@
 - [Timeline Tooltip](#timeline-tooltip)
 - [Timeline Template](#timeline-template)
 - [Zooming](#zooming)
+- [Infinite Timeline Scrolling](#infinite-timeline-scrolling)
 
 ## Timeline View Modes
 
@@ -268,4 +269,56 @@ let gantt: Gantt = new Gantt({
         gantt.zoomingLevels = customZoomingLevels;
     }
 });
+```
+
+---
+
+## Infinite Timeline Scrolling
+
+Enable infinite horizontal scrolling so the Gantt timeline can dynamically extend the visible timeline range as the user navigates.
+
+Set `enableInfiniteTimelineScroll` to `true`.
+
+**Key behaviors**
+
+- In the forward direction, the timeline automatically extends when the user scrolls horizontally (or uses the forward scroll arrow).
+- In the backward direction, the timeline extends only when the user clicks the backward scroll arrow (dragging the scrollbar backward does not trigger extension).
+- Infinite scrolling extends only the visible timeline range and does not modify the project dates (`projectStartDate` / `projectEndDate`).
+
+```typescript
+import { Gantt } from '@syncfusion/ej2-gantt';
+
+let gantt: Gantt = new Gantt({
+    dataSource: infiniteTimelineScrollData,
+    height: '430px',
+    enableInfiniteTimelineScroll: true,
+    taskFields: {
+        id: 'TaskID',
+        name: 'TaskName',
+        startDate: 'StartDate',
+        duration: 'Duration',
+        progress: 'Progress',
+        dependency: 'Predecessor',
+        parentID: 'ParentID'
+    },
+    treeColumnIndex: 1,
+    columns: [
+        { field: 'TaskID', width: 80 },
+        { field: 'TaskName', headerText: 'Job Name', width: 250, clipMode: 'EllipsisWithTooltip' },
+        { field: 'StartDate' },
+        { field: 'Duration' },
+        { field: 'Progress' },
+        { field: 'Predecessor' }
+    ],
+    timelineSettings: {
+        viewStartDate: new Date('12/29/2025'),
+        viewEndDate: new Date('04/27/2026')
+    },
+    labelSettings: {
+        leftLabel: 'TaskID',
+        rightLabel: 'TaskName'
+    }
+});
+
+gantt.appendTo('#Gantt');
 ```
