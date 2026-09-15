@@ -1,521 +1,1459 @@
 # Accessibility & RTL Support
 
 ## Table of Contents
-- [Core Accessibility Configuration](#core-accessibility-configuration)
-- [Series Accessibility](#series-accessibility)
-- [Title & Subtitle Accessibility](#title--subtitle-accessibility)
-- [Annotations Accessibility](#annotations-accessibility)
-- [Trendlines Accessibility](#trendlines-accessibility)
-- [Zoom Settings Accessibility](#zoom-settings-accessibility)
-- [Technical Indicators Accessibility](#technical-indicators-accessibility)
-- [Legend Accessibility](#legend-accessibility)
-- [Keyboard Navigation](#keyboard-navigation)
-- [RTL Language Support](#rtl-language-support)
 
-**Note:** Accessibility configuration is identical for TypeScript and JavaScript.
+- [Accessibility & RTL Support](#accessibility--rtl-support)
+  - [Overview](#overview)
+  - [WCAG Compliance](#wcag-compliance)
+    - [Accessibility Standards](#accessibility-standards)
+    - [Core Accessibility Configuration](#core-accessibility-configuration)
+    - [Series Accessibility](#series-accessibility)
+    - [Semantic HTML](#semantic-html)
+    - [Accessible Data Table](#accessible-data-table)
+  - [Keyboard Navigation](#keyboard-navigation)
+    - [Built-In Keyboard Shortcuts](#built-in-keyboard-shortcuts)
+    - [Focus Customization](#focus-customization)
+    - [Application-Owned Controls](#application-owned-controls)
+    - [Tab Order](#tab-order)
+  - [Screen Reader Support](#screen-reader-support)
+    - [Chart Description](#chart-description)
+    - [Text Summary](#text-summary)
+    - [Announcing Dynamic Updates](#announcing-dynamic-updates)
+  - [Color and Contrast](#color-and-contrast)
+    - [Contrast Requirements](#contrast-requirements)
+    - [Colorblind-Friendly Design](#colorblind-friendly-design)
+    - [Selection Patterns](#selection-patterns)
+    - [Font Readability](#font-readability)
+  - [RTL Language Support](#rtl-language-support)
+    - [Enable RTL Mode](#enable-rtl-mode)
+    - [Document Direction](#document-direction)
+    - [RTL Axis and Legend Configuration](#rtl-axis-and-legend-configuration)
+    - [Dynamic Language Switching](#dynamic-language-switching)
+  - [Complete Accessible Chart Example](#complete-accessible-chart-example)
+  - [Complete RTL Chart Example](#complete-rtl-chart-example)
+  - [Best Practices Checklist](#best-practices-checklist)
+  - [Troubleshooting](#troubleshooting)
+    - [Chart Is Not Announced](#chart-is-not-announced)
+    - [Chart Cannot Receive Keyboard Focus](#chart-cannot-receive-keyboard-focus)
+    - [Keyboard Navigation Is Not Working](#keyboard-navigation-is-not-working)
+    - [Focus Border Is Not Visible](#focus-border-is-not-visible)
+    - [Screen Reader Does Not Announce Updates](#screen-reader-does-not-announce-updates)
 
-**API Reference:** See the [Syncfusion Documentation](https://ej2.syncfusion.com/documentation/chart/advanced-accessibility-configuration) for comprehensive API details.
 
-## Core Accessibility Configuration
+## Overview
 
-The Chart control exposes the following accessibility attributes:
+The EJ2 Chart supports accessibility through WAI-ARIA semantics, keyboard navigation, screen-reader descriptions, visible focus indicators, accessible series configuration, high-contrast themes, right-to-left rendering, and application-level text alternatives.
 
-- **accessibilityDescription** - Provides a text description for the chart, improving support for screen readers
-- **accessibilityRole** - Specifies the role of the chart, helping screen readers identify the element appropriately
-- **focusable** - Allows the chart to receive focus, making it accessible via keyboard navigation
-- **focusBorderColor** - Sets the color of the focus border, enhancing visibility when the chart is focused
-- **focusBorderMargin** - Defines the margin around the focus border
-- **focusBorderWidth** - Specifies the width of the focus border
-- **tabIndex** - Specifies the tab order of the chart element, enabling efficient keyboard navigation
+The Chart follows accessibility standards and guidelines including ADA, Section 508, WCAG 2.2, and WAI-ARIA. It uses roles and attributes such as `img`, `button`, `region`, `aria-label`, `aria-hidden`, and `aria-pressed`.
 
-### Example: Fully Accessible Chart
+Accessibility requires more than enabling a tooltip. An accessible Chart should provide:
 
-```typescript
-import { Chart, LineSeries, Tooltip, Legend, Category, DataLabel } from '@syncfusion/ej2-charts';
+- A meaningful visible title.
+- A concise Chart description.
+- Keyboard access.
+- A visible focus indicator.
+- Meaningful descriptions for series and points.
+- Sufficient text and UI contrast.
+- Information that is not communicated through color alone.
+- A text summary.
+- A semantic data table when users need every value.
+- Announcements for important dynamic changes.
+- Accessible controls for export, printing, filtering, and resetting.
+- Right-to-left rendering when required by the selected language.
 
-Chart.Inject(LineSeries, Tooltip, Legend, Category, DataLabel);
+## WCAG Compliance
 
-let chartData: Object[] = [
-    { month: 'Jan', sales: 35 }, { month: 'Feb', sales: 28 },
-    { month: 'Mar', sales: 34 }, { month: 'Apr', sales: 32 },
-    { month: 'May', sales: 40 }, { month: 'Jun', sales: 32 },
-    { month: 'Jul', sales: 35 }, { month: 'Aug', sales: 55 },
-    { month: 'Sep', sales: 38 }, { month: 'Oct', sales: 30 },
-    { month: 'Nov', sales: 25 }, { month: 'Dec', sales: 32 }
-];
+### Accessibility Standards
 
-let chart: Chart = new Chart({
-    primaryXAxis: {
-        valueType: 'Category'
-    },
-    primaryYAxis: {
-        labelFormat: '${value}K'
-    },
-    series: [
-        {
-            dataSource: chartData,
-            name: 'Sales',
-            xName: 'month',
-            yName: 'sales',
-            type: 'Line',
-            marker: {
-                visible: true,
-                dataLabel: {
-                    visible: true
-                }
-            }
-        }
-    ],
-    tooltip: { enable: true },
-    legendSettings: { visible: true },
-    title: 'Sales Analysis',
-    accessibility: {
-        accessibilityDescription: 'A line chart displaying the sales analysis for each month.',
-        accessibilityRole: 'chart'
-    },
-    focusBorderColor: '#FF0000',
-    focusBorderWidth: 3,
-    focusBorderMargin: 5
-}, '#element');
-```
+The EJ2 Chart documents support for:
 
-## Series Accessibility
+- ADA.
+- Section 508.
+- WCAG 2.2.
+- WAI-ARIA.
+- Screen readers.
+- Keyboard navigation.
+- Right-to-left layouts.
+- Color contrast.
+- Mobile devices.
+- Automated accessibility-checker and axe-core validation.
 
-The series accessibility feature allows customization of accessibility for data points:
+Application-level accessibility must still be validated against the complete page and workflow. A component's built-in support does not automatically make the complete application conformant.
 
-- **accessibilityDescription** - Provides a text description for the series root element
-- **accessibilityDescriptionFormat** - Specifies a format for accessibility descriptions of each point (supports placeholders like `${series.name}`, `${point.x}`, `${point.y}`, etc.)
-- **accessibilityRole** - Specifies the role of the series
-- **focusable** - Allows the series to receive focus via keyboard navigation
-- **tabIndex** - Specifies the tab order of the series element
+### Core Accessibility Configuration
 
-### Example: Series with Accessibility
+The Chart exposes an `accessibility` object with the following properties:
 
-```typescript
-import { Chart, ColumnSeries, Category } from '@syncfusion/ej2-charts';
+- `accessibilityDescription`
+- `accessibilityRole`
+- `focusable`
+- `tabIndex`
 
-Chart.Inject(ColumnSeries, Category);
+The Chart also exposes focus-border properties:
 
-let columnData: Object[] = [
-    { country: "USA",       gold: 50 },
-    { country: "China",     gold: 40 },
-    { country: "Japan",     gold: 70 },
-    { country: "Australia", gold: 60 },
-    { country: "France",    gold: 50 },
-    { country: "Germany",   gold: 40 },
-    { country: "Italy",     gold: 40 },
-    { country: "Sweden",    gold: 30 }
-];
-
-let chart: Chart = new Chart({
-    primaryXAxis: {
-        valueType: 'Category',
-        title: 'Countries'
-    },
-    primaryYAxis: {
-        minimum: 0, 
-        maximum: 80,
-        interval: 20, 
-        title: 'Medals'
-    },
-    series: [{
-        dataSource: columnData,
-        xName: 'country', 
-        yName: 'gold',
-        type: 'Column',
-        accessibility: {
-            accessibilityDescription: 'This series displays the number of gold medals won by each country in the Olympics.',
-            accessibilityRole: 'series',
-            accessibilityDescriptionFormat: 'The country ${point.x} won ${point.y} gold medals.'
-        }
-    }],
-    title: 'Olympic Medals'
-}, '#element');
-```
-
-## Title & Subtitle Accessibility
-
-Customize the accessibility of chart titles and subtitles using the `titleStyle` and `subTitleStyle` properties with an `accessibility` object:
-
-- **accessibilityDescription** - Text description for the title/subtitle
-- **accessibilityRole** - Role for the title/subtitle
-- **focusable** - Enables keyboard focus for the title/subtitle
-- **tabIndex** - Tab order of the title/subtitle
-
-### Example: Title and Subtitle with Accessibility
+- `focusBorderColor`
+- `focusBorderWidth`
+- `focusBorderMargin`
 
 ```typescript
-import { Chart, ColumnSeries, Category, Legend } from '@syncfusion/ej2-charts';
+import {
+  Category,
+  Chart,
+  LineSeries
+} from '@syncfusion/ej2-charts';
 
-Chart.Inject(ColumnSeries, Category, Legend);
+Chart.Inject(
+  LineSeries,
+  Category
+);
 
-let columnData: Object[] = [
-    { country: "USA",       gold: 50, silver: 70, bronze: 45 },
-    { country: "China",     gold: 40, silver: 60, bronze: 55 },
-    { country: "Japan",     gold: 70, silver: 60, bronze: 50 },
-    { country: "Australia", gold: 60, silver: 56, bronze: 40 },
-    { country: "France",    gold: 50, silver: 45, bronze: 35 },
-    { country: "Germany",   gold: 40, silver: 30, bronze: 22 },
-    { country: "Italy",     gold: 40, silver: 35, bronze: 37 },
-    { country: "Sweden",    gold: 30, silver: 25, bronze: 27 }
-];
-
-let chart: Chart = new Chart({
-    primaryXAxis: {
-        valueType: 'Category',
-        title: 'Countries',
-        labelPlacement: 'OnTicks'
-    },
-    primaryYAxis: {
-        minimum: 0, 
-        maximum: 80,
-        interval: 20, 
-        title: 'Medals'
-    },
-    series: [
-        { dataSource: columnData, xName: 'country', yName: 'gold', name: 'Gold', type: 'Column' },
-        { dataSource: columnData, xName: 'country', yName: 'silver', name: 'Silver', type: 'Column' },
-        { dataSource: columnData, xName: 'country', yName: 'bronze', name: 'Bronze', type: 'Column' }
-    ],
-    title: 'Olympic Medals Comparison by Country',
-    titleStyle: {
-        accessibility: {
-            accessibilityDescription: 'This chart shows the number of gold, silver, and bronze medals won by different countries in the Olympics.',
-            accessibilityRole: 'heading'
-        }
-    },
-    subTitle: 'Medal Comparison',
-    subTitleStyle: {
-        accessibility: {
-            accessibilityDescription: 'The subtitle provides additional context for the Olympic medal distribution chart.',
-            accessibilityRole: 'heading'
-        }
-    }
-}, '#element');
-```
-
-## Annotations Accessibility
-
-Add accessibility to chart annotations using the `accessibility` property:
-
-- **accessibilityDescription** - Text description for the annotation
-- **accessibilityRole** - Role of the annotation
-- **focusable** - Enables keyboard focus for the annotation
-- **tabIndex** - Tab order of the annotation
-
-### Example: Annotations with Accessibility
-
-```typescript
-import { Chart, ColumnSeries, Category, ChartAnnotation } from '@syncfusion/ej2-charts';
-
-Chart.Inject(ColumnSeries, Category, ChartAnnotation);
-
-let columnData: Object[] = [
-    { country: "USA",       gold: 50 }, 
-    { country: "China",     gold: 40 }, 
-    { country: "Japan",     gold: 70 },
-    { country: "Australia", gold: 60 }, 
-    { country: "France",    gold: 50 }, 
-    { country: "Germany",   gold: 40 },
-    { country: "Italy",     gold: 40 }, 
-    { country: "Sweden",    gold: 30 }
-];
-
-let chart: Chart = new Chart({
-    primaryXAxis: {
-        valueType: 'Category',
-        title: 'Countries'
-    },
-    primaryYAxis: {
-        title: 'Medals'
-    },
-    annotations: [{
-        content: '<div style="border: 1px solid #000; background-color: #f8f8f8; padding: 5px; border-radius: 4px; font-size: 12px; font-weight: bold;">70 Gold Medals</div>',
-        coordinateUnits: 'Point',
-        x: 'France',
-        y: 55,
-        accessibility: {
-            accessibilityDescription: 'Annotation indicating that France has won 70 Gold Medals.',
-            accessibilityRole: 'note',
-            focusable: true
-        }
-    }],
-    series: [{
-        dataSource: columnData,
-        xName: 'country', 
-        yName: 'gold',
-        type: 'Column'
-    }],
-    title: 'Olympic Medals'
-}, '#element');
-```
-
-## Trendlines Accessibility
-
-Configure accessibility for trendlines using the `accessibility` property:
-
-- **accessibilityDescription** - Text description for the trendline
-- **accessibilityRole** - Role of the trendline
-- **focusable** - Enables keyboard focus for the trendline
-- **tabIndex** - Tab order of the trendline
-
-### Example: Trendline with Accessibility
-
-```typescript
-import { Chart, Trendlines, ScatterSeries, Tooltip, Legend } from '@syncfusion/ej2-charts';
-
-Chart.Inject(Trendlines, ScatterSeries, Tooltip, Legend);
-
-let data: Object[] = [
-    { x: 1, y: 7.66 }, { x: 2, y: 8.03 }, { x: 3, y: 8.41 },
-    { x: 4, y: 8.97 }, { x: 5, y: 8.77 }, { x: 6, y: 8.20 }
-];
-
-let chart: Chart = new Chart({
-    primaryXAxis: {
-        title: 'Time Period'
-    },
-    primaryYAxis: {
-        title: 'Value',
-        interval: 5
-    },
-    series: [{
-        dataSource: data,
-        xName: 'x', 
-        yName: 'y',
-        name: 'Data Series',
-        fill: '#0066FF',
-        type: 'Scatter',
-        trendlines: [{
-            type: 'Linear',
-            accessibility: {
-                accessibilityDescription: 'A linear trendline representing the general trend of the data series.',
-                accessibilityRole: 'line'
-            }
-        }]
-    }],
-    tooltip: { enable: true },
-    chartArea: { border: { width: 0 } },
-    title: 'Trend Analysis',
-    legendSettings: { visible: false }
-}, '#element');
-```
-
-## Zoom Settings Accessibility
-
-Configure accessibility for chart zooming using the `zoomSettings` property:
-
-- **accessibilityDescription** - Text description for the zoom toolkit items
-- **accessibilityRole** - Role of the zoom toolkit items
-- **focusable** - Enables keyboard focus for zoom items
-- **tabIndex** - Tab order of the zoom element
-
-### Example: Zoom with Accessibility
-
-```typescript
-import { Chart, AreaSeries, Legend, Zoom, DateTime } from '@syncfusion/ej2-charts';
-
-Chart.Inject(AreaSeries, Legend, Zoom, DateTime);
-
-let series1: Object[] = [];
-let value: number = 40;
-for (let i = 1; i < 100; i++) {
-    if (Math.random() > 0.5) {
-        value += Math.random();
-    } else {
-        value -= Math.random();
-    }
-    series1.push({ x: new Date(2023, 0, i), y: value.toFixed(1) });
+interface SalesData {
+  month: string;
+  sales: number;
 }
 
-let chart: Chart = new Chart({
-    primaryXAxis: {
-        valueType: 'DateTime'
-    },
-    series: [{
-        type: 'Area',
-        dataSource: series1,
-        name: 'Product X',
-        xName: 'x',
-        yName: 'y',
-        border: { width: 0.5, color: '#00bdae' },
-        animation: { enable: false }
-    }],
-    zoomSettings: {
-        enableMouseWheelZooming: true,
-        enablePinchZooming: true,
-        enableSelectionZooming: true,
-        accessibility: {
-            accessibilityDescription: 'This allows users to zoom in and out of the chart using mouse wheel, pinch gestures, or selection box.',
-            accessibilityRole: 'zoom'
-        }
-    },
-    title: 'Sales History of Product X',
-    legendSettings: { visible: false }
-}, '#element');
-```
-
-## Technical Indicators Accessibility
-
-Configure accessibility for technical indicators using the `accessibility` property:
-
-- **accessibilityDescription** - Text description for the indicators
-- **accessibilityRole** - Role of the indicators
-- **focusable** - Enables keyboard focus for indicators
-- **tabIndex** - Tab order of the indicators
-
-### Example: Technical Indicator with Accessibility
-
-Observe this [Candle series](https://ej2.syncfusion.com/documentation/chart/technical-indicators) sample for how technical indicators rendered.
-
-```typescript
-indicators: [{
-    type: 'AccumulationDistribution',
-    field: 'Close',
-    seriesName: 'Apple Inc',
-    fill: 'blue',
-    period: 3,
-    animation: { enable: true },
-    yAxisName: 'secondary',
-    accessibility: {
-        accessibilityDescription: 'The Accumulation Distribution indicator is used to assess the buying and selling pressure of Apple Inc. stock.',
-        accessibilityRole: 'indicator'
-    }
-}],
-```
-
-## Legend Accessibility
-
-Configure accessibility for legends using the `accessibility` property in `legendSettings`:
-
-- **accessibilityDescription** - Text description for the legend
-- **accessibilityRole** - Role of the legend
-- **focusable** - Enables keyboard focus for legend items
-- **tabIndex** - Tab order of the legend
-
-### Example: Legend with Accessibility
-
-```typescript
-import { Chart, ColumnSeries, Category, Legend } from '@syncfusion/ej2-charts';
-
-Chart.Inject(ColumnSeries, Category, Legend);
-
-let chartData: Object[] = [
-    { country: "USA",       gold: 50, silver: 70, bronze: 45 },
-    { country: "China",     gold: 40, silver: 60, bronze: 55 },
-    { country: "Japan",     gold: 70, silver: 60, bronze: 50 },
-    { country: "Australia", gold: 60, silver: 56, bronze: 40 },
-    { country: "France",    gold: 50, silver: 45, bronze: 35 },
-    { country: "Germany",   gold: 40, silver: 30, bronze: 22 },
-    { country: "Italy",     gold: 40, silver: 35, bronze: 37 },
-    { country: "Sweden",    gold: 30, silver: 25, bronze: 27 }
+const chartData: SalesData[] = [
+  {
+    month: 'January',
+    sales: 35
+  },
+  {
+    month: 'February',
+    sales: 28
+  },
+  {
+    month: 'March',
+    sales: 34
+  },
+  {
+    month: 'April',
+    sales: 48
+  }
 ];
 
-let chart: Chart = new Chart({
-    primaryXAxis: {
-        valueType: 'Category',
-        title: 'Countries'
-    },
-    primaryYAxis: {
-        minimum: 0, 
-        maximum: 80,
-        interval: 20, 
-        title: 'Medals'
-    },
-    series: [
-        { dataSource: chartData, xName: 'country', yName: 'gold', name: 'Gold', type: 'Column' },
-        { dataSource: chartData, xName: 'country', yName: 'silver', name: 'Silver', type: 'Column' },
-        { dataSource: chartData, xName: 'country', yName: 'bronze', name: 'Bronze', type: 'Column' }
-    ],
-    title: 'Olympic Medals',
-    legendSettings: {
-        visible: true,
-        accessibility: {
-            accessibilityDescription: 'Legend displaying medal counts by country for Gold, Silver, and Bronze.',
-            accessibilityRole: 'presentation'
-        }
+const chart: Chart = new Chart({
+  title: 'Sales Performance',
+  subTitle: 'Monthly revenue for 2026',
+  accessibility: {
+    accessibilityDescription:
+      'Line chart showing monthly sales. ' +
+      'April has the highest value at 48 thousand, ' +
+      'and February has the lowest value at 28 thousand.',
+    accessibilityRole: 'img',
+    focusable: true,
+    tabIndex: 0
+  },
+  focusBorderColor: '#0F6CBD',
+  focusBorderWidth: 3,
+  focusBorderMargin: 2,
+  primaryXAxis: {
+    valueType: 'Category',
+    title: 'Month'
+  },
+  primaryYAxis: {
+    title: 'Revenue in thousands',
+    labelFormat: '₹{value}K'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'month',
+      yName: 'sales',
+      type: 'Line',
+      name: 'Sales'
     }
-}, '#element');
+  ]
+});
+
+chart.appendTo('#chart');
 ```
+
+Use an appropriate accessibility role supported by the application and assistive-technology strategy.
+
+Do not add an unnecessary second focus target to the host element if the Chart already manages focus through its accessibility configuration.
+
+### Series Accessibility
+
+Series can define accessibility information for the series and its data points.
+
+```typescript
+series: [
+  {
+    dataSource: chartData,
+    xName: 'month',
+    yName: 'sales',
+    type: 'Line',
+    name: 'Sales',
+    accessibility: {
+      accessibilityDescription:
+        'Monthly sales series',
+      accessibilityDescriptionFormat:
+        '${series.name}, ${point.x}, ' +
+        '${point.y} thousand rupees',
+      accessibilityRole: 'img',
+      focusable: true,
+      tabIndex: 0
+    }
+  }
+]
+```
+
+Series accessibility supports descriptions, point-description formats, roles, focusability, and tab order. Point-description formats can include series and point placeholders, with financial placeholders available when supported by the series type.
+
+Keep descriptions concise. Repeating a long sentence for every point can make keyboard and screen-reader navigation inefficient.
+
+### Semantic HTML
+
+Use semantic HTML to provide context around the Chart.
+
+```html
+<article aria-labelledby="sales-heading">
+  <h2 id="sales-heading">
+    Sales Performance
+  </h2>
+
+  <p id="sales-summary">
+    Monthly revenue increased overall. April recorded
+    the highest value at ₹48,000, while February recorded
+    the lowest value at ₹28,000.
+  </p>
+
+  <div
+    id="chart"
+    aria-describedby="sales-summary sales-table-caption"
+  ></div>
+</article>
+```
+
+Avoid assigning `role="img"` manually to the host when the Chart's `accessibilityRole` already produces the required semantic role. Duplicate or conflicting semantics can create confusing announcements.
+
+### Accessible Data Table
+
+Provide a semantic data table when users need access to every value.
+
+```html
+<table>
+  <caption id="sales-table-caption">
+    Monthly sales values represented in the Chart
+  </caption>
+
+  <thead>
+    <tr>
+      <th scope="col">Month</th>
+      <th scope="col">Sales</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <th scope="row">January</th>
+      <td>₹35,000</td>
+    </tr>
+    <tr>
+      <th scope="row">February</th>
+      <td>₹28,000</td>
+    </tr>
+    <tr>
+      <th scope="row">March</th>
+      <td>₹34,000</td>
+    </tr>
+    <tr>
+      <th scope="row">April</th>
+      <td>₹48,000</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+Do not hide the only accessible data alternative with `aria-hidden="true"` or visually remove it without a supported visually-hidden technique.
 
 ## Keyboard Navigation
 
-The Chart control supports keyboard navigation through the `focusable` property set to `true`. Users can:
+The Chart provides built-in keyboard navigation. Do not replace it with custom handlers unless the application has a validated requirement that the built-in behavior cannot satisfy.
 
-- Navigate between chart elements using Tab/Shift+Tab
-- Interact with chart elements when focused
-- Access chart features via keyboard shortcuts
+### Built-In Keyboard Shortcuts
 
-### Example: Setting Focus
+Documented Chart keyboard interactions include:
+
+- `Alt + J`: Moves focus to the Chart.
+- `Tab`: Moves focus to the next interactive Chart element.
+- `Shift + Tab`: Moves focus to the previous interactive Chart element.
+- `Down Arrow`: Moves focus to the point on the left.
+- `Up Arrow`: Moves focus to the point on the right.
+- `Left Arrow`: Moves focus to the next series.
+- `Right Arrow`: Moves focus to the previous series.
+- `Escape`: Closes the point tooltip.
+- `Enter` or `Space`: Selects the focused data point.
+- `Down Arrow` or `Left Arrow` on a legend: Moves focus to the legend item on the left.
+- `Up Arrow` or `Right Arrow` on a legend: Moves focus to the legend item on the right.
+- `Enter` or `Space` on a legend item: Toggles the corresponding series.
+- `Ctrl + +`: Zooms in.
+- `Ctrl + -`: Zooms out.
+- `Down Arrow` or `Up Arrow` in panning mode: Pans vertically.
+- `Left Arrow` or `Right Arrow` in panning mode: Pans horizontally.
+- `R`: Resets the zoomed Chart.
+- `Ctrl + P`: Prints the Chart.
+
+The action performed by an arrow key depends on the focused Chart element and active interaction mode.
+
+Do not implement custom `ArrowLeft`, `ArrowRight`, `Enter`, or `Space` handlers that override the built-in behavior unless they preserve the complete supported keyboard interaction.
+
+### Focus Customization
+
+Use the Chart accessibility and focus-border properties.
 
 ```typescript
-let chart: Chart = new Chart({
-    // ... chart configuration
-    accessibility: {
-        focusable: true
+const chart: Chart = new Chart({
+  accessibility: {
+    accessibilityDescription:
+      'Line chart showing monthly sales.',
+    accessibilityRole: 'img',
+    focusable: true,
+    tabIndex: 0
+  },
+  focusBorderColor: '#0F6CBD',
+  focusBorderWidth: 3,
+  focusBorderMargin: 2,
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'month',
+      yName: 'sales',
+      type: 'Line'
     }
-}, '#element');
+  ]
+});
+
+chart.appendTo('#chart');
 ```
+
+Ensure that the focus border has sufficient contrast against the Chart background.
+
+### Application-Owned Controls
+
+Use native buttons for application actions.
+
+```html
+<div
+  class="chart-actions"
+  role="group"
+  aria-label="Chart actions"
+>
+  <button id="export-chart" type="button">
+    Export Chart
+  </button>
+
+  <button id="print-chart" type="button">
+    Print Chart
+  </button>
+
+  <button id="reset-chart" type="button">
+    Reset view
+  </button>
+</div>
+```
+
+Native buttons provide keyboard interaction and semantics without requiring custom key handlers.
+
+```typescript
+const resetButton:
+  HTMLButtonElement | null =
+  document.getElementById(
+    'reset-chart'
+  ) as HTMLButtonElement | null;
+
+const resetChart = (): void => {
+  chart.primaryXAxis.zoomFactor = 1;
+  chart.primaryXAxis.zoomPosition = 0;
+  chart.primaryYAxis.zoomFactor = 1;
+  chart.primaryYAxis.zoomPosition = 0;
+  chart.refresh();
+};
+
+resetButton?.addEventListener(
+  'click',
+  resetChart
+);
+```
+
+Do not invoke `zoomComplete` as a method. It is an event callback, not a zoom API.
+
+### Tab Order
+
+Use the natural DOM order.
+
+```html
+<div class="chart-actions">
+  <button id="export-chart" type="button">
+    Export Chart
+  </button>
+
+  <button id="print-chart" type="button">
+    Print Chart
+  </button>
+
+  <button id="reset-chart" type="button">
+    Reset view
+  </button>
+</div>
+
+<div id="chart"></div>
+```
+
+Do not assign positive `tabindex` values such as `1`, `2`, `3`, or `4`. Positive values create a separate tab sequence that is difficult to maintain.
+
+Use:
+
+- `tabindex="0"` when an application-owned element must participate in the natural tab order.
+- `tabindex="-1"` when it must be focusable programmatically but not through normal tab navigation.
+
+For the Chart itself, prefer `accessibility.tabIndex`.
+
+## Screen Reader Support
+
+### Chart Description
+
+Use `accessibility.accessibilityDescription` for the Chart's main accessible description.
+
+```typescript
+accessibility: {
+  accessibilityDescription:
+    'Column chart showing quarterly revenue. ' +
+    'Revenue increased from 35 thousand in Quarter 1 ' +
+    'to 48 thousand in Quarter 4.',
+  accessibilityRole: 'img',
+  focusable: true,
+  tabIndex: 0
+}
+```
+
+The accessibility model provides description, role, focusability, and tab-index properties for screen-reader and keyboard support.
+
+### Text Summary
+
+Provide a visible summary that explains the important conclusion rather than repeating every point.
+
+```html
+<p id="chart-summary">
+  Sales increased overall during the period. April had
+  the highest value at ₹48,000, and February had the
+  lowest value at ₹28,000.
+</p>
+
+<div
+  id="chart"
+  aria-describedby="chart-summary"
+></div>
+```
+
+A useful summary should explain:
+
+- What the Chart represents.
+- The measurement unit.
+- The most important trend or comparison.
+- The highest or lowest value when relevant.
+- Where the complete tabular data is available.
+
+### Announcing Dynamic Updates
+
+Use a persistent ARIA live region.
+
+```html
+<p
+  id="chart-status"
+  class="visually-hidden"
+  aria-live="polite"
+  aria-atomic="true"
+></p>
+```
+
+```css
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+```typescript
+interface SalesData {
+  month: string;
+  sales: number;
+}
+
+const statusElement: HTMLElement | null =
+  document.getElementById(
+    'chart-status'
+  );
+
+function announceChartUpdate(
+  message: string
+): void {
+  if (!statusElement) {
+    return;
+  }
+
+  statusElement.textContent = '';
+
+  window.setTimeout((): void => {
+    statusElement.textContent =
+      message;
+  }, 50);
+}
+
+function updateChartData(
+  nextData: SalesData[]
+): void {
+  const validData: SalesData[] =
+    nextData.filter(
+      (item: SalesData): boolean =>
+        item.month.trim().length > 0 &&
+        Number.isFinite(item.sales)
+    );
+
+  chart.series[0].dataSource =
+    validData;
+
+  chart.refresh();
+
+  if (validData.length === 0) {
+    announceChartUpdate(
+      'The Chart was updated and contains no data.'
+    );
+
+    return;
+  }
+
+  const maximumPoint: SalesData =
+    validData.reduce(
+      (
+        currentMaximum: SalesData,
+        item: SalesData
+      ): SalesData =>
+        item.sales >
+        currentMaximum.sales
+          ? item
+          : currentMaximum
+    );
+
+  announceChartUpdate(
+    `The Chart was updated. ` +
+    `The highest value is ${maximumPoint.sales} ` +
+    `in ${maximumPoint.month}.`
+  );
+}
+```
+
+Do not create and remove a live region for every announcement. A persistent live region is more reliable and avoids unnecessary DOM changes.
+
+Do not announce every render event or pointer movement. Announce only meaningful application state changes.
+
+## Color and Contrast
+
+### Contrast Requirements
+
+Use colors that meet the required WCAG contrast for their purpose:
+
+- Normal text should generally provide at least a 4.5:1 contrast ratio.
+- Large text should generally provide at least a 3:1 contrast ratio.
+- Focus indicators and meaningful UI graphics should generally provide at least a 3:1 contrast ratio against adjacent colors.
+
+Contrast must be measured. Do not use a placeholder function that always returns `true`.
+
+```typescript
+const accessiblePalettes: string[] = [
+  '#005A9C',
+  '#A23E00',
+  '#117A37',
+  '#7A3E9D',
+  '#6B5500'
+];
+
+const chart: Chart = new Chart({
+  palettes: accessiblePalettes,
+  background: '#FFFFFF',
+  titleStyle: {
+    color: '#1A1A1A',
+    fontStyle: 'Normal',
+    fontWeight: '600',
+    size: '18px'
+  },
+  primaryXAxis: {
+    labelStyle: {
+      color: '#242424',
+      size: '12px'
+    }
+  },
+  primaryYAxis: {
+    labelStyle: {
+      color: '#242424',
+      size: '12px'
+    }
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'month',
+      yName: 'sales',
+      type: 'Column'
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+Use `palettes`, not `palette`.
+
+Use `fontWeight` for bold text. Do not use `fontStyle: 'Bold'`.
+
+### Colorblind-Friendly Design
+
+Use colors with differences in hue and lightness.
+
+```typescript
+const colorblindFriendlyPalettes:
+  string[] = [
+    '#0072B2',
+    '#E69F00',
+    '#009E73',
+    '#CC79A7',
+    '#D55E00',
+    '#56B4E9'
+  ];
+```
+
+Apply them through:
+
+```typescript
+palettes:
+  colorblindFriendlyPalettes
+```
+
+Do not differentiate important series only with red and green.
+
+Also use:
+
+- Series names.
+- Marker shapes.
+- Line dash patterns.
+- Data labels.
+- Tooltips.
+- Direct annotations.
+- Tabular data.
+
+### Selection Patterns
+
+Use `selectionPattern` for additional visual distinction during selection.
+
+```typescript
+import {
+  Chart,
+  ColumnSeries,
+  Selection
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  ColumnSeries,
+  Selection
+);
+
+const chart: Chart = new Chart({
+  selectionMode: 'Point',
+  isMultiSelect: true,
+  selectionPattern: 'DiagonalForward',
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'category',
+      yName: 'value',
+      type: 'Column'
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+Do not use an unsupported `customSeries` collection to define patterns.
+
+Selection patterns apply to selected elements. They are not a replacement for permanently distinguishable series styling.
+
+### Font Readability
+
+Use readable font sizes and allow zooming.
+
+```typescript
+titleStyle: {
+  size: '18px',
+  fontFamily:
+    'Arial, sans-serif',
+  fontWeight: '600'
+},
+legendSettings: {
+  visible: true,
+  textStyle: {
+    size: '13px',
+    fontFamily:
+      'Arial, sans-serif'
+  }
+}
+```
+
+Do not use `legend`; use `legendSettings`.
+
+Do not use an unverified `letterSpacing` property unless supported by the targeted Chart text-style API.
+
+Avoid enforcing a fixed minimum font size without testing the complete layout. Text must remain usable at browser zoom levels and across supported viewports.
 
 ## RTL Language Support
 
-The Chart control supports Right-to-Left (RTL) languages through the `enableRtl` property:
-
 ### Enable RTL Mode
 
+Set the Chart-level `enableRtl` property to `true`.
+
 ```typescript
-let chart: Chart = new Chart({
-    enableRtl: true,
-    title: 'مبيعات',
-    primaryXAxis: {
-        title: { text: 'الأشهر' },
-        categories: ['يناير', 'فبراير', 'مارس', 'أبريل']
-    },
-    primaryYAxis: {
-        title: { text: 'الإيرادات' }
-    },
-    legendSettings: {
-        visible: true,
-        position: 'Left'  // Left in RTL
-    },
-    series: [{
-        dataSource: arabicData,
-        xName: 'month',
-        yName: 'revenue',
-        type: 'Line'
-    }]
-}, '#element');
+const chart: Chart = new Chart({
+  enableRtl: true,
+  title: 'أداء المبيعات',
+  series: [
+    {
+      dataSource: arabicData,
+      xName: 'month',
+      yName: 'revenue',
+      type: 'Line',
+      name: 'الإيرادات'
+    }
+  ]
+});
+
+chart.appendTo('#chart');
 ```
 
-### HTML Setup for RTL
+Right-to-left support is included in the Chart accessibility capabilities.
+
+### Document Direction
+
+Set the document language and direction.
 
 ```html
-<!-- Set HTML direction -->
-<html dir="rtl" lang="ar">
-<head>
-    <meta charset="utf-8">
-    <title>Chart RTL Example</title>
-</head>
-<body>
-    <div id="element"></div>
-</body>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8">
+    <title>تقرير المبيعات</title>
+  </head>
+
+  <body>
+    <main>
+      <h1>تقرير المبيعات</h1>
+      <div id="chart"></div>
+    </main>
+  </body>
 </html>
+```
+
+If only one section is RTL, apply direction to the nearest relevant container.
+
+```html
+<section lang="ar" dir="rtl">
+  <h2>أداء المبيعات</h2>
+  <div id="chart"></div>
+</section>
+```
+
+### RTL Axis and Legend Configuration
+
+RTL is enabled at the Chart level. Do not configure unverified axis-level or legend-level `enableRtl` properties.
+
+```typescript
+const chart: Chart = new Chart({
+  enableRtl: true,
+  title: 'أداء المبيعات',
+  primaryXAxis: {
+    valueType: 'Category',
+    title: 'الأشهر',
+    labelRotation: 0
+  },
+  primaryYAxis: {
+    title: 'الإيرادات',
+    labelFormat: '{value} ألف'
+  },
+  legendSettings: {
+    visible: true,
+    position: 'Left'
+  },
+  series: [
+    {
+      dataSource: arabicData,
+      xName: 'month',
+      yName: 'revenue',
+      type: 'Line',
+      name: 'المبيعات'
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+Use a string for an axis title.
+
+Incorrect:
+
+```typescript
+primaryYAxis: {
+  title: {
+    text: 'الإيرادات',
+    style: {
+      direction: 'rtl'
+    }
+  }
+}
+```
+
+Correct:
+
+```typescript
+primaryYAxis: {
+  title: 'الإيرادات'
+}
+```
+
+The document or container `dir="rtl"` and Chart-level `enableRtl` provide the directional context.
+
+### Dynamic Language Switching
+
+Use typed localization data and update supported Chart properties.
+
+```typescript
+type SupportedLanguage =
+  | 'en'
+  | 'ar';
+
+interface LocalizedChartText {
+  direction: 'ltr' | 'rtl';
+  title: string;
+  xAxisTitle: string;
+  yAxisTitle: string;
+  seriesName: string;
+  description: string;
+}
+
+const localization:
+  Record<
+    SupportedLanguage,
+    LocalizedChartText
+  > = {
+    en: {
+      direction: 'ltr',
+      title: 'Sales Performance',
+      xAxisTitle: 'Month',
+      yAxisTitle:
+        'Revenue in thousands',
+      seriesName: 'Sales',
+      description:
+        'Line chart showing monthly sales.'
+    },
+    ar: {
+      direction: 'rtl',
+      title: 'أداء المبيعات',
+      xAxisTitle: 'الشهر',
+      yAxisTitle:
+        'الإيرادات بالآلاف',
+      seriesName: 'المبيعات',
+      description:
+        'مخطط خطي يعرض المبيعات الشهرية.'
+    }
+  };
+
+function setLanguage(
+  language: SupportedLanguage
+): void {
+  const text: LocalizedChartText =
+    localization[language];
+
+  document.documentElement.lang =
+    language;
+
+  document.documentElement.dir =
+    text.direction;
+
+  chart.enableRtl =
+    text.direction === 'rtl';
+
+  chart.title =
+    text.title;
+
+  chart.primaryXAxis.title =
+    text.xAxisTitle;
+
+  chart.primaryYAxis.title =
+    text.yAxisTitle;
+
+  chart.series[0].name =
+    text.seriesName;
+
+  chart.accessibility = {
+    ...chart.accessibility,
+    accessibilityDescription:
+      text.description,
+    accessibilityRole: 'img',
+    focusable: true,
+    tabIndex: 0
+  };
+
+  chart.refresh();
+}
+```
+
+Do not update `chart.primaryXAxis.title.text`. The axis `title` is a string.
+
+If category text also changes by language, replace the series data source with localized category values before refreshing.
+
+## Complete Accessible Chart Example
+
+```typescript
+import {
+  Category,
+  Chart,
+  ColumnSeries,
+  DataLabel,
+  Highlight,
+  Legend,
+  Selection,
+  Tooltip
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  ColumnSeries,
+  Category,
+  DataLabel,
+  Legend,
+  Highlight,
+  Selection,
+  Tooltip
+);
+
+interface QuarterlySalesData {
+  quarter: string;
+  revenue: number;
+  label: string;
+}
+
+const chartData: QuarterlySalesData[] = [
+  {
+    quarter: 'Q1',
+    revenue: 35,
+    label: 'Q1: ₹35K'
+  },
+  {
+    quarter: 'Q2',
+    revenue: 42,
+    label: 'Q2: ₹42K'
+  },
+  {
+    quarter: 'Q3',
+    revenue: 39,
+    label: 'Q3: ₹39K'
+  },
+  {
+    quarter: 'Q4',
+    revenue: 48,
+    label: 'Q4: ₹48K'
+  }
+];
+
+const statusElement: HTMLElement | null =
+  document.getElementById(
+    'chart-status'
+  );
+
+const chart: Chart = new Chart({
+  title: 'Accessible Sales Dashboard',
+  subTitle: 'Quarterly revenue for 2026',
+  width: '100%',
+  height: '420px',
+  palettes: [
+    '#005A9C'
+  ],
+  accessibility: {
+    accessibilityDescription:
+      'Column chart showing quarterly revenue for 2026. ' +
+      'Revenue increased from 35 thousand rupees in Quarter 1 ' +
+      'to 48 thousand rupees in Quarter 4.',
+    accessibilityRole: 'img',
+    focusable: true,
+    tabIndex: 0
+  },
+  focusBorderColor: '#0F6CBD',
+  focusBorderWidth: 3,
+  focusBorderMargin: 2,
+  primaryXAxis: {
+    valueType: 'Category',
+    title: 'Fiscal quarter',
+    labelStyle: {
+      color: '#242424',
+      size: '13px',
+      fontFamily:
+        'Segoe UI, sans-serif'
+    }
+  },
+  primaryYAxis: {
+    title:
+      'Revenue in thousands of rupees',
+    labelFormat: '₹{value}K',
+    minimum: 0,
+    maximum: 60,
+    interval: 10,
+    labelStyle: {
+      color: '#242424',
+      size: '13px',
+      fontFamily:
+        'Segoe UI, sans-serif'
+    }
+  },
+  legendSettings: {
+    visible: true,
+    position: 'Bottom',
+    enableHighlight: true,
+    textStyle: {
+      color: '#242424',
+      size: '13px',
+      fontFamily:
+        'Segoe UI, sans-serif'
+    },
+    accessibility: {
+      accessibilityDescription:
+        'Sales series legend',
+      accessibilityRole: 'region',
+      focusable: true,
+      tabIndex: 0
+    }
+  },
+  tooltip: {
+    enable: true,
+    format:
+      '<b>${point.x}</b><br>' +
+      'Revenue: ₹${point.y:n0}K',
+    fill: '#FFFFFF',
+    border: {
+      color: '#242424',
+      width: 1
+    },
+    textStyle: {
+      color: '#242424',
+      size: '13px'
+    }
+  },
+  selectionMode: 'Point',
+  isMultiSelect: false,
+  selectionPattern:
+    'DiagonalForward',
+  selectionComplete: (): void => {
+    if (statusElement) {
+      statusElement.textContent =
+        'The Chart selection was updated.';
+    }
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'revenue',
+      type: 'Column',
+      name: 'Revenue',
+      accessibility: {
+        accessibilityDescription:
+          'Quarterly revenue series',
+        accessibilityDescriptionFormat:
+          '${series.name}, ${point.x}, ' +
+          '${point.y} thousand rupees',
+        accessibilityRole: 'img',
+        focusable: true,
+        tabIndex: 0
+      },
+      marker: {
+        dataLabel: {
+          visible: true,
+          name: 'label',
+          position: 'Outer',
+          font: {
+            color: '#242424',
+            size: '12px',
+            fontWeight: '600'
+          }
+        }
+      }
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+
+window.addEventListener(
+  'beforeunload',
+  (): void => {
+    chart.destroy();
+  }
+);
+```
+
+**HTML:**
+
+```html
+<article aria-labelledby="sales-heading">
+  <h1 id="sales-heading">
+    Accessible Sales Dashboard
+  </h1>
+
+  <p id="sales-summary">
+    Quarterly revenue increased overall during 2026.
+    Quarter 4 recorded the highest value at ₹48,000.
+  </p>
+
+  <div
+    id="chart"
+    aria-describedby="sales-summary sales-table-caption"
+  ></div>
+
+  <p
+    id="chart-status"
+    class="visually-hidden"
+    aria-live="polite"
+    aria-atomic="true"
+  ></p>
+
+  <table>
+    <caption id="sales-table-caption">
+      Quarterly revenue represented in the Chart
+    </caption>
+
+    <thead>
+      <tr>
+        <th scope="col">Quarter</th>
+        <th scope="col">Revenue</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th scope="row">Q1</th>
+        <td>₹35,000</td>
+      </tr>
+      <tr>
+        <th scope="row">Q2</th>
+        <td>₹42,000</td>
+      </tr>
+      <tr>
+        <th scope="row">Q3</th>
+        <td>₹39,000</td>
+      </tr>
+      <tr>
+        <th scope="row">Q4</th>
+        <td>₹48,000</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+```
+
+**CSS:**
+
+```css
+#chart {
+  width: 100%;
+  min-height: 420px;
+}
+
+table {
+  width: 100%;
+  margin-top: 16px;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid #808080;
+  text-align: left;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+## Complete RTL Chart Example
+
+```typescript
+import {
+  Category,
+  Chart,
+  Legend,
+  LineSeries,
+  Tooltip
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  LineSeries,
+  Category,
+  Legend,
+  Tooltip
+);
+
+interface ArabicSalesData {
+  month: string;
+  revenue: number;
+}
+
+const arabicData:
+  ArabicSalesData[] = [
+    {
+      month: 'يناير',
+      revenue: 35
+    },
+    {
+      month: 'فبراير',
+      revenue: 28
+    },
+    {
+      month: 'مارس',
+      revenue: 34
+    },
+    {
+      month: 'أبريل',
+      revenue: 48
+    }
+  ];
+
+const chart: Chart = new Chart({
+  enableRtl: true,
+  title: 'أداء المبيعات',
+  width: '100%',
+  height: '420px',
+  accessibility: {
+    accessibilityDescription:
+      'مخطط خطي يعرض الإيرادات الشهرية.',
+    accessibilityRole: 'img',
+    focusable: true,
+    tabIndex: 0
+  },
+  focusBorderColor: '#005A9C',
+  focusBorderWidth: 3,
+  focusBorderMargin: 2,
+  primaryXAxis: {
+    valueType: 'Category',
+    title: 'الأشهر',
+    labelStyle: {
+      color: '#242424',
+      size: '13px',
+      fontFamily:
+        'Arial, sans-serif'
+    }
+  },
+  primaryYAxis: {
+    title: 'الإيرادات بالآلاف',
+    labelFormat: '{value} ألف',
+    labelStyle: {
+      color: '#242424',
+      size: '13px',
+      fontFamily:
+        'Arial, sans-serif'
+    }
+  },
+  legendSettings: {
+    visible: true,
+    position: 'Left',
+    textStyle: {
+      color: '#242424',
+      size: '13px',
+      fontFamily:
+        'Arial, sans-serif'
+    }
+  },
+  tooltip: {
+    enable: true,
+    format:
+      '<b>${point.x}</b><br>' +
+      'الإيرادات: ${point.y:n0} ألف'
+  },
+  series: [
+    {
+      dataSource: arabicData,
+      xName: 'month',
+      yName: 'revenue',
+      type: 'Line',
+      name: 'المبيعات',
+      accessibility: {
+        accessibilityDescription:
+          'سلسلة الإيرادات الشهرية',
+        accessibilityDescriptionFormat:
+          '${point.x}: ${point.y} ألف',
+        accessibilityRole: 'img',
+        focusable: true,
+        tabIndex: 0
+      },
+      marker: {
+        visible: true,
+        width: 8,
+        height: 8
+      }
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+
+window.addEventListener(
+  'beforeunload',
+  (): void => {
+    chart.destroy();
+  }
+);
+```
+
+**HTML:**
+
+```html
+<section
+  lang="ar"
+  dir="rtl"
+  aria-labelledby="arabic-sales-heading"
+>
+  <h1 id="arabic-sales-heading">
+    أداء المبيعات
+  </h1>
+
+  <p id="arabic-sales-summary">
+    يعرض المخطط الإيرادات الشهرية من يناير إلى أبريل.
+  </p>
+
+  <div
+    id="chart"
+    aria-describedby="arabic-sales-summary"
+  ></div>
+</section>
 ```
 
 ## Best Practices Checklist
 
-- [x] Use `accessibilityDescription` for chart, series, and other elements
-- [x] Set `accessibilityRole` appropriately (e.g., 'chart', 'series', 'legend')
-- [x] Configure `focusable` properties to enable keyboard navigation
-- [x] Use `focusBorderColor`, `focusBorderWidth`, and `focusBorderMargin` for visibility
-- [x] Set `tabIndex` for proper tab order
-- [x] Use `accessibilityDescriptionFormat` in series for dynamic descriptions
-- [x] Enable tooltips for additional context
-- [x] Provide clear titles and axis labels
-- [x] Use high contrast colors (4.5:1 minimum for WCAG AA compliance)
-- [x] Support RTL languages when needed using `enableRtl`
+- [ ] Provide a visible and meaningful Chart title.
+- [ ] Configure `accessibility.accessibilityDescription`.
+- [ ] Configure an appropriate accessibility role.
+- [ ] Enable focus through `accessibility.focusable`.
+- [ ] Use a logical `accessibility.tabIndex`.
+- [ ] Provide a visible focus indicator.
+- [ ] Configure meaningful series and point descriptions.
+- [ ] Use semantic headings around the Chart.
+- [ ] Provide a concise visible text summary.
+- [ ] Provide a semantic data table when every value is required.
+- [ ] Use a persistent ARIA live region for important updates.
+- [ ] Preserve built-in keyboard navigation.
+- [ ] Use native buttons for application-owned actions.
+- [ ] Avoid positive `tabindex` values.
+- [ ] Ensure sufficient text, UI, and focus-indicator contrast.
+- [ ] Do not communicate essential information through color alone.
+- [ ] Use marker shapes, dash patterns, labels, and text as alternatives.
+- [ ] Test keyboard navigation at browser zoom levels.
+- [ ] Test with screen readers.
+- [ ] Test with axe-core or another accessibility checker.
+- [ ] Set `lang` and `dir` on the document or relevant container.
+- [ ] Set `enableRtl` when an RTL Chart is required.
+- [ ] Localize titles, labels, series names, summaries, and descriptions.
+- [ ] Validate the complete application against its required WCAG conformance level.
 
-## API Reference
+## Troubleshooting
 
-For detailed API documentation, refer to the [Syncfusion EJ2 Chart Accessibility Documentation](https://ej2.syncfusion.com/documentation/chart/advanced-accessibility-configuration).
+### Chart Is Not Announced
 
+- Configure `accessibility.accessibilityDescription`.
+- Configure an appropriate `accessibilityRole`.
+- Ensure that the Chart is not inside an `aria-hidden="true"` container.
+- Provide a visible title and summary.
+- Avoid conflicting roles on the host and generated Chart.
+- Verify behavior with the target browser and screen reader.
+
+### Chart Cannot Receive Keyboard Focus
+
+- Set `accessibility.focusable` to `true`.
+- Set `accessibility.tabIndex` to `0`.
+- Ensure that no overlay blocks the Chart.
+- Ensure that the Chart is visible.
+- Use `Alt + J` to move focus to the Chart.
+- Preserve the built-in focus behavior.
+
+### Keyboard Navigation Is Not Working
+
+- Do not override the built-in arrow, Enter, Space, Escape, zoom, or print keys.
+- Ensure that the Chart has focus.
+- Inject feature modules required by selection, legend, or zoom interaction.
+- Ensure that the selected series and points are visible.
+- Check whether application-level keyboard handlers call `preventDefault()` unnecessarily.
+
+### Focus Border Is Not Visible
+
+- Configure `focusBorderColor`.
+- Configure a positive `focusBorderWidth`.
+- Configure `focusBorderMargin`.
+- Use a color with sufficient contrast.
+- Ensure that parent containers do not clip the focus indicator.
+
+### Screen Reader Does Not Announce Updates
+
+- Use a persistent `aria-live="polite"` element.
+- Update its text after the Chart data has changed.
+- Use `aria-atomic="true"` when the complete message should be announced.
+- Avoid immediately removing the live region.
+- Do not announce every point render or mouse movement.
+- Test timing with the target screen reader.
+
+### Data Table Is Not Associated with the Chart
+
+- Give the table caption a unique ID.
+- Reference the caption or summary through `aria-describedby`.
+- Ensure that referenced IDs exist.
+- Do not hide the table from assistive technologies.
+- Keep Chart and table values synchronized.
+
+### Colors Are Difficult to Distinguish
+
+- Use a palette with differences in both hue and lightness.
+- Do not rely only on red and green.
+- Use marker shapes and dash patterns.
+- Enable direct labels or tooltips.
+- Provide a text summary and table.
+- Measure contrast rather than assuming it is sufficient.
+
+### RTL Layout Is Incorrect
+
+- Set the document or container `dir` to `rtl`.
+- Set the language through `lang`.
+- Set the Chart-level `enableRtl` to `true`.
+- Localize Chart titles, axis titles, series names, and descriptions.
+- Use `legendSettings`, not `legend`.
+- Do not configure unsupported axis-level or legend-level `enableRtl` properties.
+- Use strings for axis titles.
+- Refresh the Chart after dynamically changing direction.
+
+## Next Steps
+
+- **Troubleshooting:** See `references/troubleshooting.md`.
+- **Styling:** See `references/styling-appearance.md`.
+- **Interactions:** See `references/features-interaction.md`.
+- **Series configuration:** See `references/series-configuration.md`.
+- **Axes customization:** See `references/axes-customization.md`.
+- **Data handling:** See `references/data-handling.md`.

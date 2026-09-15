@@ -2,716 +2,1585 @@
 
 ## Table of Contents
 
-- [Advanced Accessibility Configuration](#advanced-accessibility-configuration)
-  - [Chart-Level Accessibility](#chart-level-accessibility)
-  - [Series Accessibility](#series-accessibility)
-  - [Legend Accessibility](#legend-accessibility)
-- [Keyboard Navigation](#keyboard-navigation)
-  - [Enabling Keyboard Navigation](#enabling-keyboard-navigation)
-  - [Complete Accessible Chart Example](#complete-accessible-chart-example)
-- [Focus Border Configuration](#focus-border-configuration)
-- [Screen Reader Support](#screen-reader-support)
-  - [Data Label for Screen Readers](#data-label-for-screen-readers)
-  - [Announce Chart Changes](#announce-chart-changes)
-- [Dynamic Data Updates](#dynamic-data-updates)
-  - [Update Data Source](#update-data-source)
-  - [Real-Time Streaming Example](#real-time-streaming-example)
-- [Animation & Transitions](#animation--transitions)
-  - [Animation Settings](#animation-settings)
-  - [Animation Events](#animation-events)
-- [Event Handling](#event-handling)
-  - [Common Events](#common-events)
-  - [Point Click Event](#point-click-event)
-- [Performance Optimization](#performance-optimization)
-  - [Large Dataset Configuration](#large-dataset-configuration)
-  - [Group Small Values](#group-small-values)
-- [Troubleshooting](#troubleshooting)
-- [Advanced Patterns](#advanced-patterns)
-  - [Pattern 1: Dashboard with Multiple Charts](#pattern-1-dashboard-with-multiple-charts)
-  - [Pattern 2: Drill-Down Navigation](#pattern-2-drill-down-navigation)
-  - [Pattern 3: Conditional Formatting](#pattern-3-conditional-formatting)
-- [API Reference Links](#api-reference-links)
-- [Next Steps](#next-steps)
+- [Accessibility & Advanced Features](#accessibility--advanced-features)
+  - [Accessibility Overview](#accessibility-overview)
+    - [Accessibility Standards](#accessibility-standards)
+    - [WAI-ARIA Support](#wai-aria-support)
+  - [Advanced Accessibility Configuration](#advanced-accessibility-configuration)
+    - [Chart-Level Accessibility](#chart-level-accessibility)
+    - [Series Accessibility](#series-accessibility)
+    - [Legend Accessibility](#legend-accessibility)
+    - [Focus Border Configuration](#focus-border-configuration)
+  - [Keyboard Navigation](#keyboard-navigation)
+    - [Supported Keyboard Interactions](#supported-keyboard-interactions)
+    - [Keyboard Navigation Requirements](#keyboard-navigation-requirements)
+  - [Screen Reader Support](#screen-reader-support)
+    - [Accessible Chart Summary](#accessible-chart-summary)
+    - [Accessible Data Table](#accessible-data-table)
+    - [Announcing Chart Updates](#announcing-chart-updates)
+  - [Dynamic Data Updates](#dynamic-data-updates)
+    - [Replacing the Data Source](#replacing-the-data-source)
+    - [Real-Time Data Updates](#real-time-data-updates)
+    - [Cleanup](#cleanup)
+  - [Animation and Transitions](#animation-and-transitions)
+    - [Series Animation](#series-animation)
+    - [Animation Complete Event](#animation-complete-event)
+    - [Reduced Motion](#reduced-motion)
+  - [Event Handling](#event-handling)
+    - [Loaded Event](#loaded-event)
+    - [Point Render Event](#point-render-event)
+    - [Text Render Event](#text-render-event)
+    - [Tooltip Render Event](#tooltip-render-event)
+    - [Point Click Event](#point-click-event)
+  - [Performance Optimization](#performance-optimization)
+    - [Limit Visible Points](#limit-visible-points)
+    - [Group Small Values](#group-small-values)
+    - [Control Update Frequency](#control-update-frequency)
+    - [Disable Animation for Frequent Updates](#disable-animation-for-frequent-updates)
+  - [Advanced Patterns](#advanced-patterns)
+    - [Dashboard with Multiple Charts](#dashboard-with-multiple-charts)
+    - [Drill-Down Navigation](#drill-down-navigation)
+    - [Conditional Point Formatting](#conditional-point-formatting)
+  - [Complete Accessible Example](#complete-accessible-example)
+  - [Troubleshooting](#troubleshooting)
+    - [Keyboard Navigation Is Not Working](#keyboard-navigation-is-not-working)
+    - [Screen Reader Does Not Announce the Chart](#screen-reader-does-not-announce-the-chart)
+    - [Screen Reader Does Not Announce Changes](#screen-reader-does-not-announce-changes)
+    - [Animation Is Too Slow](#animation-is-too-slow)
+    - [Dynamic Updates Are Slow](#dynamic-updates-are-slow)
+    - [Point Color Is Not Updated](#point-color-is-not-updated)
+    - [Grouping Is Not Working](#grouping-is-not-working)
+    - [Drill-Down Data Is Not Displayed](#drill-down-data-is-not-displayed)
+  - [Next Steps](#next-steps)
+  - [Combined Mistakes and Future References](#combined-mistakes-and-future-references)
 
-**API Reference:** [AccessibilityModel](https://ej2.syncfusion.com/documentation/api/accumulation-chart/accessibilityModel/) | [IAccLoadedEventArgs](https://ej2.syncfusion.com/documentation/api/accumulation-chart/iaccloadedeventargs/) | [Accumulation Chart API](https://ej2.syncfusion.com/documentation/api/accumulation-chart/)
+
+The EJ2 Accumulation Chart supports accessibility through WAI-ARIA semantics, screen reader compatibility, keyboard navigation, focus customization, right-to-left rendering, and accessible chart, series, and legend configuration.
+
+The component is documented as supporting ADA, Section 508, WCAG 2.2 at the AA level, WAI-ARIA roles and attributes, keyboard navigation, screen readers, color contrast, RTL layouts, and mobile devices.
+
+## Accessibility Overview
+
+Accessibility requires more than displaying data labels. An accessible Accumulation Chart should provide:
+
+- A meaningful visible title.
+- A concise chart description.
+- Keyboard access.
+- Visible keyboard focus.
+- Meaningful point descriptions.
+- Adequate color contrast.
+- More than color alone to distinguish categories.
+- A semantic data table when users need access to every value.
+- Announcements for important dynamic updates.
+- Respect for reduced-motion preferences.
+- Accessible controls for filtering, drill-down, export, and printing.
+
+### Accessibility Standards
+
+The Accumulation Chart follows accessibility standards and guidelines that include:
+
+- ADA.
+- Section 508.
+- WCAG 2.2.
+- WAI-ARIA.
+
+The component uses accessibility-related roles and attributes such as:
+
+- `role="img"`
+- `role="button"`
+- `role="region"`
+- `aria-label`
+- `aria-hidden`
+- `aria-pressed`
+
+### WAI-ARIA Support
+
+The chart generates WAI-ARIA semantics for its rendered and interactive elements.
+
+For application-specific context, also use semantic HTML around the chart.
+
+```html
+<section aria-labelledby="sales-heading">
+  <h2 id="sales-heading">
+    Product Sales Distribution
+  </h2>
+
+  <p id="sales-summary">
+    Product B has the highest sales value at 30,000.
+    Product C has the lowest value at 20,000.
+  </p>
+
+  <div
+    id="chart"
+    role="region"
+    aria-label="Pie chart showing product sales distribution"
+    aria-describedby="sales-summary sales-table-caption"
+  ></div>
+</section>
+```
+
+Do not depend only on automatically generated chart semantics when the visualization requires additional business context.
 
 ## Advanced Accessibility Configuration
 
-Accumulation charts support WCAG 2.2 standards and comprehensive accessibility customization options. The control provides robust customization options for accessibility, allowing you to enhance the user experience for those with disabilities.
+The current Accumulation Chart API supports chart-level accessibility configuration through properties such as:
+
+- `accessibilityDescription`
+- `accessibilityRole`
+- `focusable`
+- `focusBorderColor`
+- `focusBorderMargin`
+- `focusBorderWidth`
 
 ### Chart-Level Accessibility
 
-The accumulation chart control supports the following accessibility properties:
+Use chart-level accessibility properties to describe the complete visualization.
 
-- **accessibilityDescription** - Provides a text description for the accumulation chart, improving support for screen readers.
-- **accessibilityRole** - Specifies the role of the accumulation chart, helping screen readers to identify the element appropriately.
-- **focusable** - Allows the accumulation chart to receive focus, making it accessible via keyboard navigation.
-- **focusBorderColor** - Sets the color of the focus border, enhancing visibility when the accumulation chart is focused.
-- **focusBorderMargin** - Defines the margin around the focus border.
-- **focusBorderWidth** - Specifies the width of the focus border.
-- **tabIndex** - Specifies the tab order for the accumulation chart element, enabling efficient keyboard navigation.
-
-**Example: Chart-Level Accessibility**
 ```typescript
-import { AccumulationChart, PieSeries, AccumulationLegend } from '@syncfusion/ej2-charts';
+import {
+  AccumulationChart,
+  PieSeries
+} from '@syncfusion/ej2-charts';
 
-AccumulationChart.Inject(PieSeries, AccumulationLegend);
+AccumulationChart.Inject(PieSeries);
 
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: [
-      { x: 'Jan', y: 3 },  { x: 'Feb', y: 3.5 }, 
-      { x: 'Mar', y: 7 },  { x: 'Apr', y: 13.5 }, 
-      { x: 'May', y: 19 }, { x: 'Jun', y: 23.5 }, 
-      { x: 'Jul', y: 26 }, { x: 'Aug', y: 25 },
-      { x: 'Sep', y: 21 }, { x: 'Oct', y: 15 },
-      { x: 'Nov', y: 15 }, { x: 'Dec', y: 15 }
-    ],
-    xName: 'x',
-    yName: 'y'
-  }],
-  legendSettings: { visible: true },
-  accessibility: {
-    accessibilityDescription: 'Pie chart representing the distribution of data across months.',
-    accessibilityRole: 'chart'
+interface SalesData {
+  product: string;
+  sales: number;
+}
+
+const chartData: SalesData[] = [
+  {
+    product: 'Product A',
+    sales: 25000
   },
-  focusBorderColor: '#FF0000',
-  focusBorderWidth: 3,
-  focusBorderMargin: 5
-}, '#element');
+  {
+    product: 'Product B',
+    sales: 30000
+  },
+  {
+    product: 'Product C',
+    sales: 20000
+  }
+];
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    title: 'Product Sales Distribution',
+    accessibilityDescription:
+      'Pie chart showing sales distribution across three products. ' +
+      'Product B has the highest sales value.',
+    accessibilityRole: 'img',
+    focusable: true,
+    focusBorderColor: '#0F6CBD',
+    focusBorderWidth: 2,
+    focusBorderMargin: 2,
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        name: 'Product Sales'
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
 ```
+
+Use `accessibilityDescription`, not an unverified chart-level `ariaLabel` property.
+
+Use `focusable`, not an unverified chart-level `tabIndex` property.
 
 ### Series Accessibility
 
-The series supports customization of accessibility for data points with the following properties:
+Use the series `accessibility` configuration to provide meaningful descriptions for rendered points.
 
-- **accessibilityDescription** - Provides a text description for the series root element, enhancing support for screen readers.
-- **accessibilityRole** - Specifies the role of the series, helping screen readers to identify the element appropriately.
-- **focusable** - Allows the series to receive focus, making it accessible via keyboard navigation.
-- **tabIndex** - Specifies the tab order of the series element, enabling efficient keyboard navigation.
-
-**Example: Series Accessibility**
 ```typescript
-import { AccumulationChart, PyramidSeries, AccumulationLegend } from '@syncfusion/ej2-charts';
+const chart: AccumulationChart =
+  new AccumulationChart({
+    title: 'Product Sales Distribution',
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        name: 'Product Sales',
+        accessibility: {
+          accessibilityDescription:
+            '${point.x}, sales value ${point.y}',
+          accessibilityRole: 'img',
+          focusable: true
+        }
+      }
+    ]
+  });
 
-AccumulationChart.Inject(PyramidSeries, AccumulationLegend);
-
-const chart = new AccumulationChart({
-  series: [{
-    type: 'Pyramid',
-    dataSource: [
-      { x: 'Australia', y: 20 },
-      { x: 'France',    y: 22 },
-      { x: 'China',     y: 23 },
-      { x: 'India',     y: 24 },
-      { x: 'Japan',     y: 25 },
-      { x: 'Germany',   y: 27 }
-    ],
-    xName: 'x', 
-    yName: 'y',
-    accessibility: {
-      accessibilityDescription: 'This pyramid chart represents the sales distribution of cars by region, with each section representing a different region and its respective sales percentage.',
-      accessibilityRole: 'presentation'
-    }
-  }],
-  title: 'Sales Distribution of Car by Region',
-  legendSettings: { visible: false }
-}, '#element');
+chart.appendTo('#chart');
 ```
+
+Keep point descriptions concise and meaningful. Avoid repeating unnecessary words for every point.
 
 ### Legend Accessibility
 
-The legend settings provide information about the series shown in the accumulation chart. The accessibility properties in `legendSettings` can be used to alter the accessibility of the chart's legend:
+Use the legend accessibility configuration to describe legend interaction.
 
-- **accessibilityDescription** - Provides a text description for the legend root element, enhancing support for screen readers.
-- **accessibilityRole** - Specifies the role of the legend items to screen readers, providing appropriate context.
-- **focusable** - Specifies whether legend items are focusable via keyboard navigation.
-- **tabIndex** - Specifies the tab order of the legend element, enabling efficient keyboard navigation.
-
-**Example: Legend Accessibility**
 ```typescript
-import { AccumulationChart, PieSeries, AccumulationLegend } from '@syncfusion/ej2-charts';
+import {
+  AccumulationChart,
+  AccumulationLegend,
+  PieSeries
+} from '@syncfusion/ej2-charts';
 
-AccumulationChart.Inject(PieSeries, AccumulationLegend);
+AccumulationChart.Inject(
+  PieSeries,
+  AccumulationLegend
+);
 
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: [
-      { x: 'Jan', y: 3 },  { x: 'Feb', y: 3.5 }, 
-      { x: 'Mar', y: 7 },  { x: 'Apr', y: 13.5 }, 
-      { x: 'May', y: 19 }, { x: 'Jun', y: 23.5 }, 
-      { x: 'Jul', y: 26 }, { x: 'Aug', y: 25 },
-      { x: 'Sep', y: 21 }, { x: 'Oct', y: 15 },
-      { x: 'Nov', y: 15 }, { x: 'Dec', y: 15 }
-    ],
-    xName: 'x',
-    yName: 'y'
-  }],
-  legendSettings: {
-    visible: true,
-    accessibility: {
-      accessibilityDescription: 'The legend identifies the data categories represented in the chart and associates them with their corresponding labels.',
-      accessibilityRole: 'group'
-    }
-  }
-}, '#element');
+const chart: AccumulationChart =
+  new AccumulationChart({
+    legendSettings: {
+      visible: true,
+      position: 'Right',
+      description:
+        'Legend for product sales categories. ' +
+        'Activate a legend item to toggle the corresponding point.',
+      accessibility: {
+        accessibilityDescription:
+          'Product sales legend',
+        accessibilityRole: 'region',
+        focusable: true
+      }
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
 ```
+
+The legend settings model supports accessibility customization and a screen reader description.
+
+### Focus Border Configuration
+
+Use the chart's focus-border properties to make keyboard focus visible.
+
+```typescript
+const chart: AccumulationChart =
+  new AccumulationChart({
+    focusable: true,
+    focusBorderColor: '#0F6CBD',
+    focusBorderWidth: 3,
+    focusBorderMargin: 2,
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+Ensure that the focus border has sufficient contrast against the chart background.
 
 ## Keyboard Navigation
 
-Users can navigate chart elements using keyboard interactions. The chart is keyboard accessible by default when `focusable` is set to true.
+The Accumulation Chart provides built-in keyboard interaction.
 
-### Enabling Keyboard Navigation
+### Supported Keyboard Interactions
 
-**TypeScript:**
-```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
+The documented keyboard shortcuts include:
 
-AccumulationChart.Inject(PieSeries);
+- `Alt + J`: Moves focus to the Accumulation Chart.
+- `Tab`: Moves focus to the next interactive chart element.
+- `Shift + Tab`: Moves focus to the previous interactive chart element.
+- `Down Arrow`: Moves focus to the point on the left side of the selected point.
+- `Up Arrow`: Moves focus to the point on the right side of the selected point.
+- `Down Arrow` or `Left Arrow` on the legend: Moves focus to the legend item on the left.
+- `Up Arrow` or `Right Arrow` on the legend: Moves focus to the legend item on the right.
+- `Enter` or `Space` on a legend item: Toggles the corresponding point visibility.
+- `Ctrl + P`: Prints the chart.
 
-const chart = new AccumulationChart({
-  series: [{ 
-    dataSource: [
-      { x: 'Product A', y: 25000 },
-      { x: 'Product B', y: 30000 },
-      { x: 'Product C', y: 20000 }
-    ], 
-    xName: 'x', 
-    yName: 'y', 
-    type: 'Pie' 
-  }],
-  // Chart is keyboard accessible when focused
-  accessibility: {
-    focusable: true
-  },
-  tabIndex: 0  // Enable tabbing to chart
-}, '#chart');
+The action performed by an arrow key depends on the focused chart element.
+
+Do not document only `Left Arrow` and `Right Arrow` as point-navigation keys when the documented point navigation uses `Down Arrow` and `Up Arrow`.
+
+### Keyboard Navigation Requirements
+
+To preserve built-in keyboard navigation:
+
+- Set `focusable` to `true` when chart-level focus is required.
+- Do not intercept chart navigation keys unnecessarily.
+- Do not remove visible focus indicators.
+- Ensure that no transparent overlay blocks the chart.
+- Use native buttons for application-owned controls.
+- Keep custom controls in logical DOM order.
+- Do not use positive `tabindex` values.
+- Use descriptive labels for drill-down, reset, export, and filter controls.
+
+Use `tabindex="0"` only on an application-owned container when it has a meaningful interactive or navigational purpose.
+
+```html
+<div
+  id="chart"
+  role="region"
+  aria-label="Product sales distribution chart"
+></div>
 ```
 
-### Complete Accessible Chart Example
-
-**TypeScript:**
-```typescript
-import { AccumulationChart, PieSeries, AccumulationLegend } from '@syncfusion/ej2-charts';
-
-AccumulationChart.Inject(PieSeries, AccumulationLegend);
-
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: [
-      { x: 'Product A', y: 25000 },
-      { x: 'Product B', y: 30000 },
-      { x: 'Product C', y: 20000 }
-    ],
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie',
-    dataLabel: {
-      visible: true
-    },
-    accessibility: {
-      accessibilityDescription: 'Product sales distribution pie chart',
-      accessibilityRole: 'presentation'
-    }
-  }],
-  
-  title: 'Product Sales Distribution',
-  accessibility: {
-    accessibilityDescription: 'Pie chart showing product sales by category',
-    accessibilityRole: 'chart'
-  },
-  
-  tooltip: { enable: true },
-  legendSettings: { 
-    visible: true,
-    accessibility: {
-      accessibilityDescription: 'Legend for product categories',
-      accessibilityRole: 'group'
-    }
-  },
-  
-  tabIndex: 0,
-  focusBorderColor: '#0078D4',
-  focusBorderWidth: 2,
-  focusBorderMargin: 3,
-  
-  // Accessibility events
-  loaded: (args) => {
-    console.log('Chart accessible and ready');
-  }
-}, '#chart');
-```
-
-## Focus Border Configuration
-
-The focus border provides visual feedback when the chart element receives keyboard focus. This is crucial for keyboard users and those using accessibility tools.
-
-**Example: Custom Focus Border**
-```typescript
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: data,
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie'
-  }],
-  // Customize focus border appearance
-  focusBorderColor: '#FF0000',      // Red focus border
-  focusBorderWidth: 3,              // 3px border width
-  focusBorderMargin: 5,             // 5px margin from chart boundary
-}, '#chart');
-```
+Prefer the chart's `focusable` configuration over an unsupported constructor-level `tabIndex`.
 
 ## Screen Reader Support
 
-Chart announces data through screen readers when properly configured with accessibility properties and descriptive labels.
+Data labels and tooltips improve visual comprehension, but they are not complete replacements for accessible descriptions or semantic data alternatives.
 
-### Data Label for Screen Readers
+### Accessible Chart Summary
 
-Ensure data labels display all necessary information for screen reader users:
+Provide a concise text summary before the chart.
 
-```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
+```html
+<p id="sales-summary">
+  Product B has the highest sales at 30,000.
+  Product A follows at 25,000, and Product C has 20,000.
+</p>
 
-AccumulationChart.Inject(PieSeries);
-
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: [
-      { x: 'Product A', y: 25000 },
-      { x: 'Product B', y: 30000 },
-      { x: 'Product C', y: 20000 }
-    ],
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie',
-    dataLabel: {
-      visible: true,
-      format: '${point.x}: ${point.y} (${point.percentage}%)'
-    }
-  }],
-  accessibility: {
-    accessibilityDescription: 'Sales data visualization',
-    accessibilityRole: 'chart'
-  }
-}, '#chart');
+<div
+  id="chart"
+  role="region"
+  aria-label="Product sales distribution chart"
+  aria-describedby="sales-summary sales-table-caption"
+></div>
 ```
 
-### Announce Chart Changes
+A useful summary should explain:
+
+- What the chart represents.
+- Its measurement unit.
+- The most important comparison or trend.
+- Where users can access the complete data.
+
+### Accessible Data Table
+
+Provide a semantic table when users need access to every chart value.
+
+```html
+<table>
+  <caption id="sales-table-caption">
+    Product sales values displayed in the accumulation chart
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col">Sales</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Product A</th>
+      <td>25,000</td>
+    </tr>
+    <tr>
+      <th scope="row">Product B</th>
+      <td>30,000</td>
+    </tr>
+    <tr>
+      <th scope="row">Product C</th>
+      <td>20,000</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+Do not mark the only accessible data alternative with `aria-hidden="true"`.
+
+### Announcing Chart Updates
+
+A `console.log` statement is not announced by screen readers.
+
+Use an ARIA live region for important chart updates.
+
+```html
+<p id="chart-status" aria-live="polite">
+  Product sales chart loaded.
+</p>
+```
 
 ```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
+const statusElement: HTMLElement | null =
+  document.getElementById('chart-status');
 
-AccumulationChart.Inject(PieSeries);
-
-const chart = new AccumulationChart({
-  series: [{ 
-    dataSource: data, 
-    xName: 'x', 
-    yName: 'y', 
-    type: 'Pie' 
-  }],
-  pointRender: (args) => {
-    // Log point information (can be announced via screen readers)
-    console.log(`Point: ${args.point.x}, Value: ${args.point.y}, Percentage: ${args.point.percentage}%`);
+function announceChartUpdate(
+  message: string
+): void {
+  if (statusElement) {
+    statusElement.textContent = message;
   }
-}, '#chart');
+}
 ```
+
+After updating the data:
+
+```typescript
+chart.series[0].dataSource = updatedData;
+chart.refresh();
+
+announceChartUpdate(
+  'Product sales chart updated with the latest values.'
+);
+```
+
+Do not use `pointRender` to announce every point. Rendering can occur repeatedly and may produce excessive announcements.
 
 ## Dynamic Data Updates
 
-Update chart data in real-time while maintaining interactivity and accessibility.
+### Replacing the Data Source
 
-### Update Data Source
+Assign the new data source to the series and call `refresh()`.
 
-**TypeScript:**
 ```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
-
-AccumulationChart.Inject(PieSeries);
-
-const initialData = [
-  { x: 'Category A', y: 25000 },
-  { x: 'Category B', y: 30000 },
-  { x: 'Category C', y: 20000 }
-];
-
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: initialData,
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie'
-  }]
-}, '#chart');
-
-// Update data dynamically
-function updateChartData(newData) {
-  chart.series[0].dataSource = newData;
-  chart.refresh();  // Redraw chart
+interface SalesData {
+  product: string;
+  sales: number;
 }
 
-// Example: Update every 5 seconds
-setInterval(() => {
-  const updatedData = fetchLatestData();  // Your API call
-  updateChartData(updatedData);
-}, 5000);
-```
-
-### Real-Time Streaming Example
-
-```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
-
-AccumulationChart.Inject(PieSeries);
-
-// Simulate real-time data updates
-let realTimeData = [
-  { x: 'A', y: 25 },
-  { x: 'B', y: 30 },
-  { x: 'C', y: 20 },
-  { x: 'D', y: 25 }
+const initialData: SalesData[] = [
+  {
+    product: 'Product A',
+    sales: 25
+  },
+  {
+    product: 'Product B',
+    sales: 30
+  },
+  {
+    product: 'Product C',
+    sales: 20
+  }
 ];
 
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: realTimeData,
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie'
-  }],
-  title: 'Real-Time Data',
-  accessibility: {
-    accessibilityDescription: 'Real-time data visualization',
-    accessibilityRole: 'chart'
-  }
-}, '#chart');
+const chart: AccumulationChart =
+  new AccumulationChart({
+    series: [
+      {
+        dataSource: initialData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
 
-// Update data every 2 seconds
-const updateInterval = setInterval(() => {
-  realTimeData = realTimeData.map(item => ({
-    ...item,
-    y: Math.max(5, item.y + (Math.random() * 10 - 5))  // Random change, minimum 5
-  }));
-  
-  chart.series[0].dataSource = realTimeData;
+chart.appendTo('#chart');
+
+function updateChartData(
+  updatedData: SalesData[]
+): void {
+  chart.series[0].dataSource = updatedData;
   chart.refresh();
-}, 2000);
 
-// Stop updates after 60 seconds
-setTimeout(() => clearInterval(updateInterval), 60000);
+  announceChartUpdate(
+    'The chart data has been updated.'
+  );
+}
 ```
 
-## Animation & Transitions
+### Real-Time Data Updates
 
-Configure animation behavior on chart load and data updates while maintaining accessibility.
+The following example updates the chart at a controlled interval.
 
-### Animation Settings
-
-**TypeScript:**
 ```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
+interface LiveData {
+  category: string;
+  value: number;
+}
 
-AccumulationChart.Inject(PieSeries);
-
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: [
-      { x: 'Product A', y: 25000 },
-      { x: 'Product B', y: 30000 },
-      { x: 'Product C', y: 20000 }
-    ],
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie',
-    animation: {
-      enable: true,
-      duration: 1000
-    }
-  }],
-  enableAnimation: true
-}, '#chart');
-```
-
-### Animation Events
-
-**TypeScript:**
-```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
-
-AccumulationChart.Inject(PieSeries);
-
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: [
-      { x: 'Product A', y: 25000 },
-      { x: 'Product B', y: 30000 },
-      { x: 'Product C', y: 20000 }
-    ],
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie'
-  }],
-  
-  // Animation complete event
-  animationComplete: () => {
-    console.log('Animation finished');
-    // Perform actions after animation
+let liveData: LiveData[] = [
+  {
+    category: 'A',
+    value: 25
+  },
+  {
+    category: 'B',
+    value: 30
+  },
+  {
+    category: 'C',
+    value: 20
+  },
+  {
+    category: 'D',
+    value: 25
   }
-}, '#chart');
+];
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    title: 'Live Distribution',
+    series: [
+      {
+        dataSource: liveData,
+        xName: 'category',
+        yName: 'value',
+        type: 'Pie',
+        animation: {
+          enable: false
+        }
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+
+const updateInterval: number =
+  window.setInterval(() => {
+    liveData = liveData.map(
+      (item: LiveData): LiveData => ({
+        ...item,
+        value: Math.max(
+          1,
+          item.value +
+            Math.round(Math.random() * 10 - 5)
+        )
+      })
+    );
+
+    chart.series[0].dataSource =
+      liveData;
+
+    chart.refresh();
+
+    announceChartUpdate(
+      'Live chart values updated.'
+    );
+  }, 5000);
 ```
+
+Keep values valid and nonnegative when they represent proportions.
+
+Do not invoke a placeholder such as `fetchLatestData()` as though it returns data synchronously when the real implementation performs an asynchronous network request.
+
+### Cleanup
+
+Clear intervals and destroy the chart when it is permanently removed.
+
+```typescript
+window.addEventListener('beforeunload', () => {
+  window.clearInterval(updateInterval);
+  chart.destroy();
+});
+```
+
+In a component framework, perform equivalent cleanup in the component's unmount or destroy lifecycle.
+
+## Animation and Transitions
+
+Animation is configured inside the Accumulation Chart series.
+
+The animation model supports:
+
+- `enable`
+- `duration`
+- `delay`
+
+The documented defaults are an enabled animation, a duration of 1000 milliseconds, and a delay of 0 milliseconds.
+
+### Series Animation
+
+```typescript
+const chart: AccumulationChart =
+  new AccumulationChart({
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        animation: {
+          enable: true,
+          duration: 1000,
+          delay: 0
+        }
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+Do not use an unverified chart-level `enableAnimation` property. Configure animation through the series.
+
+### Animation Complete Event
+
+Use `animationComplete` when application logic must run after the chart animation finishes.
+
+```typescript
+import {
+  AccumulationChart,
+  IAccAnimationCompleteEventArgs,
+  PieSeries
+} from '@syncfusion/ej2-charts';
+
+AccumulationChart.Inject(PieSeries);
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    animationComplete: (
+      args: IAccAnimationCompleteEventArgs
+    ): void => {
+      announceChartUpdate(
+        'Chart animation completed.'
+      );
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        animation: {
+          enable: true,
+          duration: 800,
+          delay: 0
+        }
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+### Reduced Motion
+
+Respect the user's reduced-motion preference.
+
+```typescript
+const prefersReducedMotion: boolean =
+  window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        animation: {
+          enable: !prefersReducedMotion,
+          duration:
+            prefersReducedMotion
+              ? 0
+              : 800,
+          delay: 0
+        }
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+Disable animation for charts that update frequently.
 
 ## Event Handling
 
-Handle various chart events for custom interactions and enhanced functionality.
+### Loaded Event
 
-### Common Events
+Use `loaded` after the chart has completed rendering.
 
-**TypeScript:**
 ```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
+import {
+  IAccLoadedEventArgs
+} from '@syncfusion/ej2-charts';
 
-AccumulationChart.Inject(PieSeries);
+const chart: AccumulationChart =
+  new AccumulationChart({
+    loaded: (
+      args: IAccLoadedEventArgs
+    ): void => {
+      announceChartUpdate(
+        'Product sales chart is ready.'
+      );
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
 
-const chart = new AccumulationChart({
-  series: [{
-    dataSource: [
-      { x: 'Product A', y: 25000 },
-      { x: 'Product B', y: 30000 },
-      { x: 'Product C', y: 20000 }
-    ],
-    xName: 'x',
-    yName: 'y',
-    type: 'Pie'
-  }],
-  
-  // Chart loaded event
-  loaded: () => {
-    console.log('Chart loaded successfully');
-  },
-  
-  // Series render event
-  seriesRender: () => {
-    console.log('Series rendering');
-  },
-  
-  // Point render event
-  pointRender: (args) => {
-    // Customize points before rendering
-    if (args.point.y > 25000) {
-      args.point.color = '#00D084';  // Highlight high values
-    }
-  },
-  
-  // Text render event
-  textRender: (args) => {
-    console.log('Label rendered:', args.text);
-  },
-  
-  // Tooltip render event
-  tooltipRender: (args) => {
-    args.text = args.text.toUpperCase();  // Customize tooltip
-  }
-}, '#chart');
+chart.appendTo('#chart');
 ```
+
+### Point Render Event
+
+Use `pointRender` to customize a point before it is rendered.
+
+```typescript
+import {
+  IAccPointRenderEventArgs
+} from '@syncfusion/ej2-charts';
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    pointRender: (
+      args: IAccPointRenderEventArgs
+    ): void => {
+      const value: number =
+        Number(args.point?.y);
+
+      if (value > 30000) {
+        args.fill = '#107C10';
+      } else if (value > 20000) {
+        args.fill = '#C19C00';
+      } else {
+        args.fill = '#D13438';
+      }
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+Use `args.fill` to change the rendered point color.
+
+Do not assign an unverified `args.point.color` property.
+
+### Text Render Event
+
+Use `textRender` to customize data-label text before rendering.
+
+```typescript
+import {
+  IAccTextRenderEventArgs
+} from '@syncfusion/ej2-charts';
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    textRender: (
+      args: IAccTextRenderEventArgs
+    ): void => {
+      if (args.text.includes('Others')) {
+        args.text = 'Other Products';
+      }
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        dataLabel: {
+          visible: true,
+          position: 'Outside'
+        }
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+Inject `AccumulationDataLabel` when data labels are enabled.
+
+### Tooltip Render Event
+
+Use `tooltipRender` only when conditional runtime formatting is required.
+
+```typescript
+const chart: AccumulationChart =
+  new AccumulationChart({
+    tooltipRender: (args): void => {
+      if (args.text) {
+        args.text =
+          `Sales details: ${args.text}`;
+      }
+    },
+    tooltip: {
+      enable: true,
+      format:
+        '${point.x}: ${point.y:n2}'
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        name: 'Product Sales'
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+Preserve inline tooltip formatting in `tooltip.format` when standard number or DateTime formatting is sufficient.
 
 ### Point Click Event
 
+Use `pointClick` for drill-down, filtering, or application-specific interactions.
+
 ```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
+import {
+  IAccPointClickEventArgs
+} from '@syncfusion/ej2-charts';
 
-AccumulationChart.Inject(PieSeries);
+const chart: AccumulationChart =
+  new AccumulationChart({
+    pointClick: (
+      args: IAccPointClickEventArgs
+    ): void => {
+      if (args.point) {
+        announceChartUpdate(
+          `Selected ${String(args.point.x)}, ` +
+          `value ${String(args.point.y)}.`
+        );
+      }
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
 
-const chart = new AccumulationChart({
-  series: [{ 
-    dataSource: [
-      { x: 'Product A', y: 25000 },
-      { x: 'Product B', y: 30000 },
-      { x: 'Product C', y: 20000 }
-    ], 
-    xName: 'x', 
-    yName: 'y', 
-    type: 'Pie' 
-  }],
-  
-  pointClick: (args) => {
-    console.log(`Clicked: ${args.point.x}, Value: ${args.point.y}, Percentage: ${args.point.percentage}%`);
-    // Send data to server, update dashboard, etc.
-  }
-}, '#chart');
+chart.appendTo('#chart');
 ```
 
 ## Performance Optimization
 
-Optimize chart rendering for large datasets while maintaining accessibility.
+Accumulation Charts are designed to display proportional or stage-based data. They are generally not appropriate for thousands of individually rendered points.
 
-### Large Dataset Configuration
+### Limit Visible Points
 
-**TypeScript:**
-```typescript
-import { AccumulationChart, PieSeries } from '@syncfusion/ej2-charts';
+For a large source dataset:
 
-AccumulationChart.Inject(PieSeries);
+- Aggregate related records.
+- Display only the most important categories.
+- Group small values.
+- Filter the dataset before binding it.
+- Avoid displaying thousands of slices.
+- Avoid enabling a data label for every point.
+- Reduce update frequency.
+- Disable animation during frequent updates.
 
-// Create large dataset
-const largeDataset = Array.from({ length: 100 }, (_, i) => ({
-  x: `Item ${i + 1}`,
-  y: Math.floor(Math.random() * 10000)
-}));
-
-const chart = new AccumulationChart({
-  series: [{
-      dataSource: largeDataset,
-      xName: 'x',
-      yName: 'y',
-      type: 'Pie',
-      groupMode: 'Point',
-      groupTo: '10'
-    }],
-  
-  // Performance optimizations
-  enableSmartLabels: true
-}, '#chart');
-```
+Do not create a 10,000-point Pie Chart. It is not readable and creates unnecessary rendering work.
 
 ### Group Small Values
 
+Use `groupTo`, not `groupPadding`.
+
+Group points below a numeric threshold:
+
 ```typescript
-series: [{
-  dataSource: data,
-  xName: 'x',
-  yName: 'y',
-  type: 'Pie',
-  groupMode: 'Value'
-}]
+series: [
+  {
+    dataSource: chartData,
+    xName: 'product',
+    yName: 'sales',
+    type: 'Pie',
+    groupMode: 'Value',
+    groupTo: '5000'
+  }
+]
+```
+
+Group points below a percentage threshold:
+
+```typescript
+series: [
+  {
+    dataSource: chartData,
+    xName: 'product',
+    yName: 'sales',
+    type: 'Pie',
+    groupMode: 'Value',
+    groupTo: '5%'
+  }
+]
+```
+
+Keep a fixed number of leading points and group the remaining points:
+
+```typescript
+series: [
+  {
+    dataSource: chartData,
+    xName: 'product',
+    yName: 'sales',
+    type: 'Pie',
+    groupMode: 'Point',
+    groupTo: '5'
+  }
+]
+```
+
+The supported grouping modes are `Value` and `Point`. Percentage grouping is configured by supplying a percentage string through `groupTo`.
+
+### Control Update Frequency
+
+Batch multiple changes and call `refresh()` once.
+
+```typescript
+function updateMultipleValues(
+  updatedData: SalesData[]
+): void {
+  chart.series[0].dataSource =
+    updatedData;
+
+  chart.title =
+    'Updated Product Sales';
+
+  chart.refresh();
+}
+```
+
+Avoid calling `refresh()` after every individual point change.
+
+### Disable Animation for Frequent Updates
+
+```typescript
+series: [
+  {
+    dataSource: liveData,
+    xName: 'category',
+    yName: 'value',
+    type: 'Pie',
+    animation: {
+      enable: false
+    }
+  }
+]
+```
+
+## Advanced Patterns
+
+### Dashboard with Multiple Charts
+
+Use separate Accumulation Chart instances for independent visualizations.
+
+```typescript
+const pieChart: AccumulationChart =
+  new AccumulationChart({
+    title: 'Sales by Region',
+    series: [
+      {
+        dataSource: regionalData,
+        xName: 'region',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
+
+pieChart.appendTo('#pie-chart');
+
+const doughnutChart: AccumulationChart =
+  new AccumulationChart({
+    title: 'Revenue Distribution',
+    series: [
+      {
+        dataSource: revenueData,
+        xName: 'category',
+        yName: 'revenue',
+        type: 'Pie',
+        innerRadius: '55%'
+      }
+    ]
+  });
+
+doughnutChart.appendTo('#doughnut-chart');
+```
+
+A Doughnut Chart uses `type: 'Pie'` with a nonzero `innerRadius`. Do not use `type: 'Doughnut'`.
+
+Do not directly mutate an internal point's `isSelected` property to synchronize charts. Use supported selection configuration or update the related chart's data and selected indexes.
+
+### Drill-Down Navigation
+
+The following example replaces the chart data after a point click and provides a separate back button.
+
+```typescript
+interface RegionData {
+  region: string;
+  sales: number;
+}
+
+interface CountryData {
+  country: string;
+  sales: number;
+}
+
+const regionData: RegionData[] = [
+  {
+    region: 'Asia',
+    sales: 45
+  },
+  {
+    region: 'Europe',
+    sales: 35
+  },
+  {
+    region: 'Americas',
+    sales: 20
+  }
+];
+
+const countryData:
+  Record<string, CountryData[]> = {
+    Asia: [
+      {
+        country: 'India',
+        sales: 20
+      },
+      {
+        country: 'Japan',
+        sales: 15
+      },
+      {
+        country: 'Singapore',
+        sales: 10
+      }
+    ],
+    Europe: [
+      {
+        country: 'Germany',
+        sales: 15
+      },
+      {
+        country: 'France',
+        sales: 12
+      },
+      {
+        country: 'Italy',
+        sales: 8
+      }
+    ],
+    Americas: [
+      {
+        country: 'USA',
+        sales: 12
+      },
+      {
+        country: 'Canada',
+        sales: 5
+      },
+      {
+        country: 'Brazil',
+        sales: 3
+      }
+    ]
+  };
+
+let isDrilledDown: boolean = false;
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    title: 'Sales by Region',
+    pointClick: (
+      args: IAccPointClickEventArgs
+    ): void => {
+      if (
+        isDrilledDown ||
+        !args.point
+      ) {
+        return;
+      }
+
+      const selectedRegion: string =
+        String(args.point.x);
+
+      const detailData: CountryData[] | undefined =
+        countryData[selectedRegion];
+
+      if (!detailData) {
+        return;
+      }
+
+      chart.series[0].dataSource =
+        detailData;
+
+      chart.series[0].xName =
+        'country';
+
+      chart.series[0].yName =
+        'sales';
+
+      chart.title =
+        `Sales in ${selectedRegion}`;
+
+      isDrilledDown = true;
+      chart.refresh();
+
+      announceChartUpdate(
+        `Drilled down to sales details for ${selectedRegion}.`
+      );
+    },
+    series: [
+      {
+        dataSource: regionData,
+        xName: 'region',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+
+const backButton: HTMLButtonElement | null =
+  document.getElementById(
+    'back-to-regions'
+  ) as HTMLButtonElement | null;
+
+backButton?.addEventListener('click', () => {
+  chart.series[0].dataSource =
+    regionData;
+
+  chart.series[0].xName =
+    'region';
+
+  chart.series[0].yName =
+    'sales';
+
+  chart.title =
+    'Sales by Region';
+
+  isDrilledDown = false;
+  chart.refresh();
+
+  announceChartUpdate(
+    'Returned to the regional sales view.'
+  );
+});
+```
+
+```html
+<button id="back-to-regions" type="button">
+  Back to regions
+</button>
+```
+
+### Conditional Point Formatting
+
+Use `args.fill` in `pointRender`.
+
+```typescript
+const chart: AccumulationChart =
+  new AccumulationChart({
+    pointRender: (
+      args: IAccPointRenderEventArgs
+    ): void => {
+      const value: number =
+        Number(args.point?.y);
+
+      if (value > 30000) {
+        args.fill = '#107C10';
+      } else if (value > 20000) {
+        args.fill = '#C19C00';
+      } else {
+        args.fill = '#D13438';
+      }
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie'
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+```
+
+Do not communicate the value classification through color alone. Also provide a data label, tooltip, description, or table.
+
+## Complete Accessible Example
+
+```typescript
+import {
+  AccumulationChart,
+  AccumulationDataLabel,
+  AccumulationLegend,
+  AccumulationTooltip,
+  IAccPointClickEventArgs,
+  PieSeries
+} from '@syncfusion/ej2-charts';
+
+AccumulationChart.Inject(
+  PieSeries,
+  AccumulationDataLabel,
+  AccumulationLegend,
+  AccumulationTooltip
+);
+
+interface ProductSalesData {
+  product: string;
+  sales: number;
+  label: string;
+}
+
+const chartData: ProductSalesData[] = [
+  {
+    product: 'Product A',
+    sales: 25000,
+    label: 'Product A: 25,000'
+  },
+  {
+    product: 'Product B',
+    sales: 30000,
+    label: 'Product B: 30,000'
+  },
+  {
+    product: 'Product C',
+    sales: 20000,
+    label: 'Product C: 20,000'
+  }
+];
+
+const statusElement: HTMLElement | null =
+  document.getElementById('chart-status');
+
+const prefersReducedMotion: boolean =
+  window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+const chart: AccumulationChart =
+  new AccumulationChart({
+    title: 'Product Sales Distribution',
+    accessibilityDescription:
+      'Pie chart showing sales distribution across Products A, B, and C. ' +
+      'Product B has the highest value at 30,000.',
+    accessibilityRole: 'img',
+    focusable: true,
+    focusBorderColor: '#0F6CBD',
+    focusBorderWidth: 3,
+    focusBorderMargin: 2,
+    legendSettings: {
+      visible: true,
+      position: 'Right',
+      description:
+        'Product categories. Activate an item to toggle its point.',
+      textStyle: {
+        color: '#242424',
+        size: '12px'
+      }
+    },
+    tooltip: {
+      enable: true,
+      header: '',
+      format:
+        '<b>${point.x}</b><br>' +
+        'Sales: ${point.y:n0}<br>' +
+        'Share: ${point.percentage:n1}%'
+    },
+    pointClick: (
+      args: IAccPointClickEventArgs
+    ): void => {
+      if (
+        args.point &&
+        statusElement
+      ) {
+        statusElement.textContent =
+          `Selected ${String(args.point.x)}, ` +
+          `sales ${String(args.point.y)}.`;
+      }
+    },
+    series: [
+      {
+        dataSource: chartData,
+        xName: 'product',
+        yName: 'sales',
+        type: 'Pie',
+        name: 'Product Sales',
+        radius: '82%',
+        accessibility: {
+          accessibilityDescription:
+            '${point.x}, sales ${point.y}',
+          accessibilityRole: 'img',
+          focusable: true
+        },
+        animation: {
+          enable: !prefersReducedMotion,
+          duration:
+            prefersReducedMotion
+              ? 0
+              : 800,
+          delay: 0
+        },
+        border: {
+          color: '#FFFFFF',
+          width: 2
+        },
+        dataLabel: {
+          visible: true,
+          position: 'Outside',
+          name: 'label',
+          connectorStyle: {
+            length: '10%',
+            type: 'Curve'
+          }
+        }
+      }
+    ]
+  });
+
+chart.appendTo('#chart');
+
+window.addEventListener('beforeunload', () => {
+  chart.destroy();
+});
+```
+
+**HTML:**
+
+```html
+<section aria-labelledby="sales-heading">
+  <h1 id="sales-heading">
+    Product Sales Distribution
+  </h1>
+
+  <p id="sales-summary">
+    Product B has the highest sales value at 30,000.
+    Product C has the lowest value at 20,000.
+  </p>
+
+  <div
+    id="chart"
+    role="region"
+    aria-label="Product sales distribution chart"
+    aria-describedby="sales-summary sales-table-caption"
+  ></div>
+
+  <p id="chart-status" aria-live="polite">
+    Product sales chart loaded.
+  </p>
+
+  <table>
+    <caption id="sales-table-caption">
+      Product sales values displayed in the chart
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Product</th>
+        <th scope="col">Sales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Product A</th>
+        <td>25,000</td>
+      </tr>
+      <tr>
+        <th scope="row">Product B</th>
+        <td>30,000</td>
+      </tr>
+      <tr>
+        <th scope="row">Product C</th>
+        <td>20,000</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+```
+
+**CSS:**
+
+```css
+#chart {
+  width: 100%;
+  min-height: 420px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid #808080;
+  text-align: left;
+}
 ```
 
 ## Troubleshooting
 
-### Issue: Animation too slow/fast
-- **Solution:** Adjust `duration` property (milliseconds)
-- Reduce from 1000ms to 500ms for faster animation
-- Increase to 2000ms+ for slower animation
+### Keyboard Navigation Is Not Working
 
-### Issue: Keyboard navigation not working
-- **Solution:** Set `tabIndex: 0` on chart
-- Ensure chart container has focus
-- Check browser keyboard accessibility settings
-- Verify `accessibility: { focusable: true }` is configured
+- Set `focusable` to `true`.
+- Ensure that the chart is visible and fully rendered.
+- Use `Alt + J` to move focus to the Accumulation Chart.
+- Ensure that no parent element traps keyboard focus.
+- Ensure that custom keyboard handlers do not cancel built-in navigation.
+- Do not use an unsupported chart-level `tabIndex` property.
+- Preserve visible focus indicators.
 
-### Issue: Real-time updates lag
-- **Solution:** Reduce update frequency
-- Use `groupMode` to reduce data points
-- Consider pagination for large datasets
-- Optimize data source refresh intervals
+### Screen Reader Does Not Announce the Chart
 
-### Issue: Accessibility descriptions not announced
-- **Solution:** Verify screen reader is enabled
-- Check browser console for errors
-- Ensure data labels are visible
-- Verify `accessibility` properties are correctly configured
-- Test with multiple screen readers (NVDA, JAWS, VoiceOver)
+- Set `accessibilityDescription`.
+- Set an appropriate `accessibilityRole`.
+- Provide a visible title.
+- Add application context through `aria-label`, `aria-labelledby`, or `aria-describedby` on the host.
+- Provide an accessible summary.
+- Provide a semantic data table.
+- Ensure that the chart is not inside an `aria-hidden="true"` container.
 
-### Issue: Focus border not visible
-- **Solution:** Adjust `focusBorderColor` and `focusBorderWidth`
-- Increase `focusBorderWidth` (try 2-3px)
-- Choose contrasting colors for `focusBorderColor`
-- Verify `focusBorderMargin` is appropriate
+### Screen Reader Does Not Announce Changes
 
-## Advanced Patterns
+- Use an `aria-live="polite"` status element.
+- Update the status after the chart update completes.
+- Do not use `console.log` for screen reader announcements.
+- Do not announce every render event.
 
-### Pattern 1: Dashboard with Multiple Charts
+### Animation Is Too Slow
 
-```typescript
-import { AccumulationChart, PieSeries, AccumulationLegend } from '@syncfusion/ej2-charts';
+- Reduce `series.animation.duration`.
+- Disable animation during frequent updates.
+- Respect `prefers-reduced-motion`.
+- Do not use an unsupported chart-level `enableAnimation` property.
 
-AccumulationChart.Inject(PieSeries, AccumulationLegend);
+### Dynamic Updates Are Slow
 
-const data = [
-  { x: 'Product A', y: 25000 },
-  { x: 'Product B', y: 30000 },
-  { x: 'Product C', y: 20000 }
-];
+- Reduce the update frequency.
+- Aggregate or group small values.
+- Disable animation.
+- Avoid displaying a data label for every point.
+- Call `refresh()` once after applying all changes.
+- Clear obsolete intervals.
 
-// Pie chart
-const pieChart = new AccumulationChart({
-  series: [{ 
-    dataSource: data, 
-    xName: 'x', 
-    yName: 'y', 
-    type: 'Pie' 
-  }],
-  title: 'Sales by Region',
-  accessibility: {
-    accessibilityDescription: 'Sales by region pie chart',
-    accessibilityRole: 'chart'
-  }
-}, '#pie-chart');
+### Point Color Is Not Updated
 
-// Doughnut chart
-const doughnutChart = new AccumulationChart({
-  series: [{ 
-    dataSource: data, 
-    xName: 'x', 
-    yName: 'y', 
-    type: 'Doughnut',
-    innerRadius: '50%'
-  }],
-  title: 'Revenue Distribution',
-  accessibility: {
-    accessibilityDescription: 'Revenue distribution doughnut chart',
-    accessibilityRole: 'chart'
-  }
-}, '#doughnut-chart');
-```
+- Assign the color through `args.fill` in `pointRender`.
+- Do not assign an unverified `args.point.color`.
+- Ensure that the selected color is a valid CSS color.
+- Check whether `pointColorMapping` overrides the event result.
 
-### Pattern 2: Drill-Down Navigation
+### Grouping Is Not Working
 
-Observe this sample for [Drill-Down navigation](https://ej2.syncfusion.com/demos/#/tailwind3/chart/drill-down-pie.html).
+- Use `groupTo`.
+- Use `groupMode: 'Value'` or `groupMode: 'Point'`.
+- Do not use `groupPadding`.
+- Do not use `groupMode: 'Percentage'`.
+- Supply a percentage string such as `5%` through `groupTo`.
 
-### Pattern 3: Conditional Formatting
+### Drill-Down Data Is Not Displayed
 
-Observe this sample for [Conditional Formatting](https://ej2.syncfusion.com/demos/#/tailwind3/chart/drill-down-pie.html) using `pointRender`.
-
-## API Reference Links
-
-**Accessibility Properties:**
-- [AccessibilityModel](https://ej2.syncfusion.com/documentation/api/accumulation-chart/accessibilityModel/)
-- [accessibilityDescription](https://ej2.syncfusion.com/documentation/api/accumulation-chart/accessibilityModel/#accessibilitydescription)
-- [accessibilityRole](https://ej2.syncfusion.com/documentation/api/accumulation-chart/accessibilityModel/#accessibilityrole)
-- [focusable](https://ej2.syncfusion.com/documentation/api/accumulation-chart/accessibilityModel/#focusable)
-- [tabIndex](https://ej2.syncfusion.com/documentation/api/accumulation-chart/accessibilityModel/#tabindex)
-
-**Focus Border Properties:**
-- [focusBorderColor](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#focusbordercolor)
-- [focusBorderWidth](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#focusborderwidth)
-- [focusBorderMargin](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#focusbordermargin)
-
-**Events:**
-- [load Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#load)
-- [loaded Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#loaded)
-- [animationComplete Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#animationcomplete)
-- [pointRender Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#pointrender)
-- [seriesRender Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#seriesrender)
-- [pointClick Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#pointclick)
-- [tooltipRender Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#tooltiprender)
-- [textRender Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#textrender)
-- [beforeResize Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#beforeresize)
-- [resized Event](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#resized)
-
-**Methods:**
-- [refresh() Method](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#refresh)
-- [Inject() Method](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#inject)
-
-**Legend Settings:**
-- [legendSettings](https://ej2.syncfusion.com/documentation/api/accumulation-chart/#legendsettings)
-- [Legend Accessibility](https://ej2.syncfusion.com/documentation/api/accumulation-chart/legendSettingsModel/#accessibility)
+- Verify that the clicked point has a matching detail dataset.
+- Update `dataSource`.
+- Update `xName` and `yName` when the detail data uses different fields.
+- Call `refresh()`.
+- Provide a keyboard-accessible back control.
+- Announce the new view through an ARIA live region.
 
 ## Next Steps
 
-- **Review Getting Started** for basic setup
-- **Explore Chart Types** for choosing the right visualization
-- **Implement Accessibility** for inclusive design
-- **Optimize Performance** for large datasets
-- **Check Common Patterns** for specific use cases
-- **Review API Reference** for complete API documentation
+- **Getting started:** See `getting-started.md`.
+- **Chart types:** See `chart-types.md`.
+- **Tooltips and selection:** See `tooltip-selection.md`.
+- **Data labels:** See `data-labels.md`.
+- **Legends:** See `legend-configuration.md`.
+- **Customization:** See `customization-and-styling.md`.
+- **Annotations and features:** See `annotations-and-features.md`.
+
+## Combined Mistakes and Future References
+
+- Import Accumulation Chart modules from `@syncfusion/ej2-charts`.
+- Call `AccumulationChart.Inject(...)` before creating the chart.
+- Inject `PieSeries` for Pie and Doughnut charts.
+- Inject `AccumulationDataLabel` when data labels are enabled.
+- Inject `AccumulationLegend` when the legend is visible.
+- Inject `AccumulationTooltip` when tooltips are enabled.
+- Do not use the regular Cartesian Chart `Tooltip` module.
+- Use `accessibilityDescription` for the chart's accessible description.
+- Use `accessibilityRole` for the chart's accessibility role.
+- Use `focusable` to control chart focusability.
+- Use `focusBorderColor`, `focusBorderWidth`, and `focusBorderMargin` for focus styling.
+- Do not document `ariaLabel` as a verified chart constructor property.
+- Do not document `tabIndex` as a verified chart constructor property.
+- Use the series `accessibility` configuration for point descriptions.
+- Use the legend accessibility configuration for legend descriptions.
+- Preserve the built-in keyboard-navigation keys.
+- Do not override arrow keys, Enter, Space, or Ctrl + P without a validated requirement.
+- The documented point-navigation keys are Down Arrow and Up Arrow.
+- The documented legend-navigation keys include Down/Left and Up/Right.
+- Use `Alt + J` to focus the Accumulation Chart.
+- Use `Enter` or `Space` to toggle the focused legend item.
+- Use `Ctrl + P` to print.
+- Use a visible title and text summary.
+- Provide a semantic data table when complete data access is required.
+- Do not rely only on data labels or tooltips for screen reader support.
+- Do not use `console.log` as an accessibility announcement.
+- Use an ARIA live region for important updates.
+- Avoid announcing every point during rendering.
+- Replace the series data source and call `refresh()` for dynamic updates.
+- Call `refresh()` once after applying a group of changes.
+- Clear intervals and timeouts during cleanup.
+- Call `chart.destroy()` when the chart is permanently removed.
+- Configure animation through `series.animation`.
+- Do not use an unverified chart-level `enableAnimation` property.
+- Use `animation.enable`, `animation.duration`, and `animation.delay`.
+- Respect `prefers-reduced-motion`.
+- Disable animation for frequently updated charts.
+- Use typed event arguments when supported interfaces are available.
+- Use `loaded` after chart rendering.
+- Use `pointRender` to customize point appearance.
+- Use `args.fill`, not an unverified `args.point.color`.
+- Use `textRender` to customize data-label text.
+- Preserve inline tooltip formatting such as `${point.y:n2}` and `${point.percentage:n1}`.
+- Use `tooltipRender` only for conditional runtime tooltip logic.
+- Use `pointClick` for drill-down and application interactions.
+- Do not render thousands of independent Pie slices.
+- Aggregate, filter, or group large datasets before binding.
+- Use `groupTo`, not `groupPadding`.
+- Use `groupMode: 'Value'` for value or percentage threshold grouping.
+- Use `groupMode: 'Point'` for point-count grouping.
+- Use a percentage string such as `5%` for percentage grouping.
+- Do not use `groupMode: 'Percentage'`.
+- Do not use an unverified `isTransposed` property for an Accumulation Chart.
+- Create a Doughnut Chart with `type: 'Pie'` and a nonzero `innerRadius`.
+- Do not use `type: 'Doughnut'`.
+- Do not directly mutate internal point properties such as `isSelected`.
+- Use supported selection settings or selected-data indexes.
+- Provide native buttons for back, reset, export, print, and filtering actions.
+- Preserve visible keyboard focus for application-owned controls.
+- Do not communicate essential data through color alone.
+- Ensure that chart and text colors have sufficient contrast.
+- Ensure that `dataSource`, `xName`, and `yName` are valid.
+- Ensure that fields mapped through `yName` contain numeric values.
+- Ensure that the chart container exists and has a valid height.
+- Call `appendTo` after creating the chart.

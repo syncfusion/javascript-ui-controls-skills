@@ -1,495 +1,1423 @@
 # Series Configuration
 
 ## Table of Contents
-- [Series Properties](#series-properties)
-- [Data Labels](#data-labels)
-- [Marker Customization](#marker-customization)
-- [Stacking & Grouping](#stacking--grouping)
-- [Empty Points](#empty-points)
 
-**Note:** Configuration syntax is identical for TypeScript and JavaScript. Examples show JS object literal format.
+- [Series Configuration](#series-configuration)
+  - [Overview](#overview)
+  - [Module Injection](#module-injection)
+  - [Series Properties](#series-properties)
+    - [Basic Series Configuration](#basic-series-configuration)
+    - [Multiple Series](#multiple-series)
+    - [Series Color and Styling](#series-color-and-styling)
+    - [Series Visibility](#series-visibility)
+  - [Data Labels](#data-labels)
+    - [Enable Data Labels](#enable-data-labels)
+    - [Data Label Formatting](#data-label-formatting)
+    - [Data Label Positioning](#data-label-positioning)
+    - [Mapped Label Text](#mapped-label-text)
+    - [Data Label Template](#data-label-template)
+    - [Advanced Label Customization](#advanced-label-customization)
+  - [Marker Customization](#marker-customization)
+    - [Enable Markers](#enable-markers)
+    - [Marker Styling](#marker-styling)
+    - [Marker Shapes](#marker-shapes)
+    - [Custom Image Markers](#custom-image-markers)
+  - [Stacking and Grouping](#stacking-and-grouping)
+    - [Stacked Series](#stacked-series)
+    - [100 Percent Stacked Series](#100-percent-stacked-series)
+    - [Stacking Groups](#stacking-groups)
+    - [Side-by-Side Series](#side-by-side-series)
+    - [Column Width and Spacing](#column-width-and-spacing)
+  - [Empty Points](#empty-points)
+    - [Handling Missing Data](#handling-missing-data)
+    - [Empty Point Modes](#empty-point-modes)
+      - [Gap](#gap)
+      - [Zero](#zero)
+      - [Drop](#drop)
+      - [Average](#average)
+    - [Empty Point Styling](#empty-point-styling)
+  - [Common Configurations](#common-configurations)
+    - [Sales Comparison Chart](#sales-comparison-chart)
 
-**API Reference:** See [api-reference.md](api-reference.md#series) for complete `Series`, `MarkerSettings`, and `DataLabelSettings` class documentation.
+
+## Overview
+
+A Chart series defines how a data collection is mapped and rendered. Each series can configure its data source, field mappings, type, name, visibility, color, marker, data label, empty-point behavior, stacking group, axis association, and animation.
+
+Data markers can be configured through the series `marker` property, while data labels are configured through `marker.dataLabel`. The `DataLabel` module must be injected when data labels are enabled.
+
+## Module Injection
+
+The EJ2 Chart uses a modular architecture. Import and inject every series, axis, and feature module required by the chart.
+
+```typescript
+import {
+  Category,
+  Chart,
+  ColumnSeries,
+  DataLabel,
+  Legend,
+  LineSeries,
+  Tooltip
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  LineSeries,
+  ColumnSeries,
+  Category,
+  DataLabel,
+  Legend,
+  Tooltip
+);
+```
+
+The modules in this example provide:
+
+- `LineSeries` for Line series.
+- `ColumnSeries` for Column series.
+- `Category` for Category axes.
+- `DataLabel` for series data labels.
+- `Legend` for the chart legend.
+- `Tooltip` for chart tooltips.
+
+Inject only the modules used by the chart.
 
 ## Series Properties
 
 ### Basic Series Configuration
 
-**TypeScript:**
 ```typescript
-import { Chart, ColumnSeries, Category } from '@syncfusion/ej2-charts';
+interface MonthlySalesData {
+  month: string;
+  sales: number;
+}
 
-Chart.Inject(ColumnSeries, Category);
+const chartData: MonthlySalesData[] = [
+  {
+    month: 'Jan',
+    sales: 35
+  },
+  {
+    month: 'Feb',
+    sales: 28
+  },
+  {
+    month: 'Mar',
+    sales: 34
+  }
+];
 
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [{
-    dataSource: data,           // Data array
-    xName: 'month',            // X-axis field
-    yName: 'sales',            // Y-axis field
-    type: 'Column',            // Chart type
-    name: 'Monthly Sales',     // Series label
-    visible: true              // Show/hide series
-  }]
-}, '#chart');
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'month',
+      yName: 'sales',
+      type: 'Column',
+      name: 'Monthly Sales',
+      visible: true
+    }
+  ]
+});
+
+chart.appendTo('#chart');
 ```
+
+The primary series properties are:
+
+- `dataSource`: Specifies the collection bound to the series.
+- `xName`: Maps the field containing X-values.
+- `yName`: Maps the field containing numeric Y-values.
+- `type`: Specifies the series type.
+- `name`: Identifies the series in legends and tooltips.
+- `visible`: Controls whether the series is rendered.
+
+The field mapped through `yName` must contain valid numeric values.
 
 ### Multiple Series
 
-Combine multiple data series for comparison:
+Multiple series can use the same data source and map different Y-value fields.
 
 ```typescript
-import { Chart, ColumnSeries, Category } from '@syncfusion/ej2-charts';
+interface QuarterlyData {
+  quarter: string;
+  sales: number;
+  revenue: number;
+}
 
-Chart.Inject(ColumnSeries, Category);
+const chart[
+Source: chartData,
+Name: 'month',
+Name: 'sales',
+: 'Column',
+: 'Monthly Sales',
+: true
+To('#chart');
+ series properties are:
 
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
+dataSource
+  },
+  {
+    quarter: 'Q3',
+    sales: 38,
+    revenue: 51
+  },
+  {
+    quarter: 'Q4',
+    sales: 48,
+    revenue: 58
+  }
+];
+
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  legendSettings: {
+    visible: true,
+    position: 'Bottom'
+  },
   series: [
     {
-      dataSource: data,
+      dataSource: chartData,
       xName: 'quarter',
       yName: 'sales',
       type: 'Column',
       name: 'Sales'
     },
     {
-      dataSource: data,
+      dataSource: chartData,
       xName: 'quarter',
       yName: 'revenue',
       type: 'Column',
       name: 'Revenue'
     }
   ]
-}, '#chart');
+});
+
+chart.appendTo('#chart');
 ```
 
-### Series Color & Styling
+The series order determines the rendering and legend order unless another supported ordering option is configured.
+
+### Series Color and Styling
+
+Use `fill`, `width`, `dashArray`, and `opacity` to customize a compatible series.
 
 ```typescript
-import { Chart, LineSeriesLineSeries, Category } from '@syncfusion/ej2-charts';
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'sales',
+      type: 'Line',
+      name: 'Sales',
+      fill: '#FF5733',
+      width: 2,
+      dashArray: '0',
+      opacity: 0.8
+    }
+  ]
+});
 
-Chart.Inject(LineSeries, Category);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [{
-    dataSource: data,
-    xName: 'x',
-    yName: 'y',
-    type: 'Line',
-    fill: '#FF5733',           // Line/fill color
-    width: 2,                  // Line width
-    opacity: 0.8,              // Transparency (0-1)
-    cornerRadius: {topLeft: 5, topRight: 5 }     // Corner roundness (for columns)
-  }]
-}, '#chart');
+chart.appendTo('#chart');
 ```
+
+For a Column series, use a `cornerRadius` object.
+
+```typescript
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'sales',
+      type: 'Column',
+      name: 'Sales',
+      fill: '#0F6CBD',
+      opacity: 0.9,
+      cornerRadius: {
+        topLeft: 5,
+        topRight: 5,
+        bottomLeft: 0,
+        bottomRight: 0
+      }
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+Do not assign a single number directly to `cornerRadius`.
+
+Incorrect:
+
+```typescript
+cornerRadius: 5
+```
+
+Correct:
+
+```typescript
+cornerRadius: {
+  topLeft: 5,
+  topRight: 5,
+  bottomLeft: 0,
+  bottomRight: 0
+}
+```
+
+### Series Visibility
+
+Set `visible` to `false` to hide a series initially.
+
+```typescript
+series: [
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'sales',
+    type: 'Column',
+    name: 'Sales',
+    visible: true
+  },
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'revenue',
+    type: 'Column',
+    name: 'Revenue',
+    visible: false
+  }
+]
+```
+
+To change visibility programmatically:
+
+```typescript
+chart.series[1].visible = true;
+chart.refresh();
+```
+
+When the legend is enabled and `legendSettings.toggleVisibility` is `true`, users can toggle series visibility through legend items.
 
 ## Data Labels
 
+Data labels display point values directly on the chart. Enable them through `marker.dataLabel` and inject the `DataLabel` module.
+
 ### Enable Data Labels
 
-Display values on/near data points:
-
 ```typescript
-import { Chart, ColumnSeries, DataLabel, Category } from '@syncfusion/ej2-charts';
+import {
+  Category,
+  Chart,
+  ColumnSeries,
+  DataLabel
+} from '@syncfusion/ej2-charts';
 
-Chart.Inject(ColumnSeries, DataLabel, Category);
+Chart.Inject(
+  ColumnSeries,
+  Category,
+  DataLabel
+);
 
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [{
-    dataSource: data,
-    xName: 'x',
-    yName: 'y',
-    type: 'Column',
-    marker: {
-      dataLabel: {
-        visible: true
-      }
-    }
-  }]
-}, '#chart');
-```
-
-### Data Label Formatting
-
-```typescript
-import { Chart, ColumnSeries, DataLabel, Category } from '@syncfusion/ej2-charts';
-
-Chart.Inject(ColumnSeries, DataLabel, Category);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [{
-    dataSource: data,
-    xName: 'x',
-    yName: 'y',
-    type: 'Column',
-    marker: {
-      dataLabel: {
-        visible: true,
-        position: 'Top',           // Top, Bottom, Middle, Auto
-        margin: { left: 5, right: 5 },
-        font: {
-          size: '16px',
-          color: '#333',
-          fontFamily: 'Arial'
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'sales',
+      type: 'Column',
+      marker: {
+        dataLabel: {
+          visible: true
         }
       }
     }
-  }]
-}, '#chart');
+  ]
+});
+
+chart.appendTo('#chart');
 ```
 
-### Data Label Positions
+The marker itself does not need to be visible for a Column or Bar data label to render.
 
-Supported positions vary by chart type:
+### Data Label Formatting
+
+Use `format` for formatted text and `template` for custom HTML content.
 
 ```typescript
-// For Column/Bar/Line charts
 marker: {
   dataLabel: {
-    position: 'Top'      // Above the column
-    // Other options: 'Bottom', 'Middle', 'Auto'
-  }
-}
-
-// For Pie/Doughnut charts
-marker: {
-  dataLabel: {
-    position: 'Inside'   // Inside slice
-    // Other options: 'Outside'
+    visible: true,
+    position: 'Top',
+    format: '${point.y:n2}',
+    margin: {
+      left: 5,
+      right: 5,
+      top: 5,
+      bottom: 5
+    },
+    font: {
+      size: '14px',
+      color: '#333333',
+      fontFamily: 'Arial',
+      fontWeight: '600'
+    }
   }
 }
 ```
+
+Common tokens include:
+
+- `${point.x}`
+- `${point.y}`
+- `${series.name}`
+
+Inline number formatting can be applied inside supported tokens:
+
+```typescript
+format: '${point.y:n2}'
+```
+
+Additional examples:
+
+```typescript
+format: '${point.y:n0}'
+```
+
+```typescript
+format: '${point.y:c2}'
+```
+
+```typescript
+format: '${point.y}%'
+```
+
+Use `fontWeight`, not `weight`.
+
+### Data Label Positioning
+
+For Cartesian Chart series, supported data-label positions include:
+
+- `Top`
+- `Middle`
+- `Bottom`
+- `Outer`
+- `Auto`
+
+The `Outer` position applies to Column and Bar series.
+
+Example:
+
+```typescript
+marker: {
+  dataLabel: {
+    visible: true,
+    position: 'Outer'
+  }
+}
+```
+
+Do not use the Accumulation Chart positions `Inside` or `Outside` with a regular Cartesian Chart.
+
+Pie and Doughnut data labels belong to the separate `AccumulationChart` component and use their own series-level `dataLabel` configuration.
+
+### Mapped Label Text
+
+Use `name` to map label text from a data-source field.
+
+```typescript
+interface SalesData {
+  quarter: string;
+  sales: number;
+  label: string;
+}
+
+const chartData: SalesData[] = [
+  {
+    quarter: 'Q1',
+    sales: 35,
+    label: 'Q1: 35'
+  },
+  {
+    quarter: 'Q2',
+    sales: 42,
+    label: 'Q2: 42'
+  }
+];
+
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'sales',
+      type: 'Column',
+      marker: {
+        dataLabel: {
+          visible: true,
+          name: 'label',
+          position: 'Outer'
+        }
+      }
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+### Data Label Template
+
+Use `template` to provide custom HTML content. The documented template placeholders include `${point.x}` and `${point.y}`.
+
+```typescript
+marker: {
+  dataLabel: {
+    visible: true,
+    position: 'Outer',
+    template:
+      '<div class="chart-data-label">' +
+      '<strong>${point.x}</strong><br>' +
+      '<span>${point.y}</span>' +
+      '</div>'
+  }
+}
+```
+
+```css
+.chart-data-label {
+  padding: 4px 6px;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  background: #FFFFFF;
+  color: #242424;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 12px;
+  text-align: center;
+}
+```
+
+Do not insert unsanitized user content into a data-label template.
 
 ### Advanced Label Customization
 
 ```typescript
-import { Chart, ColumnSeries, DataLabel, Category } from '@syncfusion/ej2-charts';
-
-Chart.Inject(ColumnSeries, DataLabel, Category);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [{
-    dataSource: data,
-    xName: 'x',
-    yName: 'y',
-    type: 'Column',
-    marker: {
-      dataLabel: {
-        visible: true,
-        fill: '#FFFFFF',
-        border: { color: '#333', width: 1 }
-      }
+marker: {
+  dataLabel: {
+    visible: true,
+    position: 'Outer',
+    format: '${point.y:n2}',
+    fill: '#FFFFFF',
+    border: {
+      color: '#333333',
+      width: 1
+    },
+    rx: 3,
+    ry: 3,
+    angle: 0,
+    enableRotation: false,
+    margin: {
+      left: 5,
+      right: 5,
+      top: 4,
+      bottom: 4
+    },
+    font: {
+      color: '#242424',
+      fontFamily: 'Segoe UI',
+      size: '12px',
+      fontWeight: '600'
     }
-  }]
-}, '#chart');
+  }
+}
+```
+
+Set `enableRotation` to `true` when using a nonzero `angle`.
+
+```typescript
+marker: {
+  dataLabel: {
+    visible: true,
+    enableRotation: true,
+    angle: 45
+  }
+}
 ```
 
 ## Marker Customization
 
+Markers are visual indicators rendered at the data points of compatible series. Set `marker.visible` to `true` to display them.
+
 ### Enable Markers
 
 ```typescript
-import { Chart, LineSeries, DateTime } from '@syncfusion/ej2-charts';
-
-Chart.Inject(LineSeries, DateTime);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'DateTime' },
-  series: [{
-    dataSource: data,
-    xName: 'date',
-    yName: 'value',
-    type: 'Line',
-    marker: {
-      visible: true,
-      width: 8,
-      height: 8,
-      shape: 'Circle'    // Circle, Rectangle, Triangle, Diamond, Cross, Plus, Star
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'sales',
+      type: 'Line',
+      marker: {
+        visible: true,
+        width: 8,
+        height: 8,
+        shape: 'Circle'
+      }
     }
-  }]
-}, '#chart');
+  ]
+});
+
+chart.appendTo('#chart');
 ```
 
 ### Marker Styling
 
 ```typescript
-import { Chart, LineSeries, DateTime } from '@syncfusion/ej2-charts';
-
-Chart.Inject(LineSeries, DateTime);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'DateTime' },
-  series: [{
-    dataSource: data,
-    xName: 'date',
-    yName: 'value',
-    type: 'Line',
-    marker: {
-      visible: true,
-      shape: 'Diamond',
-      width: 12,
-      height: 12,
-      fill: '#FF5733',
-      border: {
-        color: '#FFF',
-        width: 2
-      },
-      opacity: 1
-    }
-  }]
-}, '#chart');
+marker: {
+  visible: true,
+  shape: 'Diamond',
+  width: 12,
+  height: 12,
+  fill: '#FF5733',
+  border: {
+    color: '#FFFFFF',
+    width: 2
+  },
+  opacity: 1
+}
 ```
 
-### Marker Types
+Ensure that marker colors have sufficient contrast against the chart background and series line.
 
-```typescript
-shape: 'Circle'      // Standard circle
-shape: 'Rectangle'   // Square/rect
-shape: 'Triangle'    // Triangle pointing up
-shape: 'Diamond'     // Diamond shape
-shape: 'Cross'       // Plus/cross
-shape: 'Star'        // 5-point star
-shape: 'Image'       // Custom image
-```
+### Marker Shapes
+
+Common marker shapes include:
+
+- `Circle`
+- `Rectangle`
+- `Triangle`
+- `Diamond`
+- `Cross`
+- `Plus`
+- `Star`
+- `Pentagon`
+- `HorizontalLine`
+- `VerticalLine`
+- `Image`
+
+Use an exact marker-shape value supported by the installed package version.
 
 ### Custom Image Markers
 
+Use `shape: 'Image'` with `imageUrl`.
+
 ```typescript
-import { Chart, LineSeries, DateTime } from '@syncfusion/ej2-charts';
+marker: {
+  visible: true,
+  shape: 'Image',
+  imageUrl: '/assets/marker.png',
+  width: 16,
+  height: 16
+}
+```
 
-Chart.Inject(LineSeries, DateTime);
+The image must be available when the chart renders. Provide accessible supplementary information because the marker image itself should not be the only method used to communicate essential data.
 
-const chart = new Chart({
-  primaryXAxis: { valueType: 'DateTime' },
-  series: [{
-    dataSource: data,
-    xName: 'date',
-    yName: 'value',
-    type: 'Line',
-    marker: {
-      visible: true,
-      shape: 'Image',
-      imageUrl: '/assets/marker.png',
-      width: 16,
-      height: 16
+## Stacking and Grouping
+
+### Stacked Series
+
+Stacked series place multiple values on top of one another for every category.
+
+The `StackingColumnSeries` module must be injected for `StackingColumn` and `StackingColumn100` series.
+
+```typescript
+import {
+  Category,
+  Chart,
+  Legend,
+  StackingColumnSeries,
+  Tooltip
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  StackingColumnSeries,
+  Category,
+  Legend,
+  Tooltip
+);
+
+interface StackedData {
+  quarter: string;
+  productA: number;
+  productB: number;
+  productC: number;
+}
+
+const chartData: StackedData[] = [
+  {
+    quarter: 'Q1',
+    productA: 35,
+    productB: 28,
+    productC: 20
+  },
+  {
+    quarter: 'Q2',
+    productA: 42,
+    productB: 32,
+    productC: 24
+  },
+  {
+    quarter: 'Q3',
+    productA: 48,
+    productB: 36,
+    productC: 30
+  }
+];
+
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  legendSettings: {
+    visible: true,
+    position: 'Bottom'
+  },
+  tooltip: {
+    enable: true,
+    shared: true
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'productA',
+      type: 'StackingColumn',
+      name: 'Product A'
+    },
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'productB',
+      type: 'StackingColumn',
+      name: 'Product B'
+    },
+    {
+      dataSource: chartData,
+      xName: 'quarter',
+      yName: 'productC',
+      type: 'StackingColumn',
+      name: 'Product C'
     }
-  }]
-}, '#chart');
-```
-
-## Stacking & Grouping
-
-### Stacking Column/Area Charts
-
-**Absolute stacking (values cumulative):**
-```typescript
-import { Chart, StackingColumnSeries, Category } from '@syncfusion/ej2-charts';
-
-Chart.Inject(StackingColumnSeries, Category);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [
-    { dataSource: data, xName: 'x', yName: 'value1', type: 'StackingColumn', name: 'Q1' },
-    { dataSource: data, xName: 'x', yName: 'value2', type: 'StackingColumn', name: 'Q2' },
-    { dataSource: data, xName: 'x', yName: 'value3', type: 'StackingColumn', name: 'Q3' }
   ]
-}, '#chart');
+});
+
+chart.appendTo('#chart');
 ```
 
-**Percentage stacking (normalized to 100%):**
+### 100 Percent Stacked Series
+
+Use the `100` series variant to normalize every category to 100 percent.
+
 ```typescript
-import { Chart, StackingColumnSeries, Category } from '@syncfusion/ej2-charts';
-
-Chart.Inject(StackingColumnSeries, Category);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [
-    { dataSource: data, xName: 'x', yName: 'value1', type: 'StackingColumn100' },
-    { dataSource: data, xName: 'x', yName: 'value2', type: 'StackingColumn100' }
-  ]
-}, '#chart');
+series: [
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'productA',
+    type: 'StackingColumn100',
+    name: 'Product A'
+  },
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'productB',
+    type: 'StackingColumn100',
+    name: 'Product B'
+  }
+]
 ```
 
-### Grouping Series
+A 100 percent stacked series displays the proportional contribution of every series rather than the absolute category total.
 
-Display series side-by-side for easy comparison:
+### Stacking Groups
+
+Use `stackingGroup` to create separate stacks within the same category.
 
 ```typescript
-import { Chart, ColumnSeries, Category } from '@syncfusion/ej2-charts';
-
-Chart.Inject(ColumnSeries, Category);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [
-    { dataSource: data, xName: 'month', yName: 'jan', type: 'Column', name: 'January' },
-    { dataSource: data, xName: 'month', yName: 'feb', type: 'Column', name: 'February' }
-  ]
-}, '#chart');
+series: [
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'productA',
+    type: 'StackingColumn',
+    name: 'Product A',
+    stackingGroup: 'Current'
+  },
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'productB',
+    type: 'StackingColumn',
+    name: 'Product B',
+    stackingGroup: 'Current'
+  },
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'previousA',
+    type: 'StackingColumn',
+    name: 'Previous Product A',
+    stackingGroup: 'Previous'
+  },
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'previousB',
+    type: 'StackingColumn',
+    name: 'Previous Product B',
+    stackingGroup: 'Previous'
+  }
+]
 ```
 
-### Group Padding
+Series with the same `stackingGroup` value are stacked together.
+
+### Side-by-Side Series
+
+Regular Column or Bar series are arranged side by side.
 
 ```typescript
-import { Chart, ColumnSeries, Category } from '@syncfusion/ej2-charts';
-
-Chart.Inject(ColumnSeries, Category);
-
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [{
-    dataSource: data,
-    xName: 'x',
-    yName: 'y',
+series: [
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'sales',
     type: 'Column',
-    columnSpacing: 0.1,     // Space between columns (0-1)
-    columnWidth: 0.8        // Column width (0-1)
-  }]
-}, '#chart');
+    name: 'Sales'
+  },
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'revenue',
+    type: 'Column',
+    name: 'Revenue'
+  }
+]
 ```
+
+Do not describe side-by-side Column series as stacked series.
+
+### Column Width and Spacing
+
+Use `columnWidth` to control relative column width and `columnSpacing` to control spacing between columns.
+
+```typescript
+series: [
+  {
+    dataSource: chartData,
+    xName: 'quarter',
+    yName: 'sales',
+    type: 'Column',
+    name: 'Sales',
+    columnWidth: 0.7,
+    columnSpacing: 0.1
+  }
+]
+```
+
+Use values appropriate for the number of visible series. Excessive spacing can make the columns difficult to compare.
 
 ## Empty Points
 
+Data points with `null` or `undefined` Y-values are treated as empty points.
+
+The supported empty-point modes are `Gap`, `Zero`, `Drop`, and `Average`. The default mode is `Gap`. There is no `Interpolate` empty-point mode in the EJ2 Chart API.
+
 ### Handling Missing Data
 
-When data has gaps or null values:
-
 ```typescript
-import { Chart, LineSeries, Category } from '@syncfusion/ej2-charts';
+interface MonthlyData {
+  month: string;
+  value: number | null | undefined;
+}
 
-Chart.Inject(LineSeries, Category);
-
-const data = [
-  { x: 'Jan', y: 20 },
-  { x: 'Feb', y: null },    // Missing value
-  { x: 'Mar', y: 30 },
-  { x: 'Apr', y: undefined }
+const chartData: MonthlyData[] = [
+  {
+    month: 'Jan',
+    value: 20
+  },
+  {
+    month: 'Feb',
+    value: null
+  },
+  {
+    month: 'Mar',
+    value: 30
+  },
+  {
+    month: 'Apr',
+    value: undefined
+  },
+  {
+    month: 'May',
+    value: 35
+  }
 ];
 
-const chart = new Chart({
-  primaryXAxis: { valueType: 'Category' },
-  series: [{
-    dataSource: data,
-    xName: 'x',
-    yName: 'y',
-    type: 'Line',
-    emptyPointSettings: {
-      mode: 'Gap',            // Gap, Zero, Average, Interpolate
-      fill: '#CCCCCC',
-      border: { color: '#999' }
+const chart: Chart = new Chart({
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'month',
+      yName: 'value',
+      type: 'Line',
+      emptyPointSettings: {
+        mode: 'Gap',
+        fill: '#CCCCCC',
+        border: {
+          color: '#999999',
+          width: 1
+        }
+      }
     }
-  }]
-}, '#chart');
+  ]
+});
+
+chart.appendTo('#chart');
 ```
 
 ### Empty Point Modes
 
+#### Gap
+
+Displays a gap for the empty point.
+
 ```typescript
-mode: 'Gap'           // Skip empty point, break line
-mode: 'Zero'          // Treat as 0
-mode: 'Average'       // Use average of neighbors
-mode: 'Interpolate'   // Linear interpolation
+emptyPointSettings: {
+  mode: 'Gap'
+}
 ```
 
-### Visibility Options
+#### Zero
+
+Treats the empty point as zero.
+
+```typescript
+emptyPointSettings: {
+  mode: 'Zero'
+}
+```
+
+#### Drop
+
+Ignores the empty point during rendering.
+
+```typescript
+emptyPointSettings: {
+  mode: 'Drop'
+}
+```
+
+#### Average
+
+Uses the average of the previous and next points.
+
+```typescript
+emptyPointSettings: {
+  mode: 'Average'
+}
+```
+
+Do not use:
+
+```typescript
+emptyPointSettings: {
+  mode: 'Interpolate'
+}
+```
+
+### Empty Point Styling
+
+Use `fill` and `border` to customize a rendered empty point.
+
+```typescript
+emptyPointSettings: {
+  mode: 'Average',
+  fill: '#CBCBCB',
+  border: {
+    color: '#808080',
+    width: 2
+  }
+}
+```
+
+The `emptyPointSettings` object does not include a `visible` property.
+
+Incorrect:
 
 ```typescript
 emptyPointSettings: {
   mode: 'Gap',
-  visible: false      // Don't show empty points
+  visible: false
+}
+```
+
+To omit an empty point, use:
+
+```typescript
+emptyPointSettings: {
+  mode: 'Drop'
 }
 ```
 
 ## Common Configurations
 
-### Configuration 1: Sales Comparison Chart
+### Sales Comparison Chart
 
 ```typescript
-series: [
+import {
+  Category,
+  Chart,
+  ColumnSeries,
+  DataLabel,
+  Legend,
+  Tooltip
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  ColumnSeries,
+  Category,
+  DataLabel,
+  Legend,
+  Tooltip
+);
+
+interface SalesData {
+  quarter: string;
+  currentYear: number;
+  previousYear: number;
+}
+
+const salesData: SalesData[] = [
   {
-    dataSource: salesData,
-    xName: 'quarter',
-    yName: 'amount',
-    type: 'Column',
-    name: '2023',
-    cornerRadius: {topLeft:3, topRight: 3},
-    marker: { dataLabel: { visible: true, position: 'Top' } }
+    quarter: 'Q1',
+    currentYear: 42,
+    previousYear: 35
   },
   {
-    dataSource: salesData,
-    xName: 'quarter',
-    yName: 'previousYear',
-    type: 'Column',
-    name: '2022',
-    cornerRadius: {topLeft:3, topRight: 3},
+    quarter: 'Q2',
+    currentYear: 48,
+    previousYear: 40
+  },
+  {
+    quarter: 'Q3',
+    currentYear: 52,
+    previousYear: 46
+  },
+  {
+    quarter: 'Q4',
+    currentYear: 58,
+    previousYear: 51
   }
-],
-tooltip: {
-  enable: true,
-  format: '${series.name}: ${point.y}'
-},
-legendSettings: { visible: true }
+];
+
+const chart: Chart = new Chart({
+  title: 'Annual Sales Comparison',
+  primaryXAxis: {
+    valueType: 'Category'
+  },
+  legendSettings: {
+    visible: true,
+    position: 'Bottom'
+  },
+  tooltip: {
+    enable: true,
+    shared: true,
+    format:
+      '<b>${series.name}</b><br>' +
+      '${point.x}: ${point.y:n2}'
+  },
+  series: [
+    {
+      dataSource: salesData,
+      xName: 'quarter',
+      yName: 'currentYear',
+      type: 'Column',
+      name: '2026',
+      cornerRadius: {
+        topLeft: 3,
+        topRight: 3,
+        bottomLeft: 0,
+        bottomRight: 0
+      },
+      marker: {
+        dataLabel: {
+          visible: true,
+          position: 'Outer',
+          format: '${point.y:n0}'
+        }
+      }
+    },
+    {
+      dataSource: salesData,
+      xName: 'quarter',
+      yName: 'previousYear',
+      type: 'Column',
+      name: '2025',
+      cornerRadius: {
+        topLeft: 3,
+        topRight: 3,
+        bottomLeft: 0,
+        bottomRight: 0
+      }
+    }
+  ]
+});
+
+chart.appendTo('#chart');
 ```
 
-### Configuration 2: Multi-Axis Series
+Use `legendSettings`, not `legend`.
 
-Mix different chart types:
+### Multi-Axis Series
+
+Use `yAxisName` to associate a series with a named axis.
 
 ```typescript
-series: [
+import {
+  Chart,
+  ColumnSeries,
+  DateTime,
+  Legend,
+  LineSeries,
+  Tooltip
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  LineSeries,
+  ColumnSeries,
+  DateTime,
+  Legend,
+  Tooltip
+);
+
+interface WeatherData {
+  date: Date;
+  temperature: number;
+  humidity: number;
+}
+
+const chartData: WeatherData[] = [
   {
-    dataSource: data,
-    xName: 'date',
-    yName: 'temperature',
-    type: 'Line',
-    yAxisName: 'YAxis',
-    marker: { visible: true },
-    name: 'Temperature'
+    date: new Date(2026, 0, 1),
+    temperature: 28,
+    humidity: 68
   },
   {
-    dataSource: data,
-    xName: 'date',
-    yName: 'humidity',
-    type: 'Column',
-    yAxisName: 'YAxis2',
-    name: 'Humidity',
-    opacity: 0.6
+    date: new Date(2026, 0, 2),
+    temperature: 30,
+    humidity: 72
+  },
+  {
+    date: new Date(2026, 0, 3),
+    temperature: 29,
+    humidity: 65
   }
-],
+];
+
+const chart: Chart = new Chart({
+  title: 'Temperature and Humidity',
+  primaryXAxis: {
+    valueType: 'DateTime',
+    labelFormat: 'dd MMM'
+  },
+  primaryYAxis: {
+    name: 'TemperatureAxis',
+    title: 'Temperature in Celsius'
+  },
+  axes: [
+    {
+      name: 'HumidityAxis',
+      title: 'Humidity in Percent',
+      opposedPosition: true,
+      minimum: 0,
+      maximum: 100,
+      interval: 20,
+      labelFormat: '{value}%'
+    }
+  ],
+  legendSettings: {
+    visible: true,
+    position: 'Bottom'
+  },
+  tooltip: {
+    enable: true,
+    shared: true
+  },
+  series: [
+    {
+      dataSource: chartData,
+      xName: 'date',
+      yName: 'temperature',
+      type: 'Line',
+      yAxisName: 'TemperatureAxis',
+      marker: {
+        visible: true
+      },
+      name: 'Temperature'
+    },
+    {
+      dataSource: chartData,
+      xName: 'date',
+      yName: 'humidity',
+      type: 'Column',
+      yAxisName: 'HumidityAxis',
+      name: 'Humidity',
+      opacity: 0.6
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+Axis titles are strings.
+
+Incorrect:
+
+```typescript
 axes: [
-  { name: 'YAxis', title: 'Temp (°C)' },
-  { name: 'YAxis2', title: 'Humidity (%)', opposedPosition: true }
+  {
+    name: 'HumidityAxis',
+    title: {
+      text: 'Humidity'
+    }
+  }
 ]
 ```
 
-### Configuration 3: Real-Time Data with Markers
+Correct:
 
 ```typescript
-series: [{
-  dataSource: realtimeData,
-  xName: 'timestamp',
-  yName: 'value',
-  type: 'Line',
-  width: 2,
-  marker: {
-    visible: true,
-    width: 6,
-    height: 6,
-    shape: 'Circle',
-    dataLabel: {
-      visible: true,
-      position: 'Top',
-      font: { size: '10px' }
-    }
-  },
-}]
+axes: [
+  {
+    name: 'HumidityAxis',
+    title: 'Humidity'
+  }
+]
 ```
 
+### Real-Time Data with Markers
+
+```typescript
+import {
+  Chart,
+  DataLabel,
+  DateTime,
+  LineSeries
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(
+  LineSeries,
+  DateTime,
+  DataLabel
+);
+
+interface RealTimeData {
+  timestamp: Date;
+  value: number;
+}
+
+let realTimeData: RealTimeData[] = [
+  {
+    timestamp: new Date(),
+    value: 25
+  }
+];
+
+const chart: Chart = new Chart({
+  title: 'Real-Time Values',
+  primaryXAxis: {
+    valueType: 'DateTime',
+    labelFormat: 'HH:mm:ss'
+  },
+  series: [
+    {
+      dataSource: realTimeData,
+      xName: 'timestamp',
+      yName: 'value',
+      type: 'Line',
+      width: 2,
+      marker: {
+        visible: true,
+        width: 6,
+        height: 6,
+        shape: 'Circle',
+        dataLabel: {
+          visible: true,
+          position: 'Top',
+          format: '${point.y:n2}',
+          font: {
+            size: '10px'
+          }
+        }
+      }
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+
+const updateInterval: number =
+  window.setInterval(() => {
+    realTimeData = [
+      ...realTimeData,
+      {
+        timestamp: new Date(),
+        value:
+          Math.round(
+            (20 + Math.random() * 20) * 100
+          ) / 100
+      }
+    ].slice(-20);
+
+    chart.series[0].dataSource =
+      realTimeData;
+
+    chart.refresh();
+  }, 5000);
+
+window.addEventListener('beforeunload', () => {
+  window.clearInterval(updateInterval);
+  chart.destroy();
+});
+```
+
+For frequent updates:
+
+- Limit the number of retained points.
+- Disable animation when necessary.
+- Avoid displaying data labels for every point in a dense series.
+- Update all required settings before calling `refresh()`.
+- Clear intervals when the chart is destroyed.
+
+## Troubleshooting
+
+### Series Is Not Displayed
+
+- Import and inject the module required by the series type.
+- Ensure that `dataSource` contains valid records.
+- Ensure that `xName` and `yName` match the data-source fields.
+- Ensure that fields mapped through `yName` contain numeric values.
+- Ensure that the chart container exists and has a valid height.
+- Check the browser console for errors.
+
+### Data Labels Are Not Displayed
+
+- Import and inject `DataLabel`.
+- Place `dataLabel` inside the series `marker`.
+- Set `marker.dataLabel.visible` to `true`.
+- Use a supported label position.
+- Ensure that label text contrasts with its background.
+- Increase the chart dimensions if labels are clipped.
+
+### Data Label Position Is Incorrect
+
+- Use `Top`, `Middle`, `Bottom`, `Outer`, or `Auto`.
+- Use `Outer` only with compatible series such as Column and Bar.
+- Do not use the Accumulation Chart values `Inside` or `Outside`.
+- Ensure that positive and negative values have enough space for the selected placement.
+
+### Data Label Template Is Not Displayed
+
+- Inject `DataLabel`.
+- Set `marker.dataLabel.visible` to `true`.
+- Provide valid HTML in `template`.
+- Use supported placeholders such as `${point.x}` and `${point.y}`.
+- Ensure that application CSS does not hide the template.
+- Do not insert unsanitized user content.
+
+### Markers Are Not Displayed
+
+- Set `marker.visible` to `true`.
+- Use a series type that supports markers.
+- Configure a positive marker width and height.
+- Use a supported marker shape.
+- Ensure that the marker fill contrasts with the series and background.
+
+### Image Marker Is Not Displayed
+
+- Set `marker.shape` to `Image`.
+- Provide a valid `imageUrl`.
+- Ensure that the image is accessible from the page.
+- Check browser network and content-security-policy errors.
+- Configure a positive marker width and height.
+
+### Stacking Is Not Working
+
+- Import and inject the appropriate stacking-series module.
+- Use the same stacked series type for related series.
+- Ensure that related series use compatible X-values.
+- Use the same `stackingGroup` value for series that must be stacked together.
+- Use the `100` variant when proportional stacking is required.
+
+### Columns Are Not Grouped Correctly
+
+- Use regular `Column` series for side-by-side rendering.
+- Use `StackingColumn` for stacked rendering.
+- Use `stackingGroup` for multiple independent stacks.
+- Adjust `columnWidth` and `columnSpacing` carefully.
+- Ensure that the X-values match across related series.
+
+### Empty Points Are Not Handled Correctly
+
+- Ensure that missing Y-values are `null` or `undefined`.
+- Configure `emptyPointSettings`.
+- Use `Gap`, `Zero`, `Drop`, or `Average`.
+- Do not use `Interpolate`.
+- Do not use an unsupported `visible` property.
+- Use `Drop` when the empty point should be omitted.
+
+### Multi-Axis Series Is Not Displayed
+
+- Assign a unique `name` to every additional axis.
+- Set the series `yAxisName` to the exact axis name.
+- Ensure that the axis name casing matches.
+- Configure `opposedPosition` when the additional axis should appear on the opposite side.
+- Use a string for the axis `title`.
+
+## Next Steps
+
+- **Configure axes:** See `references/axes-customization.md`.
+- **Add interaction:** See `references/features-interaction.md`.
+- **Style appearance:** See `references/styling-appearance.md`.
+- **Configure tooltips:** See `references/tooltip-configuration.md`.
+- **Configure legends:** See `references/legend-configuration.md`.
+- **Configure chart types:** See `references/chart-types.md`.
