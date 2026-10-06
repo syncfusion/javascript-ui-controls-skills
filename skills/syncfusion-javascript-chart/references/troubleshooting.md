@@ -10,7 +10,6 @@
       - [Verify Field Mapping](#verify-field-mapping)
       - [Verify Module Injection](#verify-module-injection)
       - [Verify Chart Attachment](#verify-chart-attachment)
-      - [CSS Requirement](#css-requirement)
     - [Data Is Not Displayed](#data-is-not-displayed)
       - [Validate Data Types](#validate-data-types)
       - [Verify Axis Type](#verify-axis-type)
@@ -209,20 +208,6 @@ chart.appendTo('#chart');
 ```
 
 Do not attach the same Chart instance twice.
-
-#### CSS Requirement
-
-A standalone EJ2 Chart renders its core visual content through SVG or Canvas and does not require a Chart-specific stylesheet merely to display the series.
-
-Application CSS may still be required to size the host and style surrounding controls.
-
-Do not add an unverified import such as:
-
-```typescript
-import '@syncfusion/ej2-charts/styles/material.css';
-```
-
-When using the consolidated EJ2 package for other controls, load the theme required by those controls according to the application setup.
 
 ### Data Is Not Displayed
 

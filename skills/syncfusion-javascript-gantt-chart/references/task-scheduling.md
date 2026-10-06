@@ -7,6 +7,7 @@
 - [Custom (Mixed) Scheduling](#custom-mixed-scheduling)
 - [Unscheduled Tasks](#unscheduled-tasks)
 - [Duration Units](#duration-units)
+- [Week and Month Duration Units](#week-and-month-duration-units)
 - [Milestone Tasks](#milestone-tasks)
 - [Project Date Range](#project-date-range)
 - [Working Time & Weekends](#working-time--weekends)
@@ -184,6 +185,178 @@ Duration: '30min'   → 30 minutes
 ```
 
 > The duration column edit type is `string` to support inline unit values (e.g., `'4hours'`). The `durationUnit` property default is `'day'`.
+
+---
+
+## Week and Month Duration Units
+
+The Gantt Chart supports `'Week'` and `'Month'` as duration units, in addition to `'Day'`, `'Hour'`, and `'Minute'`. These units are useful for sprint planning, roadmap planning, and longer-term project phases.
+
+### Key APIs
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `durationUnit` | `string` | Global duration unit: `'Day'` \| `'Hour'` \| `'Minute'` \| `'Week'` \| `'Month'` |
+| `taskFields.durationUnit` | `string` | Per-task duration unit (maps to data source field) |
+| `daysPerWeek` | `number` | Number of working days in a week for week-to-day conversion (default: 5) |
+| `daysPerMonth` | `number` | Number of working days in a month for month-to-day conversion (default: 20) |
+
+### Configure Week Duration Unit
+
+Set `durationUnit: 'Week'` to interpret duration values as weeks:
+
+```typescript
+import { Gantt, Edit, Toolbar, Selection } from '@syncfusion/ej2-gantt';
+
+Gantt.Inject(Edit, Toolbar, Selection);
+
+let gantt: Gantt = new Gantt({
+    dataSource: [
+        { TaskID: 1, TaskName: 'Sprint 1', StartDate: new Date('04/02/2024'), Duration: 2, Progress: 50 },    // 2 weeks
+        { TaskID: 2, TaskName: 'Sprint 2', StartDate: new Date('04/16/2024'), Duration: 2, Progress: 0 }      // 2 weeks
+    ],
+    height: '450px',
+    durationUnit: 'Week',           // durations are in weeks
+    daysPerWeek: 5,                 // 1 week = 5 working days
+    taskFields: {
+        id: 'TaskID', name: 'TaskName', startDate: 'StartDate',
+        duration: 'Duration', progress: 'Progress'
+    }
+});
+gantt.appendTo('#Gantt');
+```
+
+### Configure Month Duration Unit
+
+Set `durationUnit: 'Month'` to interpret duration values as months:
+
+```typescript
+let gantt: Gantt = new Gantt({
+    dataSource: [
+        { TaskID: 1, TaskName: 'Phase 1', StartDate: new Date('04/02/2024'), Duration: 1, Progress: 30 },    // 1 month
+        { TaskID: 2, TaskName: 'Phase 2', StartDate: new Date('05/02/2024'), Duration: 1, Progress: 0 }      // 1 month
+    ],
+    height: '450px',
+    durationUnit: 'Month',          // durations are in months
+    daysPerMonth: 20,               // 1 month = 20 working days
+    taskFields: {
+        id: 'TaskID', name: 'TaskName', startDate: 'StartDate',
+        duration: 'Duration', progress: 'Progress'
+    }
+});
+gantt.appendTo('#Gantt');
+```
+
+### Duration Conversion Rules
+
+#### Week-to-Day Conversion
+
+When `durationUnit: 'Week'` and `daysPerWeek: 5`:
+- Duration `1` week = `5` working days
+- Duration `2` weeks = `10` working days
+- Duration `2.5` weeks = `12.5` working days
+
+Start/end date calculations use the converted day value.
+
+#### Month-to-Day Conversion
+
+When `durationUnit: 'Month'` and `daysPerMonth: 20`:
+- Duration `1` month = `20` working days
+- Duration `2` months = `40` working days
+- Duration `1.5` months = `30` working days
+
+Start/end date calculations use the converted day value.
+
+### Configure daysPerWeek and daysPerMonth
+
+Adjust these values to match your organization's working calendar:
+
+```typescript
+let gantt: Gantt = new Gantt({
+    dataSource: GanttData,
+    height: '450px',
+    durationUnit: 'Week',
+    daysPerWeek: 4,                 // 4-day work week
+    daysPerMonth: 16,               // 4 weeks × 4 days
+    taskFields: { id: 'TaskID', name: 'TaskName', startDate: 'StartDate', duration: 'Duration' }
+});
+gantt.appendTo('#Gantt');
+```
+
+| Configuration | daysPerWeek | daysPerMonth |
+|---|---|---|
+| Standard 5-day week | 5 | 20 (4 weeks × 5 days) |
+| 4-day work week | 4 | 16 (4 weeks × 4 days) |
+| 6-day work week | 6 | 24 (4 weeks × 6 days) |
+| 7-day (24/7 operations) | 7 | 28 (4 weeks × 7 days) |
+
+### Per-Task Duration Unit
+
+Use `taskFields.durationUnit` to map a per-task duration unit field from the data source:
+
+```typescript
+let data: Object[] = [
+    { TaskID: 1, TaskName: 'Sprint', Duration: 2, DurUnit: 'Week' },
+    { TaskID: 2, TaskName: 'Phase', Duration: 1, DurUnit: 'Month' },
+    { TaskID: 3, TaskName: 'Daily Task', Duration: 8, DurUnit: 'Hour' }
+];
+
+let gantt: Gantt = new Gantt({
+    dataSource: data,
+    height: '450px',
+    durationUnit: 'Day',             // global default
+    taskFields: {
+        id: 'TaskID', name: 'TaskName', startDate: 'StartDate',
+        duration: 'Duration', parentID: 'ParentID',
+        durationUnit: 'DurUnit'      // per-task unit from data
+    },
+    daysPerWeek: 5,
+    daysPerMonth: 20
+});
+gantt.appendTo('#Gantt');
+```
+
+### Duration Unit Inline in Data
+
+Specify duration unit directly in the duration string:
+
+```typescript
+{ TaskID: 1, Duration: '2weeks' }    → 2 weeks
+{ TaskID: 2, Duration: '1month' }    → 1 month
+{ TaskID: 3, Duration: '5days' }     → 5 days
+{ TaskID: 4, Duration: '8hours' }    → 8 hours
+```
+
+### Impact on Scheduling
+
+- **Start Date**: Calculated from the given start date using the converted duration.
+- **End Date**: Calculated as start date + converted duration (in days), respecting working time and holidays.
+- **Duration Display**: In the UI, duration is shown in the specified unit (e.g., "2 weeks" or "1 month").
+- **Taskbar Width**: Reflects the actual working days represented by the duration.
+- **Dependency Offsets**: Offsets (e.g., `'2FS+1week'`) are converted and applied using the assigned calendar.
+- **Auto-Scheduling**: Parent/child recalculations use converted day values.
+- **Task Editing**: When you change duration, the unit is preserved or converted based on the edit mode.
+
+### Interaction with Calendars and Working Time
+
+- **Working Time**: Week and month conversions respect `dayWorkingTime` and calendar working hours.
+- **Holidays**: Holidays are excluded from duration calculations; a 5-day duration spanning 1 holiday = 6 calendar days.
+- **Weekends**: By default, weekends are excluded; set `includeWeekend: true` to include them.
+- **Task Calendars**: If a task has a `calendarId`, its calendar's working time is used for duration conversion.
+
+### Limitations
+
+- Duration must be numeric; fractional weeks/months are supported but may round depending on working time.
+- Changing `durationUnit` globally does not retroactively convert existing task durations; values are reinterpreted in the new unit.
+- Very long durations (e.g., 1000 weeks) may cause UI performance issues; consider capping or validating.
+
+### Best Practices
+
+1. **Set `daysPerWeek` and `daysPerMonth` early**: Define them at component initialization based on your working calendar.
+2. **Be consistent**: Use the same duration unit throughout a project for clarity.
+3. **Test with dependencies**: Verify that dependency offsets and scheduling work as expected with your unit choice.
+4. **Document assumptions**: Make it clear in project docs which unit is used and what `daysPerWeek`/`daysPerMonth` values mean.
+5. **Validate imported data**: Ensure imported durations use the correct unit or are converted on import.
 
 ---
 

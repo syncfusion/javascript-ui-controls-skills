@@ -131,27 +131,6 @@ Load the stylesheet that corresponds to the selected theme.
 https://cdn.syncfusion.com/ej2/34.2.2/material3.css
 ```
 
-### Bundler Import
-
-```typescript
-import
-    '@syncfusion/ej2-charts/styles/bootstrap5.css';
-```
-
-A Stock Chart uses dependent EJ2 controls for its range selector, period selector, dropdowns, calendars, buttons, and toolbars. Loading the consolidated theme stylesheet is generally the safest setup for a complete Stock Chart.
-
-Keep the component theme and stylesheet aligned:
-
-```typescript
-theme: 'Bootstrap5'
-```
-
-```html
-https://cdn.syncfusion.com/ej2/34.2.2/material3.css
-```
-
-Avoid mixing a Material component theme with unrelated Bootstrap styling unless the resulting appearance has been intentionally tested.
-
 ## Color Palettes
 
 Use the Stock Chart `palettes` collection to assign default colors across multiple series:

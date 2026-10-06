@@ -5,6 +5,7 @@
 - [Column Properties](#column-properties)
 - [Column Header Customization](#column-header-customization)
 - [Column Formatting](#column-formatting)
+- [Serial Number Column](#serial-number-column)
 - [Tree / Expander Column](#tree--expander-column)
 - [Show / Hide Columns](#show--hide-columns)
 - [Column Type](#column-type)
@@ -109,6 +110,117 @@ columns: [
 | `{ type: 'dateTime', format: 'dd/MM/yyyy hh:mm a' }` | 04/07/2019 12:00 AM |
 
 > Default culture for number/date formatting is `en-US`.
+
+---
+
+## Serial Number Column
+
+### Overview
+
+The Serial Number column displays sequential row numbers in the Gantt Chart, reflecting the current visible row order. Serial numbers are automatically recalculated whenever the visible row sequence changes.
+
+### Enable Serial Number Column
+
+Set `enableSerialNumber` to `true` and add a column with `field: 'SerialNumber'`:
+
+```typescript
+import { Gantt } from '@syncfusion/ej2-gantt';
+
+let gantt: Gantt = new Gantt({
+    dataSource: GanttData,
+    height: '450px',
+    taskFields: { id: 'TaskID', name: 'TaskName', startDate: 'StartDate', duration: 'Duration', progress: 'Progress', parentID: 'ParentID' },
+    enableSerialNumber: true,
+    columns: [
+        { field: 'SerialNumber', headerText: 'S.No', width: 80, allowReordering: false },
+        { field: 'TaskID', width: '150' },
+        { field: 'TaskName', width: '250' }
+    ]
+});
+gantt.appendTo('#Gantt');
+```
+
+### Key Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `enableSerialNumber` | boolean | Enable auto-generated serial numbers (default: `false`) |
+| `field: 'SerialNumber'` | string | Set this field value in the column definition to display serial numbers |
+
+### Behavior
+
+- Serial numbers are based on the current visible row order, not the data source order.
+- **No data source field required** — serial numbers are computed dynamically.
+- Serial numbers are **recalculated** whenever the visible row sequence changes:
+  - Sorting
+  - Filtering
+  - Searching
+  - Paging
+  - Expanding/collapsing parent tasks
+  - Indenting/outdenting tasks
+  - Adding/editing/deleting records
+  - Row drag-and-drop
+  - Data refresh
+  - Virtualization (row re-rendering)
+
+### Hierarchical Data Behavior
+
+Serial numbers work consistently with hierarchical data and update numbering across all visible records. Numbering reflects the expanded/collapsed state:
+
+```typescript
+// When all rows are expanded: 1, 2, 3, 4, 5, 6...
+// When a parent is collapsed: 1, 2, [collapsed parent 3], 4, 5...
+// Serial numbers update to: 1, 2, 3, 4, 5...
+```
+
+### Sorting and Filtering
+
+Serial numbers always reflect the current sorted/filtered view:
+
+```typescript
+// Original data: rows 1, 2, 3, 4, 5
+// After filtering to show only rows 2, 4, 5:
+// Serial numbers display as: 1, 2, 3
+```
+
+### Virtualization Compatibility
+
+Serial numbers update correctly when virtualization is enabled. When rows scroll out of view and back in, serial numbers are recalculated based on the current visible order.
+
+### Column Configuration Recommendations
+
+For a better user experience with serial numbers:
+
+```typescript
+columns: [
+    {
+        field: 'SerialNumber',
+        headerText: 'S.No',
+        width: 80,
+        textAlign: 'Center',
+        type: 'number',
+        allowReordering: false,     // prevent reordering for consistency
+        allowSorting: false,        // optional: prevent manual sort
+        allowEditing: false         // serial numbers are read-only
+    },
+    // ...other columns
+]
+```
+
+### Limitations
+
+- Serial numbers are display-only and cannot be edited or used for data operations.
+- Do not use serial numbers as record identifiers or primary keys.
+- Serial numbers are not persisted in the data source; they exist only for UI display.
+- Exporting (Excel, PDF) includes serial numbers but they are static at export time.
+
+### Best Practices
+
+1. **Keep serial number column narrow** — typically 60-100px width for 1-4 digit numbers.
+2. **Make it read-only** — set `allowEditing: false`.
+3. **Consider disabling sort/reorder** — to avoid confusion about what serial numbers represent.
+4. **Use for large datasets** — especially helpful with paging or virtualization.
+5. **Test with filtering/searching** — verify serial numbers recalculate correctly.
 
 ---
 

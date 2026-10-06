@@ -1,6 +1,6 @@
 ---
 name: syncfusion-javascript-gantt-chart
-description: "Implement Syncfusion Gantt Chart using JavaScript/TypeScript (Essential JS 2). Use this when working with ej2-gantt component for project scheduling, task dependencies, and timeline management. Covers full Gantt implementation including data binding, task scheduling, columns, resources, timeline configuration, WBS, resource view, critical path, baseline tracking, filtering, sorting, editing, and export functionality (Excel/PDF)."
+description: "Implement Syncfusion Gantt Chart using JavaScript/TypeScript (Essential JS 2). Use this when working with ej2-gantt component for project scheduling, task dependencies, and timeline management. Covers full Gantt implementation including data binding, task scheduling (auto/manual/custom, week/month duration units), columns (serial number column), resources, timeline configuration, WBS, resource view, critical path, baseline tracking, filtering, sorting, editing (taskbar draw for creating unscheduled tasks), and export functionality (Excel/PDF). Advanced features: task calendars with custom working time, hierarchical checkbox selection modes, dependency type restrictions (allowedDependencyTypes), calendar-driven scheduling with holidays and working time exceptions."
 metadata:
   author: "Syncfusion Inc"
   version: "34.1.29"
@@ -16,13 +16,15 @@ Use this skill when the user needs to:
 
 - **Set up** the Syncfusion Gantt Chart from scratch (installation, dependencies, basic init)
 - **Bind data** (local hierarchical, flat/self-referential, remote DataManager, load-on-demand)
-- **Configure task scheduling** (auto/manual, milestones, duration units, constraints)
-- **Define columns** (custom columns, templates, frozen, WBS, checkbox, responsive)
+- **Configure task scheduling** (auto/manual/custom modes, week/month duration units, milestones, constraints, daysPerWeek/daysPerMonth)
+- **Configure calendars** (project calendar, task calendars, working time, holidays, exceptions, hoursPerDay)
+- **Define columns** (custom columns, templates, frozen, WBS, serial number column, checkbox, responsive)
 - **Manage resources** (assign resources, resource view, multi-taskbar, work/task types)
 - **Configure timeline** (top/bottom tiers, zooming, formatting)
-- **Enable editing** (cell, dialog, taskbar drag/resize, dependency editing, indent/outdent)
+- **Enable editing** (cell, dialog, taskbar drag/resize, taskbar draw for creating unscheduled tasks, dependency editing, indent/outdent)
 - **Implement filtering, sorting, searching** on Gantt grid
-- **Show task dependencies** (FS, SS, FF, SF, offsets, connector lines)
+- **Show task dependencies** (FS, SS, FF, SF, offsets, restrict dependency types via allowedDependencyTypes, connector lines)
+- **Configure selection** (row, cell, checkbox selection with hierarchyCheckboxMode for parent-child propagation)
 - **Display critical path**, baseline, event markers, holidays, data markers, labels
 - **Export** to Excel or PDF
 - **Implement toolbar, context menu, undo/redo**
@@ -80,7 +82,8 @@ gantt.appendTo('#Gantt');
 - Manual: user controls all dates; no recalculation; `validateManualTasksOnLinking: true` enables predecessor-based validation only
 - Custom: per-task scheduling via `taskFields.manual` boolean field in data source
 - Unscheduled tasks: `allowUnscheduledTasks: true` — tasks with only start date, only end date, only duration, or none; if `false`, defaults to duration 1 from `projectStartDate`
-- Duration units: `durationUnit` (project-wide: `'Day'`/`'Hour'`/`'Minute'`); per-task via `taskFields.durationUnit` field or inline string (`'4hours'`, `'30min'`)
+- Duration units: `durationUnit` (project-wide: `'Day'`/`'Hour'`/`'Minute'`/`'Week'`/`'Month'`); per-task via `taskFields.durationUnit` field or inline string (`'4hours'`, `'30min'`, `'2weeks'`, `'1month'`)
+- Week and Month duration units: daysPerWeek (default: 5), daysPerMonth (default: 20) — conversion factors for week/month to day
 - Milestones: `Duration: 0` renders a diamond shape
 - `projectStartDate` / `projectEndDate` — constrain chart range; auto-calculated if omitted
 - `dayWorkingTime` — define working hour ranges (default: 8–12 and 13–17); used for auto-scheduling calculations
@@ -110,6 +113,18 @@ gantt.appendTo('#Gantt');
 - updateOffsetOnTaskbarEdit: false — preserve offsets during taskbar drag
 - Show/hide dependency lines dynamically via .e-gantt-dependency-view-container
 - enablePredecessorValidation: false — draw lines without enforcing scheduling
+- allowedDependencyTypes — restrict which dependency types are permitted (FS/SS/FF/SF)
+
+### Calendar Settings
+📄 **Read:** [references/calendar-settings.md](references/calendar-settings.md)
+- calendarSettings (projectCalendar, taskCalendar)
+- Project calendar: workingTime, holidays, exceptions
+- Task calendars: assign custom calendars via taskFields.calendarId
+- Calendar behavior affecting task scheduling, duration, dependencies
+- hoursPerDay — working hours per display day (default: 8)
+- workWeek, includeWeekend for working day configuration
+- Calendar interaction with dependencies, resources, task editing, taskbar editing
+- Limitations, best practices, calendar examples
 
 ### Critical Path
 📄 **Read:** [references/critical-path.md](references/critical-path.md)
@@ -155,6 +170,7 @@ gantt.appendTo('#Gantt');
 ### Columns
 📄 **Read:** [references/columns.md](references/columns.md)
 - columns array definition, treeColumnIndex
+- Serial Number Column: enableSerialNumber, field: 'SerialNumber' — auto-generated sequential row numbers that recalculate on sort, filter, paging, drag-drop
 - Checkbox columns, responsive columns
 - Column spanning, column templates
 - WBS column (enableWBS, enableAutoWbsUpdate)
@@ -202,6 +218,8 @@ gantt.appendTo('#Gantt');
 - `selectionSettings.mode`: `'Row'` (default) / `'Cell'` / `'Both'`
 - `selectionSettings.type`: `'Single'` (default) / `'Multiple'` (Ctrl+click for multi-select)
 - `selectionSettings.enableToggle: true` — click selected item again to deselect
+- Checkbox selection: add column with `type: 'checkbox'`; works with hierarchical data
+- `hierarchyCheckboxMode`: `'Self'` / `'Hierarchy'` (default) / `'FilteredHierarchy'` — controls propagation of checkbox selection in parent-child hierarchies
 - `enableHover: true` — highlights rows, taskbars, header cells, and timeline cells on hover
 - Row selection: `selectedRowIndex` for initial load; `selectRow(index)` / `selectRows([indexes])` for dynamic selection
 - Prevent row selection: `rowSelecting` event with `args.cancel = true`; `rowDeselecting` to prevent deselection
@@ -240,10 +258,23 @@ gantt.appendTo('#Gantt');
 
 ### Managing Tasks (Editing)
 📄 **Read:** [references/managing-tasks.md](references/managing-tasks.md)
-- editSettings (allowAdding, allowEditing, allowDeleting)
+- editSettings (allowAdding, allowEditing, allowDeleting, allowTaskbarEditing)
 - Cell / Dialog / Taskbar editing modes
 - Add, delete, indent/outdent, drag-and-drop rows
 - Server-side CRUD, split/merge tasks, validation
+
+### Taskbar Draw (Create Tasks by Drawing)
+📄 **Read:** [references/taskbar-draw.md](references/taskbar-draw.md)
+- `allowTaskbarDraw: true` in editSettings — enables drawing taskbars on the timeline to create or schedule unscheduled tasks
+- Workflow: identify unscheduled task → click and drag on timeline → Gantt auto-calculates StartDate, EndDate, Duration
+- Respects working time, holidays, weekends, task calendars, constraints, and dependencies
+- Fully unscheduled, partially scheduled (start-only, duration-only), and already-scheduled task scenarios
+- Parent tasks (cannot draw directly), child tasks (can draw; parent auto-adjusts), milestone tasks (duration = 0)
+- Feature interactions: taskbar editing, dialog/cell editing, dependencies, scheduling modes, resource assignments
+- Prerequisites: Edit module injection, allowTaskbarEditing, allowUnscheduledTasks, primary key configured
+- Behavior with auto/manual/custom scheduling modes and dependency validation
+- Events: taskbarEditing (prevent draw), actionComplete (post-draw actions)
+- Edge cases (drawing before project start, overlapping draws, minimal duration) and best practices
 
 ### Undo / Redo
 📄 **Read:** [references/undo-redo.md](references/undo-redo.md)

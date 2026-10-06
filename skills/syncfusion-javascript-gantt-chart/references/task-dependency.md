@@ -5,6 +5,7 @@
 - [Basic Configuration](#basic-configuration)
 - [Multiple Predecessors](#multiple-predecessors)
 - [Offsets (Lag & Lead)](#offsets-lag--lead)
+- [Allowed Dependency Types](#allowed-dependency-types)
 - [Parent Dependencies](#parent-dependencies)
 - [Connector Line Customization](#connector-line-customization)
 - [Dependency Editing (Taskbar)](#dependency-editing-taskbar)
@@ -99,6 +100,178 @@ let data = [
       Predecessor: '2FS-1d' }      // testing starts 1 day before dev finishes
 ];
 ```
+
+---
+
+## Allowed Dependency Types
+
+The `allowedDependencyTypes` property restricts which dependency types (relationship types) can be created, edited, or parsed in the Gantt Chart. Use this to enforce project management standards or organizational policies.
+
+### Supported Dependency Types
+
+| Type | Code | Description |
+|------|------|-------------|
+| Finish to Start | `'FS'` | Successor starts after predecessor finishes (most common) |
+| Start to Start | `'SS'` | Successor starts when predecessor starts |
+| Finish to Finish | `'FF'` | Successor finishes when predecessor finishes |
+| Start to Finish | `'SF'` | Successor finishes when predecessor starts |
+
+### Configuration
+
+Set `allowedDependencyTypes` to an array of permitted types. Only these types are allowed during dependency creation, editing, and parsing.
+
+```typescript
+import { Gantt, Edit, Toolbar } from '@syncfusion/ej2-gantt';
+
+Gantt.Inject(Edit, Toolbar);
+
+let gantt: Gantt = new Gantt({
+    dataSource: GanttData,
+    height: '450px',
+    taskFields: {
+        id: 'TaskID', name: 'TaskName', startDate: 'StartDate',
+        duration: 'Duration', dependency: 'Predecessor', progress: 'Progress'
+    },
+    allowedDependencyTypes: ['FS', 'SS'],   // only Finish-to-Start and Start-to-Start allowed
+    editSettings: { allowTaskbarEditing: true },
+    toolbar: ['Add', 'Edit', 'Update', 'Delete', 'Cancel']
+});
+gantt.appendTo('#Gantt');
+```
+
+### Default Behavior
+
+If `allowedDependencyTypes` is not set or is an empty array, **all dependency types are allowed** (`['FS', 'SS', 'FF', 'SF']`).
+
+### API Details
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `allowedDependencyTypes` | `string[]` | `['FS', 'SS', 'FF', 'SF']` | Array of permitted dependency type codes |
+
+### Restriction Behavior
+
+When `allowedDependencyTypes` is configured:
+
+1. **Data Loading**: Dependencies not matching allowed types are **ignored** during initial data load.
+2. **Dependency Creation (UI)**: Users cannot create dependencies of non-allowed types via taskbar drag, dialogs, or inline editing.
+3. **Dependency Editing (UI)**: Existing dependencies of disallowed types cannot be edited to valid dates; they remain as-is.
+4. **Dependency Dialogs**: The dependency type selector in edit dialogs shows **only** the allowed types.
+5. **Programmatic APIs**: Methods like `addPredecessor()` reject non-allowed types.
+
+### Example: Allow Only FS Dependencies
+
+```typescript
+let gantt: Gantt = new Gantt({
+    dataSource: [
+        { TaskID: 1, TaskName: 'Design', StartDate: new Date('04/02/2024'), Duration: 5 },
+        { TaskID: 2, TaskName: 'Development', StartDate: new Date('04/02/2024'), Duration: 8, Predecessor: '1FS+2d' },
+        { TaskID: 3, TaskName: 'Testing', StartDate: new Date('04/02/2024'), Duration: 3, Predecessor: '1SS' }  // SS not allowed
+    ],
+    height: '450px',
+    taskFields: {
+        id: 'TaskID', name: 'TaskName', startDate: 'StartDate',
+        duration: 'Duration', dependency: 'Predecessor', progress: 'Progress'
+    },
+    allowedDependencyTypes: ['FS'],   // only FS allowed
+    editSettings: { allowTaskbarEditing: true }
+});
+gantt.appendTo('#Gantt');
+
+// On load:
+// Task 2 dependency (1FS+2d) is parsed and rendered normally
+// Task 3 dependency (1SS) is ignored because SS is not allowed
+```
+
+### Behavior During Editing
+
+#### Taskbar Drag to Create Dependency
+
+When dragging a taskbar connector to create a dependency, the component defaults to the first allowed type. If only `['FS']` is allowed, all newly created dependencies are `FS`.
+
+#### Dependency Dialog
+
+When opening the dependency type dropdown in the edit dialog, only allowed types are shown:
+
+```typescript
+allowedDependencyTypes: ['FS', 'SS']
+
+// Dropdown shows:
+// - Finish to Start (FS)
+// - Start to Start (SS)
+// - (Finish to Finish and Start to Finish are hidden)
+```
+
+#### Changing an Existing Dependency Type
+
+If a task has a dependency like `'2FS'` and you try to change it to `'2SS'` while `allowedDependencyTypes: ['FS']`, the edit is **rejected** or reverted because `SS` is not allowed.
+
+### Validation Examples
+
+**Example 1: Strict FS-only project**
+
+```typescript
+allowedDependencyTypes: ['FS']
+
+// Valid: '2FS', '2FS+3d'
+// Invalid/Ignored: '2SS', '3FF', '4SF'
+```
+
+**Example 2: Agile/Sprint planning (FS and SS)**
+
+```typescript
+allowedDependencyTypes: ['FS', 'SS']
+
+// Valid: '2FS', '2SS', '2FS+1d', '3SS-2h'
+// Invalid/Ignored: '2FF', '2SF'
+```
+
+**Example 3: Complex projects (all types)**
+
+```typescript
+allowedDependencyTypes: ['FS', 'SS', 'FF', 'SF']  // or omit to default to all
+
+// All types allowed
+```
+
+### Interaction with Offsets
+
+Offsets are validated only for allowed types. If a dependency string includes an offset for a non-allowed type, the entire dependency is ignored:
+
+```typescript
+allowedDependencyTypes: ['FS']
+
+Predecessor: '2FS+3d'       // VALID: FS is allowed, offset is applied
+Predecessor: '2SS+2d'       // IGNORED: SS is not allowed (entire string ignored)
+Predecessor: '3FS,2SS'      // MIXED: FS parsed, SS ignored → Task depends only on 3FS
+```
+
+### Programmatic API
+
+Use `addPredecessor()` to add a dependency programmatically. Non-allowed types are rejected:
+
+```typescript
+// Given: allowedDependencyTypes: ['FS', 'SS']
+
+gantt.addPredecessor(4, '2FS');      // OK: FS is allowed
+gantt.addPredecessor(4, '3SS');      // OK: SS is allowed
+gantt.addPredecessor(4, '2FF');      // REJECTED: FF is not allowed
+```
+
+### Best Practices
+
+1. **Define `allowedDependencyTypes` early**: Set it during component initialization.
+2. **Standardize across projects**: Use the same allowed types across similar projects for consistency.
+3. **Document the policy**: Make it clear to teams which dependency types are permitted and why.
+4. **Validate imported data**: When importing existing projects, ensure dependencies conform to allowed types or scrub them on import.
+5. **Use FS for simplicity**: If unsure, start with `['FS']` (Finish-to-Start) as it's the most intuitive and common type.
+6. **Test with edge cases**: Verify behavior with complex dependency chains and multiple predecessors.
+
+### Limitations
+
+- `allowedDependencyTypes` is enforced at UI/parsing time only; it does not validate programmatic data manipulation outside the component.
+- Changing `allowedDependencyTypes` after component initialization does not retroactively validate existing dependencies; re-load data to apply validation.
+- Disallowed dependencies in the data source are silently ignored with no error or warning (by default); consider custom validation in `dataBound` event if auditing is needed.
 
 ---
 
