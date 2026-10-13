@@ -5,6 +5,7 @@
 - [Banner Template](#banner-template)
 - [Prompt Item Template](#prompt-item-template)
 - [Response Item Template](#response-item-template)
+- [Response Animation Template](#response-animation-template)
 - [Prompt Suggestion Item Template](#prompt-suggestion-item-template)
 - [Footer Template](#footer-template)
 
@@ -14,13 +15,14 @@ This guide covers all template customization options in the AI AssistView compon
 
 ## Overview
 
-The AI AssistView provides five template properties to customize different areas:
+The AI AssistView provides six template properties to customize different areas:
 
 1. **bannerTemplate** - Welcome banner at the top
 2. **promptItemTemplate** - User prompt messages
 3. **responseItemTemplate** - AI response messages
-4. **promptSuggestionItemTemplate** - Suggestion chips
-5. **footerTemplate** - Custom footer/input area
+4. **responseAnimationTemplate** - Loading indicator shown while a response is being generated
+5. **promptSuggestionItemTemplate** - Suggestion chips
+6. **footerTemplate** - Custom footer/input area
 
 All templates support string HTML or function returning HTML.
 
@@ -230,6 +232,114 @@ const aiAssistView: AIAssistView = new AIAssistView({
 
 ---
 
+## Response Animation Template
+
+### Property
+
+```typescript
+responseAnimationTemplate: string | Function = ''
+```
+
+The `responseAnimationTemplate` property displays a custom loading indicator or animation in the AI AssistView while a response is being generated. The animation template is shown in place of the response and is removed once the response is added.
+
+To use this template effectively, return a `Promise` from `promptRequest` and call `resolve()` only after `addPromptResponse` completes. The AI AssistView keeps the animation visible until the promise resolves.
+
+### Example
+
+```typescript
+import { AIAssistView, PromptRequestEventArgs } from '@syncfusion/ej2-interactive-chat';
+import { enableRipple } from '@syncfusion/ej2-base';
+
+enableRipple(true);
+
+let aiAssistView: AIAssistView = new AIAssistView({
+    responseAnimationTemplate: responseAnimationContent,
+    promptRequest: (args: PromptRequestEventArgs) => {
+        return new Promise<void>((resolve: () => void) => {
+            setTimeout(() => {
+                const defaultResponse = 'For real-time prompt processing, connect the AIAssistView component to your preferred AI service, such as OpenAI or Azure Cognitive Services. Ensure you obtain the necessary API credentials to authenticate and enable seamless integration.';
+                aiAssistView.addPromptResponse(defaultResponse);
+                resolve();
+            }, 2000);
+        });
+    }
+});
+aiAssistView.appendTo('#response-animation');
+
+function responseAnimationContent() {
+    return `<div class="assistview-loading-status">
+                <div class="assistview-grid-icon">
+                    <span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="assistview-loading-label">Generating</span>
+            </div>`;
+}
+```
+
+### Styling the Animation
+
+```html
+<style>
+    .assistview-loading-status {
+        display: flex;
+        gap: 10px;
+        color: #666;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    .assistview-grid-icon {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+
+    .assistview-grid-icon span {
+        width: 4px;
+        height: 4px;
+        background: #8a8a8a;
+        border-radius: 1px;
+        opacity: 0.25;
+        animation: assistview-pulse 1.8s ease-in-out infinite;
+    }
+
+    .assistview-grid-icon span:nth-child(1) { animation-delay: 0s; }
+    .assistview-grid-icon span:nth-child(2) { animation-delay: 0.1s; }
+    .assistview-grid-icon span:nth-child(3) { animation-delay: 0.2s; }
+    .assistview-grid-icon span:nth-child(4) { animation-delay: 0.3s; }
+    .assistview-grid-icon span:nth-child(5) { animation-delay: 0.4s; }
+    .assistview-grid-icon span:nth-child(6) { animation-delay: 0.5s; }
+    .assistview-grid-icon span:nth-child(7) { animation-delay: 0.6s; }
+    .assistview-grid-icon span:nth-child(8) { animation-delay: 0.7s; }
+    .assistview-grid-icon span:nth-child(9) { animation-delay: 0.8s; }
+
+    @keyframes assistview-pulse {
+        0%,
+        100% {
+            opacity: 0.25;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+</style>
+```
+
+### Behavior Notes
+
+- The animation template is rendered in place of the response area while the response is being generated.
+- The template is automatically removed once `addPromptResponse` (or the next response update) is invoked.
+- Return a `Promise` from `promptRequest` and call `resolve()` only after the response is added so the AI AssistView keeps the animation visible until the response is complete.
+
+---
+
 ## Prompt Suggestion Item Template
 
 ### Property
@@ -396,6 +506,7 @@ function advancedFooter() {
 - `bannerTemplate`: Top banner area
 - `promptItemTemplate`: User prompt messages
 - `responseItemTemplate`: AI response messages
+- `responseAnimationTemplate`: Loading indicator shown while a response is being generated
 - `promptSuggestionItemTemplate`: Suggestion chips
 - `footerTemplate`: Footer/input area
 

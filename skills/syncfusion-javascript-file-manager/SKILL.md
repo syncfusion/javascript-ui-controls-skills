@@ -144,6 +144,10 @@ Then create a basic HTML container:
 📄 **Read:** [references/file-system-providers-detailed.md](references/file-system-providers-detailed.md)
 - **Topics:** 10 complete providers with setup, configurations, and examples
 
+### Docker Deployment
+📄 **Read:** [references/docker-deployment.md](references/docker-deployment.md)
+- **Topics:** Unified `syncfusion/filemanager-provider` Docker image for Azure Blob Storage and Amazon S3, environment-variable configuration, `docker-compose.yml` examples, client-side `ajaxSettings`, troubleshooting
+
 ### Localization
 📄 **Read:** [references/localization-and-internationalization.md](references/localization-and-internationalization.md)
 - **Topics:** Multi-language support, locales, RTL rendering, custom translations

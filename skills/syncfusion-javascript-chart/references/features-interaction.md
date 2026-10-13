@@ -307,6 +307,60 @@ tooltip: {
 
 Do not insert unsanitized user-provided HTML into tooltip templates.
 
+### Raw Datasource Record in `tooltipRender`
+
+The original datasource record is available only through `args.data.rawData` in the `tooltipRender` event. It is not available as a `${point.data.<field>}` tooltip-format token.
+
+#### TypeScript
+
+```ts
+import { Category, Chart, HiloOpenCloseSeries, ITooltipRenderEventArgs, Tooltip } from '@syncfusion/ej2-charts';
+
+Chart.Inject(Category, HiloOpenCloseSeries, Tooltip);
+
+interface HiloOpenCloseData {
+    x: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+}
+
+const tooltipRender = (args: ITooltipRenderEventArgs): void => {
+    if (!args.data || !args.data.rawData) {
+        return;
+    }
+    const rawData: HiloOpenCloseData = args.data.rawData as HiloOpenCloseData;
+    args.headerText = `<b>${rawData.x}</b>`;
+    args.text = [
+        `Open: ${rawData.open}`,
+        `High: ${rawData.high}`,
+        `Low: ${rawData.low}`,
+        `Close: ${rawData.close}`
+    ];
+};
+```
+
+#### JavaScript
+
+```js
+function tooltipRender(args) {
+    if (!args.data || !args.data.rawData) {
+        return;
+    }
+    var rawData = args.data.rawData;
+    args.headerText = '<b>' + rawData.x + '</b>';
+    args.text = [
+        'Open: ' + rawData.open,
+        'High: ' + rawData.high,
+        'Low: ' + rawData.low,
+        'Close: ' + rawData.close
+    ];
+}
+```
+
+Use datasource property names directly, such as `args.data.rawData.x` and `args.data.rawData.high`.
+
 ## Crosshair and Trackball
 
 The Crosshair module displays horizontal, vertical, or combined reference lines. Crosshair axis tooltips can be enabled separately through each axis.

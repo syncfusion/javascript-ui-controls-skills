@@ -577,6 +577,170 @@ primaryXAxis: {
 }
 ```
 
+#### Supported Axis Actions
+
+- `None`: Leaves labels unchanged, even when they overlap.
+- `Hide`: Hides labels that collide with previously rendered labels.
+- `Trim`: Trims intersecting labels and displays an ellipsis.
+- `Wrap`: Wraps intersecting labels into multiple lines.
+- `MultipleRows`: Moves colliding horizontal-axis labels into additional rows.
+- `Rotate45`: Rotates intersecting labels by 45 degrees.
+- `Rotate90`: Rotates intersecting labels by 90 degrees.
+- `Rotate45WithTrim`: Rotates labels by 45 degrees and trims text outside the available label width.
+- `Rotate90WithTrim`: Rotates labels by 90 degrees and trims text outside the available label width.
+
+
+Use `Trim`, `Wrap`, `Rotate45WithTrim`, or `Rotate90WithTrim` when the label area must remain predictable.
+
+```typescript
+primaryXAxis: {
+  valueType: 'Category',
+  labelIntersectAction: 'Wrap',
+  maximumLabelWidth: 80
+}
+```
+
+#### Fixed Rotation Versus Intersection-Based Rotation
+
+Use `labelRotation` when every label must use a fixed angle regardless of collision.
+
+```typescript
+primaryXAxis: {
+  labelRotation: 45
+}
+```
+
+Use `labelIntersectAction` when rotation or trimming should occur only as part of overlap handling.
+
+```typescript
+primaryXAxis: {
+  labelIntersectAction: 'Rotate45'
+}
+```
+
+Do not combine contradictory values unless their interaction is intentional.
+
+#### Required Chart Modules
+
+Axis label intersection does not require a dedicated module. Inject:
+
+- The module required by the axis value type, such as `Category`, `DateTime`, `DateTimeCategory`, or `Logarithmic`.
+- The module required by each rendered series type.
+
+```typescript
+import { Category, Chart, ColumnSeries } from '@syncfusion/ej2-charts';
+
+Chart.Inject(Category, ColumnSeries);
+```
+
+#### Complete TypeScript Example
+
+```typescript
+import { Category, Chart, ColumnSeries, Tooltip } from '@syncfusion/ej2-charts';
+
+Chart.Inject(Category, ColumnSeries, Tooltip);
+
+interface DepartmentRevenue {
+  department: string;
+  revenue: number;
+}
+
+const chartData: DepartmentRevenue[] = [
+  { department: 'Consumer Electronics and Accessories', revenue: 72 },
+  { department: 'Home Furniture and Interior Products', revenue: 58 },
+  { department: 'Sports Equipment and Outdoor Recreation', revenue: 64 },
+  { department: 'Personal Care and Beauty Products', revenue: 49 },
+  { department: 'Books, Education and Office Supplies', revenue: 55 },
+  { department: 'Automotive Parts and Maintenance', revenue: 46 }
+];
+
+const chart: Chart = new Chart({
+  title: 'Department Revenue',
+  primaryXAxis: {
+    valueType: 'Category',
+    title: 'Department',
+    labelIntersectAction: 'Rotate45',
+    maximumLabelWidth: 100,
+    majorGridLines: { width: 0 }
+  },
+  primaryYAxis: {
+    title: 'Revenue',
+    minimum: 0,
+    maximum: 80,
+    interval: 20,
+    labelFormat: '${value}M'
+  },
+  tooltip: { enable: true },
+  series: [{
+    dataSource: chartData,
+    type: 'Column',
+    xName: 'department',
+    yName: 'revenue',
+    name: 'Revenue'
+  }]
+});
+
+chart.appendTo('#chart');
+```
+
+
+### Rotate Axis Labels with Trimming
+
+`labelIntersectAction` supports two additional axis-label actions:
+
+- `Rotate45WithTrim`: Rotates intersecting labels by 45 degrees and trims text exceeding the available label bounds.
+- `Rotate90WithTrim`: Rotates intersecting labels by 90 degrees and trims text exceeding the available label bounds.
+
+#### TypeScript
+
+```ts
+import { Category, Chart, ColumnSeries } from '@syncfusion/ej2-charts';
+
+Chart.Inject(Category, ColumnSeries);
+
+const chart: Chart = new Chart({
+    primaryXAxis: {
+        valueType: 'Category',
+        labelIntersectAction: 'Rotate45WithTrim'
+    },
+    series: [{
+        type: 'Column',
+        dataSource: [
+            { department: 'Consumer Electronics and Accessories', revenue: 72 },
+            { department: 'Home Furniture and Interior Products', revenue: 58 },
+            { department: 'Sports Equipment and Outdoor Recreation', revenue: 64 }
+        ],
+        xName: 'department',
+        yName: 'revenue'
+    }]
+});
+chart.appendTo('#chart');
+```
+
+#### JavaScript
+
+```js
+var chart = new ej.charts.Chart({
+    primaryXAxis: {
+        valueType: 'Category',
+        labelIntersectAction: 'Rotate90WithTrim'
+    },
+    series: [{
+        type: 'Column',
+        dataSource: [
+            { department: 'Consumer Electronics and Accessories', revenue: 72 },
+            { department: 'Home Furniture and Interior Products', revenue: 58 },
+            { department: 'Sports Equipment and Outdoor Recreation', revenue: 64 }
+        ],
+        xName: 'department',
+        yName: 'revenue'
+    }]
+});
+chart.appendTo('#chart');
+```
+
+The JavaScript global-bundle sample requires no imports or `Chart.Inject(...)` call.
+
 ### Edge Label Placement
 
 Use `edgeLabelPlacement` when the first or last label is clipped.
@@ -602,6 +766,211 @@ primaryXAxis: {
 ```
 
 The final interval count may vary based on the available chart size and axis range.
+
+
+
+## Axis Scrollbar
+
+A Chart scrollbar has two related configurations:
+
+- `zoomSettings.enableScrollbar` enables the standard scrollbar that follows the Chart zoom state.
+- `axis.scrollbarSettings` controls axis-specific appearance, placement, lazy-load range, and zoom behavior.
+
+### Required Modules
+
+Inject `ScrollBar` for the scrollbar and `Zoom` when scrolling participates in zooming or panning. Also inject the modules required by the rendered series and axis value type.
+
+```typescript
+import {
+  Category,
+  Chart,
+  LineSeries,
+  ScrollBar,
+  Zoom
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(Category, LineSeries, ScrollBar, Zoom);
+```
+
+### Standard Scrollbar with Zooming
+
+```typescript
+zoomSettings: {
+  enableScrollbar: true,
+  enableSelectionZooming: true,
+  enableMouseWheelZooming: true,
+  enablePan: true,
+  mode: 'X'
+}
+```
+
+### Axis Scrollbar Settings
+
+```typescript
+primaryXAxis: {
+  valueType: 'Category',
+  zoomFactor: 0.5,
+  zoomPosition: 0,
+  scrollbarSettings: {
+    enable: true,
+    height: 16,
+    enableZoom: true,
+    position: 'PlaceNextToAxisLine',
+    scrollbarRadius: 4,
+    trackRadius: 4,
+    scrollbarColor: '#6B7280',
+    trackColor: '#E5E7EB',
+    gripColor: '#FFFFFF'
+  }
+}
+```
+
+### Styling, Placement, and Zoom Behavior
+
+- `enable`: Enables an axis scrollbar for lazy-loading workflows.
+- `height`: Sets scrollbar thickness. Use `12` or greater when the grip-circle visual and grab cursor are required.
+- `enableZoom`: Enables thumb resizing, arrows, and scrollbar wheel zoom. Set it to `false` for pan-only behavior.
+- `position`: Use `Top` or `Bottom` for horizontal axes, `Left` or `Right` for vertical axes, or `PlaceNextToAxisLine` for axis-relative placement.
+- `scrollbarColor`: Sets the thumb color.
+- `trackColor`: Sets the track color.
+- `gripColor`: Sets the grip-circle color.
+- `scrollbarRadius`: Sets the thumb corner radius.
+- `trackRadius`: Sets the track corner radius.
+
+### DateTime Lazy-Load Range
+
+Use `range` to define the complete DateTime range and use the axis `minimum` and `maximum` values for the initially visible range. Inject `DateTime`.
+
+```typescript
+primaryXAxis: {
+  valueType: 'DateTime',
+  minimum: new Date(2025, 0, 1),
+  maximum: new Date(2025, 2, 31),
+  scrollbarSettings: {
+    enable: true,
+    range: {
+      minimum: new Date(2024, 0, 1),
+      maximum: new Date(2026, 11, 31)
+    },
+    enableZoom: true,
+    height: 16
+  }
+}
+```
+
+### Numeric and Logarithmic `pointsLength`
+
+Use `pointsLength` to represent the complete logical data length for numeric or logarithmic lazy-loading workflows.
+
+```typescript
+primaryXAxis: {
+  minimum: 0,
+  maximum: 100,
+  scrollbarSettings: {
+    enable: true,
+    pointsLength: 1000,
+    enableZoom: false,
+    height: 16
+  }
+}
+```
+
+### Scroll Events
+
+- `scrollStart`: Fires once when a scrollbar interaction starts.
+- `scrollChanged`: Fires continuously while the visible range changes.
+- `scrollEnd`: Fires after the final range is resolved and is suitable for lazy loading.
+
+```typescript
+const chart: Chart = new Chart({
+  scrollStart: (args: Object): void => {
+    console.log('Scroll started', args);
+  },
+  scrollChanged: (args: Object): void => {
+    console.log('Scroll changed', args);
+  },
+  scrollEnd: (args: Object): void => {
+    console.log('Scroll ended', args);
+  }
+});
+```
+
+### Complete TypeScript Example
+
+```typescript
+import {
+  Category,
+  Chart,
+  LineSeries,
+  ScrollBar,
+  Tooltip,
+  Zoom
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(Category, LineSeries, ScrollBar, Tooltip, Zoom);
+
+interface MonthlySales {
+  month: string;
+  sales: number;
+}
+
+const chartData: MonthlySales[] = [
+  { month: 'Jan', sales: 35 }, { month: 'Feb', sales: 28 },
+  { month: 'Mar', sales: 34 }, { month: 'Apr', sales: 32 },
+  { month: 'May', sales: 40 }, { month: 'Jun', sales: 32 },
+  { month: 'Jul', sales: 35 }, { month: 'Aug', sales: 55 },
+  { month: 'Sep', sales: 38 }, { month: 'Oct', sales: 30 },
+  { month: 'Nov', sales: 25 }, { month: 'Dec', sales: 32 }
+];
+
+const chart: Chart = new Chart({
+  title: 'Monthly Sales with Scrollbar',
+  primaryXAxis: {
+    valueType: 'Category',
+    title: 'Month',
+    zoomFactor: 0.5,
+    zoomPosition: 0,
+    scrollbarSettings: {
+      enable: true,
+      height: 16,
+      enableZoom: true,
+      position: 'PlaceNextToAxisLine',
+      scrollbarRadius: 4,
+      trackRadius: 4,
+      scrollbarColor: '#6B7280',
+      trackColor: '#E5E7EB',
+      gripColor: '#FFFFFF'
+    }
+  },
+  primaryYAxis: {
+    title: 'Sales',
+    minimum: 0,
+    maximum: 60,
+    interval: 10
+  },
+  zoomSettings: {
+    enableScrollbar: true,
+    enableSelectionZooming: true,
+    enableMouseWheelZooming: true,
+    enablePan: true,
+    mode: 'X'
+  },
+  tooltip: { enable: true },
+  scrollStart: (args: Object): void => console.log('Scroll started', args),
+  scrollChanged: (args: Object): void => console.log('Scroll changed', args),
+  scrollEnd: (args: Object): void => console.log('Scroll ended', args),
+  series: [{
+    dataSource: chartData,
+    type: 'Line',
+    xName: 'month',
+    yName: 'sales',
+    name: 'Sales'
+  }]
+});
+
+chart.appendTo('#chart');
+```
+
 
 ## Axis Ranges and Scaling
 

@@ -12,7 +12,12 @@
   - [promptChanged](#promptchanged)
   - [stopRespondingClick](#stoprespondingclick)
   - [Attachment Events](#attachment-events)
-
+    - [beforeAttachmentUpload](#beforeattachmentupload)
+    - [attachmentUploadSuccess](#attachmentuploadsuccess)
+    - [attachmentUploadFailure](#attachmentuploadfailure)
+    - [attachmentRemoving](#attachmentremoving)
+    - [attachmentRemoved](#attachmentremoved)
+    - [attachmentClick](#attachmentclick)
 This guide covers all public methods and events available in the AI AssistView component.
 
 ---
@@ -21,12 +26,14 @@ This guide covers all public methods and events available in the AI AssistView c
 
 ### addPromptResponse
 
-Add prompts and responses to the AI AssistView programmatically.
+Add prompts and responses to the AI AssistView programmatically. Supports an optional `isFinalUpdate` flag for streaming responses and an optional `TelemetryData` argument for telemetry reporting.
 
 #### Signature
 
 ```typescript
-addPromptResponse(promptResponse: string | PromptModel): void
+addPromptResponse(promptResponse: string | PromptModel): void;
+addPromptResponse(promptResponse: string | PromptModel, isFinalUpdate?: boolean): void;
+addPromptResponse(promptResponse: string | PromptModel, isFinalUpdate?: boolean, telemetryData?: TelemetryData): void;
 ```
 
 #### Add Response as String
@@ -102,6 +109,44 @@ aiAssistView.addPromptResponse({
         { iconCss: 'e-icons e-edit', tooltip: 'Edit' }
     ]
 });
+```
+
+#### With Streaming and Telemetry Data
+
+When telemetry is enabled via `telemetrySettings.enable`, pass a `TelemetryData` argument to attach AI usage details (model, token counts, custom attributes) to the generated telemetry report. See [telemetry.md](./telemetry.md) for the full feature guide.
+
+```typescript
+import { AIAssistView, TelemetryData } from '@syncfusion/ej2-interactive-chat';
+
+const aiAssistView: AIAssistView = new AIAssistView({
+    telemetrySettings: { enable: true },
+    promptRequest: (args) => {
+        // Stream a response in chunks; isFinalUpdate: true marks the final chunk
+        aiAssistView.addPromptResponse('Streaming response chunk...', false);
+
+        // Finalize the response and attach telemetry data
+        const telemetryData: TelemetryData = {
+            model: 'gpt-4o',
+            inputTokens: 128,
+            outputTokens: 512,
+            customAttributes: { region: 'us-east-1', tenant: 'acme' }
+        };
+        aiAssistView.addPromptResponse('Final streamed response.', true, telemetryData);
+    }
+});
+```
+
+#### TelemetryData Interface
+
+```typescript
+interface TelemetryData {
+    model?: string;
+    inputTokens?: number;
+    outputTokens?: number;
+    reasoningTokens?: number;
+    cachedInputTokens?: number;
+    customAttributes?: { [key: string]: any };
+}
 ```
 
 ---
@@ -478,7 +523,7 @@ aiAssistView.appendTo('#aiAssistView');
 
 ### Attachment Events
 
-Four events handle file attachment operations.
+Six events handle file attachment operations.
 
 #### beforeAttachmentUpload
 
@@ -563,6 +608,46 @@ const aiAssistView: AIAssistView = new AIAssistView({
 });
 ```
 
+#### attachmentRemoving
+
+Triggered while an attached file is being removed. Use this event to perform custom actions (for example, prompting the user, validating removal, or updating state) before the file is detached from the prompt.
+
+The following table lists the arguments available in the `attachmentRemoving` event.
+
+| Argument | Type | Description |
+|---|---|---|
+| `cancel` | `boolean` | Defines whether the current action can be prevented. |
+| `currentRequest` | `XMLHttpRequest` | Returns the `XMLHttpRequest` instance that is associated with the remove action. |
+| `customFormData` | `{ [key: string]: Object }[]` | Defines the additional data with key and value pair format that will be submitted to the remove action. |
+| `event` | `MouseEvent \| TouchEvent \| KeyboardEventArgs` | Returns the original event arguments. |
+| `filesData` | `FileInfo[]` | Returns the list of files' details that will be removed. |
+| `postRawFile` | `boolean` | Defines whether the selected raw file is sent to the server's remove action. Set to `true` to send the raw file, or `false` to send only the file name. |
+
+```typescript
+import { AIAssistView } from '@syncfusion/ej2-interactive-chat';
+import { enableRipple } from '@syncfusion/ej2-base';
+import { RemovingEventArgs } from '@syncfusion/ej2-inputs';
+
+enableRipple(true);
+
+const aiAssistView: AIAssistView = new AIAssistView({
+    enableAttachments: true,
+    attachmentSettings: {
+        saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Save',
+        removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Remove'
+    },
+    attachmentRemoving: (args: RemovingEventArgs) => {
+        // Your required action here
+        console.log('Removing file:', args.fileData.name);
+    },
+    promptRequest: (args) => {
+        setTimeout(() => {
+            aiAssistView.addPromptResponse('Response...');
+        }, 1000);
+    }
+});
+```
+
 #### attachmentRemoved
 
 Triggered when an attached file is removed.
@@ -631,5 +716,6 @@ const aiAssistView: AIAssistView = new AIAssistView({
 - `beforeAttachmentUpload`: Before upload starts
 - `attachmentUploadSuccess`: Upload succeeded
 - `attachmentUploadFailure`: Upload failed
+- `attachmentRemoving`: File is being removed (pre-removal hook)
 - `attachmentRemoved`: File removed
 - `attachmentClick`: File clicked

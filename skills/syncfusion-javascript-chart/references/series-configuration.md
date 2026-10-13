@@ -17,6 +17,8 @@
     - [Mapped Label Text](#mapped-label-text)
     - [Data Label Template](#data-label-template)
     - [Advanced Label Customization](#advanced-label-customization)
+    - [Handling Overlapping Data Labels](#handling-overlapping-data-labels)
+    - [Stack Labels](#stack-labels)
   - [Marker Customization](#marker-customization)
     - [Enable Markers](#enable-markers)
     - [Marker Styling](#marker-styling)
@@ -563,6 +565,249 @@ marker: {
 }
 ```
 
+### Handling Overlapping Data Labels
+
+Use the `labelIntersectAction` property to specify how overlapping data labels are handled.
+
+The following options are available:
+
+- `None`: Displays all data labels without changing their positions, even when they overlap.
+- `Hide`: Hides data labels that overlap.
+- `Rotate90`: Rotates overlapping data labels by 90 degrees.
+- `RelocateVertically`: Relocates overlapping data labels vertically.
+- `RelocateHorizontally`: Relocates overlapping data labels horizontally.
+
+The `RelocateVertically` and `RelocateHorizontally` options enable the Smart Data Label feature and are supported only for the following series types:
+
+- `StackingColumn`
+- `StackingColumn100`
+- `StackingBar`
+- `StackingBar100`
+
+These options improve readability by relocating overlapping data labels and connecting them to their corresponding data points using connector lines.
+
+Use the `smartLabelSettings` property to customize the appearance and position of relocated data labels. The following settings are available:
+
+- `background`: Specifies the background color of the relocated data label.
+- `pointerShape`: Specifies the pointer shape of the relocated data label.
+- `border`: Customizes the color, width, and dash array of the relocated data label border.
+- `connectorLineStyle`: Customizes the color and width of the connector line.
+- `offset`: Specifies the distance by which the data label is relocated. This property is applicable only when `labelIntersectAction` is set to `RelocateVertically`.
+
+The following example demonstrates how to relocate overlapping data labels vertically in a stacking column chart:
+
+```typescript
+import { Category, Chart, DataLabel, StackingColumnSeries } from '@syncfusion/ej2-charts';
+
+Chart.Inject(StackingColumnSeries, Category, DataLabel);
+
+interface SalesData {
+  quarter: string;
+  productA: number;
+  productB: number;
+  productC: number;
+  productD: number;
+  productE: number;
+  productF: number;
+}
+
+const chartData: SalesData[] = [
+  { quarter: 'Q1', productA: 1.1, productB: 1.2, productC: 1.1, productD: 1.2, productE: 1.1, productF: 1.2 },
+  { quarter: 'Q2', productA: 1.2, productB: 1.1, productC: 1.2, productD: 1.1, productE: 1.2, productF: 1.1 },
+  { quarter: 'Q3', productA: 1.1, productB: 1.1, productC: 1.2, productD: 1.2, productE: 1.1, productF: 1.2 },
+  { quarter: 'Q4', productA: 1.2, productB: 1.2, productC: 1.1, productD: 1.1, productE: 1.2, productF: 1.1 }
+];
+
+const marker: Object = {
+  dataLabel: {
+    visible: true,
+    position: 'Middle',
+    format: 'Value: {value}',
+    font: { size: '14px' },
+    labelIntersectAction: 'RelocateVertically',
+    smartLabelSettings: {
+      background: '#ffffff',
+      pointerShape: 'Arrow',
+      border: { color: '#808080', width: 1, dashArray: '2,2' },
+      connectorLineStyle: { color: '#808080', width: 1 },
+      offset: 10
+    }
+  }
+};
+
+const chart: Chart = new Chart({
+  title: 'Quarterly Sales',
+  height: '260px',
+  primaryXAxis: { valueType: 'Category', title: 'Quarter' },
+  primaryYAxis: { title: 'Sales', minimum: 0, maximum: 8, interval: 1 },
+  series: [
+    { dataSource: chartData, type: 'StackingColumn', xName: 'quarter', yName: 'productA', name: 'Product A', marker: marker },
+    { dataSource: chartData, type: 'StackingColumn', xName: 'quarter', yName: 'productB', name: 'Product B', marker: marker },
+    { dataSource: chartData, type: 'StackingColumn', xName: 'quarter', yName: 'productC', name: 'Product C', marker: marker },
+    { dataSource: chartData, type: 'StackingColumn', xName: 'quarter', yName: 'productD', name: 'Product D', marker: marker },
+    { dataSource: chartData, type: 'StackingColumn', xName: 'quarter', yName: 'productE', name: 'Product E', marker: marker },
+    { dataSource: chartData, type: 'StackingColumn', xName: 'quarter', yName: 'productF', name: 'Product F', marker: marker }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+To relocate overlapping data labels horizontally, set `labelIntersectAction` to `RelocateHorizontally`:
+
+```typescript
+const marker: Object = {
+  dataLabel: {
+    visible: true,
+    position: 'Middle',
+    labelIntersectAction: 'RelocateHorizontally',
+    smartLabelSettings: {
+      background: '#ffffff',
+      pointerShape: 'Arrow',
+      border: { color: '#808080', width: 1, dashArray: '2,2' },
+      connectorLineStyle: { color: '#808080', width: 1 }
+    }
+  }
+};
+```
+
+> **Note:** Smart data labels are supported only for the `StackingColumn`, `StackingColumn100`, `StackingBar`, and `StackingBar100` series. The `offset` property is applicable only when `labelIntersectAction` is set to `RelocateVertically`.
+
+### Stack Labels
+
+`stackLabels` is a Chart-level property. It must not be placed inside `marker.dataLabel`.
+
+```typescript
+const stackLabels: Object = {
+  visible: true,
+  format: '${value}',
+  position: 'Top',
+  alignment: 'Center',
+  fill: '#FFFFFF',
+  border: { color: '#64748B', width: 1 },
+  font: { color: '#0F172A', size: '12px', fontWeight: '600' },
+  margin: { left: 5, right: 5, top: 3, bottom: 3 }
+};
+```
+
+Use these rules:
+
+- `visible` must be `true`; using a stacking-series type alone does not display aggregate totals.
+- `format` formats the aggregate stack value, not an individual segment value.
+- `position` controls the supported stack-label position.
+- `alignment` controls horizontal alignment within the stack-label region.
+- `fill`, `border`, `font`, and `margin` configure stack-label appearance.
+- `marker.dataLabel` renders individual segment values.
+- `stackLabels` renders one aggregate label for the completed stack.
+
+Inject the stacking module used by the chart, such as `StackingColumnSeries`, `StackingColumn100Series`, `StackingBarSeries`, `StackingBar100Series`, `StackingAreaSeries`, or `StackingLineSeries`. Inject `DataLabel` when individual segment labels are enabled.
+
+#### Positive, Negative, and Zero Totals
+
+- Positive stacks render their aggregate label at the resolved positive stack position.
+- Negative stacks render their aggregate label at the resolved negative stack position.
+- A zero-total category renders at the value-axis baseline.
+- Zero totals include all-zero segments and positive and negative values that cancel each other.
+- Null and undefined segment values must not produce an invalid aggregate total.
+
+#### `textRender` Customization
+
+Use `textRender` to modify or cancel stack-label text.
+
+```typescript
+textRender: (args: any): void => {
+  if (args.text === '0') {
+    args.text = 'No total';
+  }
+}
+```
+
+#### Complete TypeScript Stack-Label Example
+
+```typescript
+import {
+  Category,
+  Chart,
+  DataLabel,
+  Legend,
+  StackingColumnSeries,
+  Tooltip
+} from '@syncfusion/ej2-charts';
+
+Chart.Inject(Category, DataLabel, Legend, StackingColumnSeries, Tooltip);
+
+const productData: Object[] = [
+  { quarter: 'Q1', value: 25 },
+  { quarter: 'Q2', value: 0 },
+  { quarter: 'Q3', value: 30 },
+  { quarter: 'Q4', value: 10 }
+];
+
+const serviceData: Object[] = [
+  { quarter: 'Q1', value: 20 },
+  { quarter: 'Q2', value: 0 },
+  { quarter: 'Q3', value: 22 },
+  { quarter: 'Q4', value: -10 }
+];
+
+const chart: Chart = new Chart({
+  title: 'Quarterly Revenue Totals',
+  primaryXAxis: { valueType: 'Category' },
+  primaryYAxis: { minimum: -20, maximum: 60, interval: 20 },
+  legendSettings: { visible: true },
+  tooltip: { enable: true },
+  stackLabels: {
+    visible: true,
+    format: '${value}',
+    position: 'Top',
+    alignment: 'Center',
+    fill: '#FFFFFF',
+    border: { color: '#64748B', width: 1 },
+    font: { color: '#0F172A', size: '12px', fontWeight: '600' },
+    margin: { left: 5, right: 5, top: 3, bottom: 3 }
+  },
+  textRender: (args: any): void => {
+    if (args.text === '0') {
+      args.text = 'No total';
+    }
+  },
+  series: [
+    {
+      dataSource: productData,
+      type: 'StackingColumn',
+      xName: 'quarter',
+      yName: 'value',
+      name: 'Products',
+      marker: { dataLabel: { visible: true, position: 'Middle' } }
+    },
+    {
+      dataSource: serviceData,
+      type: 'StackingColumn',
+      xName: 'quarter',
+      yName: 'value',
+      name: 'Services',
+      marker: { dataLabel: { visible: true, position: 'Middle' } }
+    }
+  ]
+});
+
+chart.appendTo('#chart');
+```
+
+
+`stackLabels` is a Chart-level setting that displays aggregate totals for visible stacks. A stack resolving to zero renders its total at the value-axis baseline. This includes all-zero values, null or undefined values normalized to zero, and positive and negative values that cancel.
+
+```ts
+const stackLabels: Object = {
+    visible: true,
+    format: '${value}',
+    fill: '#FFFFFF',
+    border: { color: '#6B7280', width: 1 },
+    font: { color: '#111827', size: '12px', fontWeight: '600' }
+};
+```
+
+
 ## Marker Customization
 
 Markers are visual indicators rendered at the data points of compatible series. Set `marker.visible` to `true` to display them.
@@ -592,6 +837,8 @@ const chart: Chart = new Chart({
 
 chart.appendTo('#chart');
 ```
+
+
 
 ### Marker Styling
 

@@ -1,6 +1,6 @@
 ---
 name: syncfusion-javascript-inline-ai-assist
-description: "Implement the Syncfusion JavaScript Inline AI Assist control. Use this skill ALWAYS and immediately when users mention inline AI assistance, popup AI assist, contextual AI help, AI text editing popups, content summarization with AI, inline content generation, AI-powered text transformation, quick AI commands, AI assist with accept/reject workflow, element-relative AI popups, or any popup-based AI assistance interface. Use this skill immediately for InlineAIAssist component, inline AI component, ej2-interactive-chat InlineAIAssist, contextual AI assistance, AI command popup, response action handling, or AI content editing workflows."
+description: "Implement the Syncfusion JavaScript Inline AI Assist control. Use this skill ALWAYS and immediately when users mention inline AI assistance, popup AI assist, contextual AI help, AI text editing popups, content summarization with AI, inline content generation, AI-powered text transformation, quick AI commands, AI assist with accept/reject workflow, element-relative AI popups, speech-to-text, voice input, microphone button, Web Speech API, voice prompt, speech recognition, speechToTextSettings, onStart, onStop, transcriptChanged, onError, or any popup-based AI assistance interface. Use this skill immediately for InlineAIAssist component, inline AI component, ej2-interactive-chat InlineAIAssist, contextual AI assistance, AI command popup, response action handling, or AI content editing workflows."
 metadata:
   author: "Syncfusion Inc"
   version: "34.1.29"
@@ -24,6 +24,7 @@ The Inline AI Assist component provides:
 - **Templates**: Customize editor area with custom prompt input UI
 - **Methods**: Show/hide popup, add responses, execute prompts programmatically
 - **Events**: created, open, close, promptRequest for lifecycle management
+- **Speech-to-Text**: Built-in voice input via the browser's Web Speech API, configured through `speechToTextSettings` (`enable`, `lang`, `allowInterimResults`, `buttonSettings`, `tooltipSettings`) and lifecycle events (`onStart`, `onStop`, `transcriptChanged`, `onError`); recognized speech is fed back into the `promptRequest` event
 - **Globalization**: RTL support and localization for international apps
 
 ---
@@ -121,6 +122,16 @@ The Inline AI Assist component provides:
 - Localization (L10n) for UI text
 - RTL support (`enableRtl`)
 - Locale configuration
+
+### Speech to Text
+📄 **Read:** [references/speech-to-text.md](references/speech-to-text.md)
+- Enabling voice input via `speechToTextSettings.enable` (uses the browser's Web Speech API)
+- Configuring the speech recognition language with `speechToTextSettings.lang` (e.g. `en-US`, `es-ES`, `fr-FR`)
+- Customizing the microphone button with `speechToTextSettings.buttonSettings` (`content`, `stopContent`, `iconCss`, `stopIconCss`)
+- Real-time interim transcription with `speechToTextSettings.allowInterimResults`
+- Tooltip customization for the microphone button with `speechToTextSettings.tooltipSettings` (`content`, `stopContent`, `position`)
+- Speech-to-text lifecycle events: `onStart`, `onStop`, `transcriptChanged`, `onError`
+- Microphone permissions, browser compatibility (Speech Recognition API), and feature detection
 
 ---
 
@@ -263,6 +274,47 @@ document.addEventListener('click', (e) => {
 });
 ```
 
+### Pattern 5: Voice Input with Speech-to-Text
+
+```typescript
+import { InlineAIAssist, InlinePromptRequestEventArgs } from '@syncfusion/ej2-interactive-chat';
+import { enableRipple } from '@syncfusion/ej2-base';
+
+enableRipple(true);
+
+let inlineAIAssist: InlineAIAssist = new InlineAIAssist({
+    relateTo: '#summarizeBtn',
+    // Enables voice input through the browser's Web Speech API
+    speechToTextSettings: {
+        enable: true,
+        lang: 'en-US',
+        allowInterimResults: true,
+        buttonSettings: {
+            content: 'Start Recording',
+            stopContent: 'Stop Recording',
+            iconCss: 'e-icons e-microphone',
+            stopIconCss: 'e-icons e-microphone-off'
+        }
+    },
+    promptRequest: (args: InlinePromptRequestEventArgs) => {
+        // Both typed and voice-recognized input flow through this event
+        setTimeout(() => {
+            inlineAIAssist.addResponse('For real-time processing, connect the Inline AI Assist component to your preferred AI service.');
+        }, 1000);
+    }
+});
+
+inlineAIAssist.appendTo('#inlineAssist');
+
+const summarizeBtn: HTMLElement = document.querySelector('#summarizeBtn') as HTMLElement;
+if (summarizeBtn) {
+    summarizeBtn.addEventListener('click', () => {
+        inlineAIAssist.dataBind();
+        inlineAIAssist.showPopup();
+    });
+}
+```
+
 ---
 
 ## Key Properties
@@ -282,6 +334,7 @@ document.addEventListener('click', (e) => {
 - **responseSettings** (ResponseSettingsModel): Accept/reject actions configuration
 - **editorTemplate** (string | Function): Custom editor area template
 - **enableStreaming** (boolean): Enable streaming responses (default: false)
+- **speechToTextSettings** (SpeechToTextSettingsModel): Built-in voice input via the browser's Web Speech API; accepts `enable`, `lang`, `allowInterimResults`, `buttonSettings`, `tooltipSettings`, and lifecycle event handlers (`onStart`, `onStop`, `transcriptChanged`, `onError`)
 
 ### Styling & Behavior
 - **cssClass** (string): Custom CSS classes for root element

@@ -126,6 +126,17 @@ Use `StockChart` when the application requires a stock-focused interface with fe
 
 Read only the reference files relevant to the user's task.
 
+### WebMCP for TypeScript and JavaScript
+
+📄 **Read:** [TypeScript API Reference](references/API-Reference_TypeScript.md) and [JavaScript API Reference](references/API-Reference_JavaScript.md)
+
+- TypeScript WebMCP samples must import and inject every available Chart feature module, including `WebMcpChart`.
+- Do not reduce TypeScript imports or injections based on the initial series type.
+- Browser JavaScript WebMCP samples that use the global EJ2 bundle must contain no imports and no injection calls.
+- JavaScript samples must use `new ej.charts.Chart(...)` after loading the all-in-one browser script.
+- Both languages must use a stable Chart ID, automatic registration, and verified WebMCP tool names.
+- Never generate `registerWebMcpTools()` or a manual registration button.
+
 ### Getting Started
 
 Read `references/getting-started.md` for:
@@ -973,3 +984,21 @@ Do not add an indicator to the normal `series` collection.
 - `focusBorderColor`: Configures the focus border.
 - `focusBorderWidth`: Configures focus-border width.
 - `focusBorderMargin`: Configures focus-border spacing.
+
+### WebMCP Language Rules
+
+#### TypeScript
+
+```ts
+import { Chart, WebMcpChart } from '@syncfusion/ej2-charts';
+
+// The complete WebMCP sample must import and inject all available Chart feature modules.
+Chart.Inject(WebMcpChart);
+```
+
+#### JavaScript
+
+```js
+// No imports and no Chart.Inject(...) for global-bundle JavaScript WebMCP samples.
+var chart = new ej.charts.Chart({ enableWebMcp: true });
+```

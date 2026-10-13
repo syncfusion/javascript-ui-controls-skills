@@ -468,6 +468,41 @@ interface ToolbarItemModel {
 }
 ```
 
+### Setting Alignment
+
+Use the `align` property of a toolbar item to control its alignment within the toolbar. It supports three alignment values: `Left`, `Center`, and `Right`. The default value is `Left`.
+
+```typescript
+import { AIAssistView } from '@syncfusion/ej2-interactive-chat';
+import { enableRipple } from '@syncfusion/ej2-base';
+
+enableRipple(true);
+
+// Initializes the AI Assist control
+let aiAssistView: AIAssistView = new AIAssistView({
+    toolbarSettings: {
+        items: [ { iconCss: 'e-icons e-refresh', align: 'Right' } ],
+    },
+    promptRequest: () => {
+        setTimeout(() => {
+            let defaultResponse = 'For real-time prompt processing, connect the AIAssistView component to your preferred AI service, such as OpenAI or Azure Cognitive Services. Ensure you obtain the necessary API credentials to authenticate and enable seamless integration.';
+            aiAssistView.addPromptResponse(defaultResponse);
+        }, 1000);
+    }
+});
+
+// Render initialized AI Assist.
+aiAssistView.appendTo('#align');
+```
+
+**Supported alignment values:**
+
+| Value | Description |
+|---|---|
+| `Left` (default) | Item is rendered on the left side of the toolbar. |
+| `Center` | Item is rendered in the center of the toolbar. |
+| `Right` | Item is rendered on the right side of the toolbar. |
+
 **Disabled State:**
 
 ```typescript
