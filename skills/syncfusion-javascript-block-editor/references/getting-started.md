@@ -1,248 +1,93 @@
-# Getting Started with Syncfusion JavaScript BlockEditor
+# Getting Started with TypeScript Block Editor
 
-This guide walks you through the process of setting up and initializing the Syncfusion JavaScript BlockEditor control in your application.
+This section explains the steps to create a simple Block Editor and demonstrates the basic usage of the Block Editor control using a Vite-based TypeScript project scaffolded with latest vite version.
 
-All peer dependencies are automatically installed when you install `@syncfusion/ej2-blockeditor`.
+## Prerequisites
 
-## Installation
+This guide uses Vite as the bundler and development environment. Install Node.js 24.13.0 or higher before proceeding.
 
-### Using npm
+## Create a TypeScript application
 
-Install the BlockEditor package from npm:
-
-```bash
-npm install @syncfusion/ej2-blockeditor --save
-```
-
-## CSS Imports
-
-Install the theme package that matches your application. This example uses `Tailwind 3`:
+To set up a TypeScript project with Vite, run the following command:
 
 ```bash
-npm install @syncfusion/ej2-tailwind3-theme
+npm create vite@latest my-app -- --template vanilla-ts
+```
+This command will prompt you to install the required packages and start the application. Select the no option.
+
+As Syncfusion packages are not installed yet, currently, the `No` option will be selected. Then, navigate to the project directory and install the dependencies using the following commands:
+
+```bash
+cd my-app
+npm install
 ```
 
-Add the following stylesheet in `src/styles.css`
+## Adding Syncfusion® Block Editor packages
+
+All the available Essential® JS 2 packages are published in [`npmjs.com`](https://www.npmjs.com/~syncfusionorg) public registry.
+To install Block Editor component, use the following command
+
+```bash
+npm install @syncfusion/ej2-blockeditor
+```
+
+## Adding CSS reference
+
+Syncfusion provides multiple themes for the Block Editor control. For a complete list of available themes, refer to the [themes packages](https://ej2.syncfusion.com/documentation/appearance/theme#theme-packages).
+
+To apply the [Tailwind 3](https://www.npmjs.com/package/@syncfusion/ej2-tailwind3-theme) theme, install the corresponding theme package by using the following command:
+
+```bash
+npm install @syncfusion/ej2-tailwind3-theme --save
+```
+
+Then add the following CSS reference to the `src/style.css` file:
 
 ```css
-@import '../node_modules/@syncfusion/ej2-tailwind3-theme/styles/blockeditor/index.css';
+@import "../node_modules/@syncfusion/ej2-tailwind3-theme/styles/blockeditor/index.css";
 ```
 
-> Replace `tailwind3` with your preferred theme name (`material3`, `bootstrap5`, `fabric`, `fluent2`, etc) install the corresponding package, and use the same theme name in the CSS import path.
+> To apply the application-specific styles correctly, import `./style.css` into **src/main.ts**, remove the default Vite styles from **src/style.css**, and keep the Block Editor styles shown above. You can also refer to the [themes section](https://ej2.syncfusion.com/documentation/appearance/theme) for details about built-in themes and CSS references for individual controls.
 
-## Basic Implementation
+## Adding Block Editor control
 
-### Step 1: Add HTML Element
+To get started, add the Block Editor control in `main.ts` and `index.html` files. Block Editor can be initialized through a div element.
 
-Add a container div with an ID in your `index.html`:
+```typescript
+import './style.css';
+import { BlockEditor } from '@syncfusion/ej2-blockeditor';
+
+const blockEditor: BlockEditor = new BlockEditor({});
+blockEditor.appendTo('#blockeditor_default');
+```
+
+```css
+@import "../node_modules/@syncfusion/ej2-tailwind3-theme/styles/blockeditor/index.css";
+```
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>BlockEditor Demo</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="styles.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Syncfusion Typescript Block Editor</title>
 </head>
+
 <body>
-    <div id="container">
-        <div id="blockeditor_default"></div>
-    </div>
+    <div id="blockeditor_default"></div>
+    <script type="module" src="/src/main.ts"></script>
 </body>
+
 </html>
 ```
 
-### Step 2: Initialize BlockEditor
+## Run the application
 
-Import and initialize the BlockEditor in your TypeScript file (`app.ts`):
-
-```typescript
-import { BlockEditor } from "@syncfusion/ej2-blockeditor";
-
-// Initialize BlockEditor
-const blockEditor: BlockEditor = new BlockEditor({});
-
-// Render the BlockEditor
-blockEditor.appendTo('#blockeditor_default');
-```
-
-### Step 3: Run the Application
+Use the following command to run the application in the browser.
 
 ```bash
-npm start
+npm run dev
 ```
-
-The BlockEditor will render at `http://localhost:8080` (or the configured port).
-
-## Minimal Working Example
-
-Here's a complete minimal example with sample content:
-
-```typescript
-import { BlockEditor, BlockType, ContentType } from "@syncfusion/ej2-blockeditor";
-
-const blockEditor: BlockEditor = new BlockEditor({
-    width: '100%',
-    height: '600px',
-    blocks: [
-        {
-            id: 'heading-1',
-            blockType: BlockType.Heading,
-            properties: { level: 1 },
-            content: [
-                {
-                    contentType: ContentType.Text,
-                    content: 'BlockEditor Demo'
-                }
-            ]
-        },
-        {
-            id: 'intro-para',
-            blockType: BlockType.Paragraph,
-            content: [
-                {
-                    contentType: ContentType.Text,
-                    content: 'The Block Editor enables users to create, format, and organize content using various block types.'
-                }
-            ]
-        }
-    ]
-});
-
-blockEditor.appendTo('#blockeditor_default');
-```
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>BlockEditor Demo</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.syncfusion.com/ej2/32.1.19/ej2-blockeditor/styles/tailwind3.css" rel="stylesheet" />
-    <style>
-        #container {
-            margin: 50px auto;
-            max-width: 1200px;
-        }
-    </style>
-</head>
-<body>
-    <div id="container">
-        <div id="blockeditor_default"></div>
-    </div>
-</body>
-</html>
-```
-
-## Common Initialization Patterns
-
-### Empty Editor (User Creates Content)
-
-```typescript
-const editor = new BlockEditor({
-    width: '100%',
-    height: '80vh'
-});
-editor.appendTo('#blockeditor');
-```
-
-The editor starts empty, ready for users to add content using slash commands (/) or typing.
-
-### With Default Content
-
-```typescript
-const editor = new BlockEditor({
-    blocks: [
-        {
-            blockType: BlockType.Paragraph,
-            content: [
-                {
-                    contentType: ContentType.Text,
-                    content: 'Start typing here...'
-                }
-            ]
-        }
-    ]
-});
-editor.appendTo('#blockeditor');
-```
-
-### Read-Only Mode
-
-```typescript
-const editor = new BlockEditor({
-    blocks: existingBlocks,
-    readOnly: true
-});
-editor.appendTo('#blockeditor');
-```
-
-### With Drag-and-Drop Disabled
-
-```typescript
-const editor = new BlockEditor({
-    blocks: sampleBlocks,
-    enableDragAndDrop: false
-});
-editor.appendTo('#blockeditor');
-```
-
-## Configuration Options at Initialization
-
-You can configure various settings when initializing the BlockEditor:
-
-```typescript
-const editor = new BlockEditor({
-    // Dimensions
-    width: '100%',
-    height: '600px',
-    
-    // Content
-    blocks: [],
-    
-    // Features
-    enableDragAndDrop: true,
-    enableHtmlSanitizer: true,
-    readOnly: false,
-    
-    // Undo/Redo
-    undoRedoStack: 30,
-    
-    // Styling
-    cssClass: 'custom-editor',
-    
-    // Localization
-    locale: 'en-US',
-    enableRtl: false,
-    
-    // Events
-    created: () => {
-        console.log('BlockEditor created');
-    },
-    blockChanged: (args) => {
-        console.log('Content changed', args);
-    }
-});
-
-editor.appendTo('#blockeditor');
-```
-
-## Troubleshooting
-
-### Styles Not Loading
-
-Ensure all dependent stylesheets are imported in the correct order (base → inputs → buttons → navigations → popups → dropdowns → splitbuttons → blockeditor).
-
-### Editor Not Rendering
-
-Check that:
-1. The target element exists in the DOM before calling `appendTo()`
-2. The element ID matches the selector (e.g., `#blockeditor_default`)
-3. All required packages are installed (`npm install`)
-4. CSS files are properly loaded
-
-### Webpack Configuration Issues
-
-Ensure your `webpack.config.js` includes proper loaders for CSS and TypeScript files. The Syncfusion quickstart template includes preconfigured webpack settings.

@@ -24,11 +24,12 @@ The Syncfusion JavaScript BlockEditor is a modern, block-based text editor that 
 
 ### Getting Started
 📄 **Read:** [references/getting-started.md](references/getting-started.md)
+- Prerequisites and Node.js version requirements (24.13.0 or higher)
+- Creating a TypeScript application with Vite
 - Installation and package setup (`@syncfusion/ej2-blockeditor`)
 - CSS imports and theme configuration (Tailwind3, Material, Bootstrap, etc.)
-- Basic BlockEditor initialization and first render
-- Webpack configuration for development environment
-- Minimal working example with sample blocks
+- Basic BlockEditor initialization with Vite
+- Running the application with npm run dev
 
 ### Blocks and Content Models
 📄 **Read:** [references/blocks-and-content-models.md](references/blocks-and-content-models.md)
@@ -117,6 +118,10 @@ The Syncfusion JavaScript BlockEditor is a modern, block-based text editor that 
 - RTL support: enableRtl property
 - Localization: locale property
 - Custom block templates
+- Theme customization via CSS variables (`--color-sf-*` with `--sf` naming convention)
+- Block Editor CSS classes and IDs (`.e-blockeditor`, `.e-active`, `.e-selected`, `.e-list-item`, `.e-dropdownbase`, `.e-table-element`, `#blockeditor_contextmenu`, `#blockeditor_code-ddl_popup`)
+- Multi-theme switching example with CSS variable overrides (Slate Light, Sage Green, Dark Pro)
+- Syncfusion Theme Studio for fully customized themes (Material 3, Fluent 2, Bootstrap 5.3, Tailwind 3)
 - Theme integration
 
 ### Security and Sanitization
@@ -131,15 +136,19 @@ The Syncfusion JavaScript BlockEditor is a modern, block-based text editor that 
 
 ### Collaborative Editing
 📄 **Read:** [references/collaborative-editing.md](references/collaborative-editing.md)
+- Quick Start guide: Set up collaboration in minutes with Vite, Yjs, and WebSocket
+- Creating a `collaboration.ts` file with Yjs document, adapter, provider, and room allocation logic
+- Setting up a WebSocket server with `y-websocket` for production deployments
+- Installing and configuring Yjs and WebSocket providers for real-time synchronization
 - Real-time collaborative editing powered by Yjs (CRDT-based sync and conflict resolution)
 - Injecting the `Collaboration` and `VersionHistory` modules
 - `collaborationSettings` property (provider, adapter, enableAwareness, versionHistory)
 - Choosing a Yjs provider (y-websocket, y-webrtc, y-indexeddb, Hocuspocus, Liveblocks, PartyKit)
-- Setting up a Yjs document, `YjsAdapter`, and provider
 - User presence, remote cursors, and text selection overlays (enableAwareness)
 - Configuring the current user via `users` and `currentUserId`
-- Version history: creating, listing, renaming, restoring, comparing, exporting, and importing snapshots
-- Custom snapshot storage via the `IVersionStorage` interface
+- Version history with IndexedDBVersionStorage implementation
+- Version history UI with snapshot panel, restore/delete buttons, and auto-refresh
+- Version history methods: creating, listing, renaming, restoring, comparing, exporting, and importing snapshots
 - Version history events: `snapshotCreated`, `snapshotRestored`
 - Best practices and troubleshooting for collaboration setups
 
@@ -330,6 +339,47 @@ const editor = new BlockEditor({
 });
 ```
 
+### Theme Customization via CSS Variables
+
+Override the `--color-sf-*` CSS variables on `.e-blockeditor` (or any ancestor) to re-skin the editor without touching component configuration:
+
+```typescript
+const blockEditor = new BlockEditor({
+    blocks: blocksData,
+    width: '100%',
+    height: '600px'
+});
+blockEditor.appendTo('#blockeditor');
+
+// Switch theme by toggling a body class
+function applyTheme(themeName: 'slateLightTheme' | 'sageGreenTheme' | 'darkProTheme') {
+    document.body.classList.remove('slateLightTheme', 'sageGreenTheme', 'darkProTheme');
+    document.body.classList.add(themeName);
+}
+```
+
+```css
+/* CSS variables follow the unified --sf naming convention */
+.darkProTheme .e-blockeditor {
+    --color-sf-content-bg-color: #0d1117;
+    --color-sf-content-bg-color-hover: #161b22;
+    --color-sf-content-bg-color-selected: #21262d;
+    --color-sf-content-text-color: #e6edf3;
+    --color-sf-placeholder-text-color: #7d8590;
+    --color-sf-border: #30363d;
+    --color-sf-border-hover: #58a6ff;
+    --color-sf-primary: #1f6feb;
+    --color-sf-primary-text-color: #ffffff;
+    --color-sf-icon-color: #8b949e;
+
+    background: #0d1117 !important;
+    border: 1px solid #30363d;
+    border-radius: 20px;
+}
+```
+
+For a fully customized theme across all Syncfusion components, use [Syncfusion Theme Studio](https://ej2.syncfusion.com/themestudio/) with Material 3, Fluent 2, Bootstrap 5.3, or Tailwind 3 as the base.
+
 ## Key Configuration Options
 
 ### Essential Properties
@@ -364,6 +414,12 @@ const editor = new BlockEditor({
 
 - **fontColorSettings**: `FontColorSettingsModel` - Text color palette
 - **backgroundColorSettings**: `BackgroundColorSettingsModel` - Background/highlight color palette
+
+### Theme Customization
+
+- **CSS variables (`--color-sf-*`)**: Override on `.e-blockeditor` (or any ancestor) to customize colors, borders, placeholders, primary accent, and icons without touching component properties
+- **CSS classes/IDs**: `.e-blockeditor`, `.e-active`, `.e-selected`, `.e-list-item`, `.e-dropdownbase`, `.e-table-element`, `#blockeditor_contextmenu`, `#blockeditor_code-ddl_popup`
+- **Syncfusion Theme Studio**: Build fully customized themes for the Block Editor and other EJ2 components using Material 3, Fluent 2, Bootstrap 5.3, or Tailwind 3 as the base
 
 ### Collaboration Settings
 
