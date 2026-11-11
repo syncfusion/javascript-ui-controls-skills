@@ -1,8 +1,8 @@
 ---
 name: syncfusion-javascript-pivot-table
-description: Use this skill whenever the user wants to implement Syncfusion PivotView in TypeScript applications. Triggers include: pivot table, pivot grid, data analysis, OLAP, aggregation in TypeScript context. Covers data binding (JSON, CSV, remote), drill-down/drill-through, grouping, filtering, conditional formatting, exports (Excel/PDF/CSV), and pivot charts. Use for interactive reports and dashboards. Do NOT use for React, Vue, or Angular.
+description: 'Use this skill whenever the user wants to implement Syncfusion PivotView in TypeScript applications. Triggers include: pivot table, pivot grid, data analysis, OLAP, aggregation in TypeScript context. Covers data binding, drill-down, drill-through, grouping, filtering, conditional formatting, exports, and pivot charts. Use for interactive reports and dashboards. Do NOT use for React, Vue, or Angular.'
 metadata:
-  author: "Syncfusion Inc"
+  author: "Syncfusion"
   version: "34.1.29"
   category: "Grids"
 ---

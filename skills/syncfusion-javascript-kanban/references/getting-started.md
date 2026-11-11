@@ -49,19 +49,19 @@ npm install @syncfusion/ej2-kanban
 
 ## Import CSS Styles
 
-Kanban CSS files are available in the ej2-kanban package and its sub-component folders. Import the required styles in your `src/style.css` file.
+Install a Syncfusion theme package and import the bundled Kanban stylesheet in your `src/style.css` file.
 
 ### Tailwind 3 Theme Example
 
+Install the theme package:
+
+```bash
+npm install @syncfusion/ej2-tailwind3-theme --save
+```
+import the Kanban styles in your `src/style.css` file.
+
 ```css
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-layouts/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-kanban/styles/tailwind3.css';
+@import "../node_modules/@syncfusion/ej2-tailwind3-theme/styles/kanban/index.css";
 ```
 
 ### Available Built-in Themes
@@ -276,14 +276,7 @@ Here's a complete, copy-paste-ready example:
 
 **src/style.css:**
 ```css
-@import '../node_modules/@syncfusion/ej2-base/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-buttons/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-inputs/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-layouts/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-navigations/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-popups/styles/tailwind3.css';
-@import '../node_modules/@syncfusion/ej2-kanban/styles/tailwind3.css';
+@import "../node_modules/@syncfusion/ej2-tailwind3-theme/styles/kanban/index.css";
 ```
 
 **src/main.ts:**
